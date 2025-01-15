@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['index_40',['index',['../structSaiModel_1_1SphericalJointDescription.html#a5c36b0da3fdaab8787f5aed940d43818',1,'SaiModel::SphericalJointDescription']]],
-  ['inertia_41',['inertia',['../structSaiModel_1_1LinkMassParams.html#ab1ff8f34deb5156db4b94aae6ed9a303',1,'SaiModel::LinkMassParams']]],
-  ['islinkinrobot_42',['isLinkInRobot',['../classSaiModel_1_1SaiModel.html#ae6f267753af8146d643642c6e2f5df7c',1,'SaiModel::SaiModel']]]
+  ['g_0',['G',['../structSaiModel_1_1GraspMatrixData.html#a1edbd49bbc80568d7ef0cc311f1a39e4',1,'SaiModel::GraspMatrixData']]],
+  ['g_5finv_1',['G_inv',['../structSaiModel_1_1GraspMatrixData.html#ab9c37cc9c927a9ffef3c23f0a900fe24',1,'SaiModel::GraspMatrixData']]],
+  ['getlinkmassparams_2',['getLinkMassParams',['../classSaiModel_1_1SaiModel.html#acecad858b6bebd2fc94552827559c3ef',1,'SaiModel::SaiModel']]],
+  ['graspmatrixdata_3',['GraspMatrixData',['../structSaiModel_1_1GraspMatrixData.html',1,'SaiModel']]]
 ];

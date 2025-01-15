@@ -1,11 +1,17 @@
 var searchData=
 [
-  ['ddq_21',['ddq',['../classSaiModel_1_1SaiModel.html#a94216a967728f640b51d99ed36f866f1',1,'SaiModel::SaiModel']]],
-  ['deleteenvironmentalcontact_22',['deleteEnvironmentalContact',['../classSaiModel_1_1SaiModel.html#a194a90147d14000496a490fe0fc7bfd4',1,'SaiModel::SaiModel']]],
-  ['deletemanipulationcontact_23',['deleteManipulationContact',['../classSaiModel_1_1SaiModel.html#a6c4de9caae5d61678e91c3f8d32d876f',1,'SaiModel::SaiModel']]],
-  ['displayjoints_24',['displayJoints',['../classSaiModel_1_1SaiModel.html#a07787ad9abc4c18377013cad0a1333cd',1,'SaiModel::SaiModel']]],
-  ['displaylinks_25',['displayLinks',['../classSaiModel_1_1SaiModel.html#ad457b399f7d024276db50fefd64b85e1',1,'SaiModel::SaiModel']]],
-  ['dof_26',['dof',['../classSaiModel_1_1SaiModel.html#aad87c70896089196e74b089c5c34367a',1,'SaiModel::SaiModel']]],
-  ['dq_27',['dq',['../classSaiModel_1_1SaiModel.html#a343659832f84225308e3f0bd8b351662',1,'SaiModel::SaiModel']]],
-  ['dynconsistentinversejacobian_28',['dynConsistentInverseJacobian',['../classSaiModel_1_1SaiModel.html#ab9ce0c2c745baada07b043e40dbad22d',1,'SaiModel::SaiModel']]]
+  ['child_5flink_5fname_0',['child_link_name',['../structSaiModel_1_1SphericalJointDescription.html#ae52994ff2df628302876bddf51d6c218',1,'SaiModel::SphericalJointDescription']]],
+  ['childlinkname_1',['childLinkName',['../classSaiModel_1_1SaiModel.html#adcba7dc8f3fc764e81237bae7a0e38c9',1,'SaiModel::SaiModel']]],
+  ['com_5fpos_2',['com_pos',['../structSaiModel_1_1LinkMassParams.html#a49cba9192c7c6f48517f0212d01580e6',1,'SaiModel::LinkMassParams']]],
+  ['comjacobian_3',['comJacobian',['../classSaiModel_1_1SaiModel.html#ac623fce02968881a5323c5892fed70fb',1,'SaiModel::SaiModel']]],
+  ['composition_4',['comPosition',['../classSaiModel_1_1SaiModel.html#a05741c173421d5963206573ce2625119',1,'SaiModel::SaiModel']]],
+  ['computeinversekinematics_5',['computeinversekinematics',['../classSaiModel_1_1SaiModel.html#af7e714659dd9956022f3a3aff3021269',1,'SaiModel::SaiModel::computeInverseKinematics(const vector&lt; string &gt; &amp;link_names, const vector&lt; Vector3d &gt; &amp;pos_in_links, const vector&lt; Vector3d &gt; &amp;desired_pos_world_frame)'],['../classSaiModel_1_1SaiModel.html#adca249ca7d43eff87fcf2936c5c4ca55',1,'SaiModel::SaiModel::computeInverseKinematics(const vector&lt; string &gt; &amp;link_names, const vector&lt; Affine3d &gt; &amp;frames_in_links, const vector&lt; Affine3d &gt; &amp;desired_frames_locations_in_world_frame)']]],
+  ['contact_3a_6',['For questions, contact:',['../index.html#autotoc_md6',1,'']]],
+  ['contact_5flink_5fname_7',['contact_link_name',['../structSaiModel_1_1ContactModel.html#a144fd95437cbb2e6b9d23a9703041738',1,'SaiModel::ContactModel']]],
+  ['contact_5forientation_8',['contact_orientation',['../structSaiModel_1_1ContactModel.html#aba68c986e485ff7e9a9061d3ef5098bc',1,'SaiModel::ContactModel']]],
+  ['contact_5fposition_9',['contact_position',['../structSaiModel_1_1ContactModel.html#a07d3acaa9dc694e897ef7f3b4ba89000',1,'SaiModel::ContactModel']]],
+  ['contact_5ftype_10',['contact_type',['../structSaiModel_1_1ContactModel.html#ae938c772b81aadcdd2b4348c14bef03b',1,'SaiModel::ContactModel']]],
+  ['contactmodel_11',['ContactModel',['../structSaiModel_1_1ContactModel.html',1,'SaiModel']]],
+  ['coriolisforce_12',['coriolisForce',['../classSaiModel_1_1SaiModel.html#a4de5bfad3ff71784bbc67be1e06c6fd0',1,'SaiModel::SaiModel']]],
+  ['coriolisplusgravity_13',['coriolisPlusGravity',['../classSaiModel_1_1SaiModel.html#a6c2af6f58d7cc1769e3aa84448e9aa87',1,'SaiModel::SaiModel']]]
 ];

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['operationalspacematrices_79',['operationalSpaceMatrices',['../classSaiModel_1_1SaiModel.html#a5d0352194f2d3e15b3bb340851cc42ba',1,'SaiModel::SaiModel']]],
-  ['opspacematrices_80',['OpSpaceMatrices',['../structSaiModel_1_1OpSpaceMatrices.html',1,'SaiModel']]]
+  ['n_0',['N',['../structSaiModel_1_1OpSpaceMatrices.html#ad72c12104864cbd27ba98dfdffa301ca',1,'SaiModel::OpSpaceMatrices']]],
+  ['nullspacematrix_1',['nullspaceMatrix',['../classSaiModel_1_1SaiModel.html#ad769c1699df5da3258c8b8e70c6f31f2',1,'SaiModel::SaiModel']]]
 ];

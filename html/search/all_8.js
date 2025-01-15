@@ -1,10 +1,23 @@
 var searchData=
 [
-  ['lambda_63',['Lambda',['../structSaiModel_1_1OpSpaceMatrices.html#a29623520fb900eebcd8ef93ae4cfea3c',1,'SaiModel::OpSpaceMatrices']]],
-  ['linearacceleration_64',['linearAcceleration',['../classSaiModel_1_1SaiModel.html#a29be2741c8177c43361d26cebce1e0e8',1,'SaiModel::SaiModel']]],
-  ['linearaccelerationinworld_65',['linearAccelerationInWorld',['../classSaiModel_1_1SaiModel.html#adee710a5bd2f489a20805cbfe7d2e9dd',1,'SaiModel::SaiModel']]],
-  ['linearvelocity_66',['linearVelocity',['../classSaiModel_1_1SaiModel.html#abf6038147a812a7509c39034301bb801',1,'SaiModel::SaiModel']]],
-  ['linearvelocityinworld_67',['linearVelocityInWorld',['../classSaiModel_1_1SaiModel.html#a1bc094072c7d224b0361cf95f62ea21b',1,'SaiModel::SaiModel']]],
-  ['link_5fname_68',['link_name',['../structSaiModel_1_1ForceSensorData.html#ab8d5525adb1cfabb4c0f5482bcb99668',1,'SaiModel::ForceSensorData']]],
-  ['linkmassparams_69',['LinkMassParams',['../structSaiModel_1_1LinkMassParams.html',1,'SaiModel']]]
+  ['j_0',['j',['../structSaiModel_1_1OpSpaceMatrices.html#af6d982bda82fef68c57d054ed58be3e2',1,'SaiModel::OpSpaceMatrices::J'],['../classSaiModel_1_1SaiModel.html#a1c0499397118327680b13833fe90638e',1,'SaiModel::SaiModel::J()']]],
+  ['jbar_1',['Jbar',['../structSaiModel_1_1OpSpaceMatrices.html#a56e1d4f435776ab4311aa752d9905537',1,'SaiModel::OpSpaceMatrices']]],
+  ['jlocalframe_2',['JLocalFrame',['../classSaiModel_1_1SaiModel.html#ae3a3928244fb207fdac9d308df470665',1,'SaiModel::SaiModel']]],
+  ['joint_5findex_3',['joint_index',['../structSaiModel_1_1JointLimit.html#aa591c96397a4f5ca795c1abbb046cb4d',1,'SaiModel::JointLimit']]],
+  ['joint_5fname_4',['joint_name',['../structSaiModel_1_1JointLimit.html#a73f4b156f5df9291cb5823612809f664',1,'SaiModel::JointLimit::joint_name'],['../structSaiModel_1_1SphericalJointDescription.html#ad39eee39b86f60aade6e5a0ccde4c6e3',1,'SaiModel::SphericalJointDescription::joint_name']]],
+  ['jointgravityvector_5',['jointGravityVector',['../classSaiModel_1_1SaiModel.html#aa53c3862eccb309de7640a8c0cc7c8f8',1,'SaiModel::SaiModel']]],
+  ['jointindex_6',['jointIndex',['../classSaiModel_1_1SaiModel.html#a65ec4fb2f3a20dc55ac34c3c98b7eaac',1,'SaiModel::SaiModel']]],
+  ['jointlimit_7',['JointLimit',['../structSaiModel_1_1JointLimit.html',1,'SaiModel']]],
+  ['jointlimits_8',['jointLimits',['../classSaiModel_1_1SaiModel.html#a740218bdf928e9f67735e6316c86a209',1,'SaiModel::SaiModel']]],
+  ['jointlimitspositionlower_9',['jointLimitsPositionLower',['../classSaiModel_1_1SaiModel.html#a9cafebfcd3302cbb9976db4af1ac3685',1,'SaiModel::SaiModel']]],
+  ['jointlimitspositionupper_10',['jointLimitsPositionUpper',['../classSaiModel_1_1SaiModel.html#aa660595d85363872dfb4a04e254ee03c',1,'SaiModel::SaiModel']]],
+  ['jointname_11',['jointName',['../classSaiModel_1_1SaiModel.html#abd7b9df768c2e4eaa547d181ca3984fe',1,'SaiModel::SaiModel']]],
+  ['jointnames_12',['jointNames',['../classSaiModel_1_1SaiModel.html#a60bc9a5adec92c6b65dfc5453cc3ec6d',1,'SaiModel::SaiModel']]],
+  ['jv_13',['Jv',['../classSaiModel_1_1SaiModel.html#ab6752408d68c17361a04e25ec42e393a',1,'SaiModel::SaiModel']]],
+  ['jvlocalframe_14',['JvLocalFrame',['../classSaiModel_1_1SaiModel.html#aab36f364dfb5ac7d7f264d6de16788bf',1,'SaiModel::SaiModel']]],
+  ['jvworldframe_15',['JvWorldFrame',['../classSaiModel_1_1SaiModel.html#ae67c4ccb90f9f30709e1cfc4c3d26cb3',1,'SaiModel::SaiModel']]],
+  ['jw_16',['Jw',['../classSaiModel_1_1SaiModel.html#a7cbddeb81f4a996a6c903f6b755f65ef',1,'SaiModel::SaiModel']]],
+  ['jwlocalframe_17',['JwLocalFrame',['../classSaiModel_1_1SaiModel.html#a66f09f8ffca0259d235cb3a641dfa11e',1,'SaiModel::SaiModel']]],
+  ['jworldframe_18',['JWorldFrame',['../classSaiModel_1_1SaiModel.html#a6f0ba0a238efa96f833fc0368a181ff9',1,'SaiModel::SaiModel']]],
+  ['jwworldframe_19',['JwWorldFrame',['../classSaiModel_1_1SaiModel.html#a297ca115e04ad10b592f3cc610497333',1,'SaiModel::SaiModel']]]
 ];

@@ -1,23 +1,7 @@
 var searchData=
 [
-  ['j_43',['J',['../structSaiModel_1_1OpSpaceMatrices.html#af6d982bda82fef68c57d054ed58be3e2',1,'SaiModel::OpSpaceMatrices::J()'],['../classSaiModel_1_1SaiModel.html#a1c0499397118327680b13833fe90638e',1,'SaiModel::SaiModel::J()']]],
-  ['jbar_44',['Jbar',['../structSaiModel_1_1OpSpaceMatrices.html#a56e1d4f435776ab4311aa752d9905537',1,'SaiModel::OpSpaceMatrices']]],
-  ['jlocalframe_45',['JLocalFrame',['../classSaiModel_1_1SaiModel.html#ae3a3928244fb207fdac9d308df470665',1,'SaiModel::SaiModel']]],
-  ['joint_5findex_46',['joint_index',['../structSaiModel_1_1JointLimit.html#aa591c96397a4f5ca795c1abbb046cb4d',1,'SaiModel::JointLimit']]],
-  ['joint_5fname_47',['joint_name',['../structSaiModel_1_1JointLimit.html#a73f4b156f5df9291cb5823612809f664',1,'SaiModel::JointLimit::joint_name()'],['../structSaiModel_1_1SphericalJointDescription.html#ad39eee39b86f60aade6e5a0ccde4c6e3',1,'SaiModel::SphericalJointDescription::joint_name()']]],
-  ['jointgravityvector_48',['jointGravityVector',['../classSaiModel_1_1SaiModel.html#aa53c3862eccb309de7640a8c0cc7c8f8',1,'SaiModel::SaiModel']]],
-  ['jointindex_49',['jointIndex',['../classSaiModel_1_1SaiModel.html#a65ec4fb2f3a20dc55ac34c3c98b7eaac',1,'SaiModel::SaiModel']]],
-  ['jointlimit_50',['JointLimit',['../structSaiModel_1_1JointLimit.html',1,'SaiModel']]],
-  ['jointlimits_51',['jointLimits',['../classSaiModel_1_1SaiModel.html#a9470ee718e8768cfce91b569031d2d2c',1,'SaiModel::SaiModel']]],
-  ['jointlimitspositionlower_52',['jointLimitsPositionLower',['../classSaiModel_1_1SaiModel.html#a9cafebfcd3302cbb9976db4af1ac3685',1,'SaiModel::SaiModel']]],
-  ['jointlimitspositionupper_53',['jointLimitsPositionUpper',['../classSaiModel_1_1SaiModel.html#aa660595d85363872dfb4a04e254ee03c',1,'SaiModel::SaiModel']]],
-  ['jointname_54',['jointName',['../classSaiModel_1_1SaiModel.html#abd7b9df768c2e4eaa547d181ca3984fe',1,'SaiModel::SaiModel']]],
-  ['jointnames_55',['jointNames',['../classSaiModel_1_1SaiModel.html#a60bc9a5adec92c6b65dfc5453cc3ec6d',1,'SaiModel::SaiModel']]],
-  ['jv_56',['Jv',['../classSaiModel_1_1SaiModel.html#ab6752408d68c17361a04e25ec42e393a',1,'SaiModel::SaiModel']]],
-  ['jvlocalframe_57',['JvLocalFrame',['../classSaiModel_1_1SaiModel.html#aab36f364dfb5ac7d7f264d6de16788bf',1,'SaiModel::SaiModel']]],
-  ['jvworldframe_58',['JvWorldFrame',['../classSaiModel_1_1SaiModel.html#ae67c4ccb90f9f30709e1cfc4c3d26cb3',1,'SaiModel::SaiModel']]],
-  ['jw_59',['Jw',['../classSaiModel_1_1SaiModel.html#a7cbddeb81f4a996a6c903f6b755f65ef',1,'SaiModel::SaiModel']]],
-  ['jwlocalframe_60',['JwLocalFrame',['../classSaiModel_1_1SaiModel.html#a66f09f8ffca0259d235cb3a641dfa11e',1,'SaiModel::SaiModel']]],
-  ['jworldframe_61',['JWorldFrame',['../classSaiModel_1_1SaiModel.html#a6f0ba0a238efa96f833fc0368a181ff9',1,'SaiModel::SaiModel']]],
-  ['jwworldframe_62',['JwWorldFrame',['../classSaiModel_1_1SaiModel.html#a297ca115e04ad10b592f3cc610497333',1,'SaiModel::SaiModel']]]
+  ['index_0',['index',['../structSaiModel_1_1SphericalJointDescription.html#a5c36b0da3fdaab8787f5aed940d43818',1,'SaiModel::SphericalJointDescription']]],
+  ['inertia_1',['inertia',['../structSaiModel_1_1LinkMassParams.html#ab1ff8f34deb5156db4b94aae6ed9a303',1,'SaiModel::LinkMassParams']]],
+  ['instructions_2',['Build instructions',['../index.html#autotoc_md2',1,'']]],
+  ['islinkinrobot_3',['isLinkInRobot',['../classSaiModel_1_1SaiModel.html#ae6f267753af8146d643642c6e2f5df7c',1,'SaiModel::SaiModel']]]
 ];
