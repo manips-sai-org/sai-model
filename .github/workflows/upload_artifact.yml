@@ -25,7 +25,7 @@ jobs:
           cp rbdl/build/librbdl.so.3.2.0 ./librbdl.so
 
       - name: Archive Sai-model Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: sai-model-artifact
           path: |
