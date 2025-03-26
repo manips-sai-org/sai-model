@@ -1,0 +1,75 @@
+	
+
+STANFORD ACADEMIC SOFTWARE LICENSE AGREEMENT FOR SAI
+
+	Academic Research Use Software License Agreement
+
+1. This is a legal agreement between you (“RECIPIENT” or “you”), and
+THE BOARD OF TRUSTEES OF THE LELAND STANFORD JUNIOR UNIVERSITY (“STANFORD”).
+Stanford has an assignment to “SAI” (“Software”) which was developed in the
+laboratory of Professor Oussama Khatib.
+
+2. By downloading or otherwise receiving and using Software, including any
+accompanying information, materials or manuals you are agreeing to be bound
+by the terms of this Agreement.  If you do not agree to the terms of this
+Agreement, promptly delete the Software from your storage.
+
+3. STANFORD grants to RECIPIENT a royalty-free, nonexclusive, and
+nontransferable license to use, copy and modify the Software furnished
+hereunder, upon the terms and conditions set out below.
+
+4. RECIPIENT acknowledges that the Software is a research tool still in the
+development stage and that it is being supplied as is, without any
+accompanying services, support or improvements from STANFORD. STANFORD makes
+no representations and extends no warranties of any kind, either express or
+implied other than set out in this agreement.
+
+5. RECIPIENT agrees to use the Software solely for internal academic
+non-commercial purposes and shall not distribute or transfer it to another
+location or to any other person without prior written permission from
+STANFORD.
+
+6. RECIPIENT acknowledges that any modifications to the Software made by
+RECIPIENT will be considered a derivative of Software and owned by STANFORD.
+
+7. RECIPIENT may not further distribute Software without express written
+permission of STANFORD. If permission to transfer the Software is given,
+RECIPIENT warrants that RECIPIENT will not remove or export any part of the
+Software from the United States except in full compliance with all United
+States export regulations and other applicable laws.
+
+8. RECIPIENT will use the Software in compliance with all applicable laws,
+policies and regulations including, but not limited to, any approvals,
+informed consent and patient confidentiality principles.
+
+9. RECIPIENT will indemnify, hold harmless, and defend STANFORD against any
+claim of any kind arising out of or related to the exercise of any rights
+granted under this Agreement or the breach of this Agreement by RECIPIENT.
+
+10. IN NO EVENT WILL STANFORD BE LIABLE TO ANY ENTITY OR PERSON FOR DIRECT,
+INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST
+PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE, EVEN IF STANFORD HAS BEEN
+ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. STANFORD SPECIFICALLY DISCLAIMS ANY
+AND ALL WARRANTIES, EXPRESS AND IMPLIED, INCLUDING, BUT NOT LIMITED TO, ANY
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+THE SOFTWARE IS PROVIDED “AS IS.” STANFORD HAS NO OBLIGATION TO PROVIDE
+MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS OF THIS
+SOFTWARE.
+
+11. Title and copyright to the Software and any derivatives and any associated
+documentation shall at all times remain with STANFORD, and RECIPIENT agrees to
+preserve same.
+
+12. If RECIPIENT plans to publish any peer reviewed papers, abstracts, or
+similar publications, RECIPIENT agrees to grant to acknowledge Software and
+its creators in a manner consistent with academic practice.
+
+13. This agreement may be terminated by either party upon thirty (30) days
+written notice to the other party.  In the event of termination, RECIPIENT
+shall destroy or return immediately all Software and all copies thereof to
+STANFORD upon STANFORD’s request.
+
+
+	
+
+
