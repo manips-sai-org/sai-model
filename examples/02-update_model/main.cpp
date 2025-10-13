@@ -13,6 +13,32 @@ const string robot_fname =
 	string(EXAMPLES_FOLDER) + "/02-update_model/rprbot.urdf";
 const string rppbot_robot_fname = 
 	string(EXAMPLES_FOLDER) + "/02-update_model/rprbot.urdf";
+const string rr_robot_fname = 
+	string(EXAMPLES_FOLDER) + "/02-update_model/rrbot.urdf";
+
+// Function to perform SVD
+std::tuple<Eigen::MatrixXd, Eigen::VectorXd, Eigen::MatrixXd, double> computeSVD(const Eigen::MatrixXd& A) {
+    // Perform SVD decomposition
+    Eigen::JacobiSVD<Eigen::MatrixXd> svd(A, Eigen::ComputeFullU | Eigen::ComputeFullV);
+
+    // Extract U, S, V matrices
+    Eigen::MatrixXd U = svd.matrixU();
+    Eigen::VectorXd S = svd.singularValues();
+    Eigen::MatrixXd V = svd.matrixV();
+
+    // Compute inverse condition number
+    double invCond = 0.0;
+    if (S.size() > 0) {
+        double sigma_max = S(0); // Largest singular value
+        double sigma_min = S(S.size() - 1); // Smallest singular value
+        invCond = sigma_min / sigma_max;
+    } else {
+        invCond = std::numeric_limits<double>::infinity(); // Handle the case of zero singular values
+    }
+
+    // Return the results as a tuple
+    return std::make_tuple(U, S, V, invCond);
+}
 	
 int main(int argc, char** argv) {
 	cout << "Loading robot file: " << robot_fname << endl;
@@ -163,6 +189,24 @@ int main(int argc, char** argv) {
 	cout << "Parallel robot partial task jacobian for joint dependency: \n" << J_joint << endl;
 	auto JdotQdot = parallel_robot->jDotQDot(ee_link, ee_pos_in_link);
 	cout << "Parallel robot jdotqdot: \n" << JdotQdot.transpose() << "\n";
+
+	// test RR robot singularity directions for paper 
+	Sai2Model::Sai2Model* rr_robot = new Sai2Model::Sai2Model(rr_robot_fname);
+	// rr_robot->setQ(Vector2d(-0.35, 0.35));
+	rr_robot->setQ(Vector2d(-0.035, 0.035));
+	rr_robot->updateModel();
+	auto [U, S, V, gamma] = computeSVD(rr_robot->Jv("link1", Vector3d(0, 1, 0)));
+	std::cout << "U of J\n";
+	std::cout << U << "\n";
+	std::cout << "inverse condition number: " << gamma << "\n";
+	auto [U_L, S_L, V_L, gamma_L] = computeSVD(rr_robot->Jv("link1") * rr_robot->MInv() * rr_robot->Jv("link1").transpose());
+	std::cout << U_L << "\n";
+
+	/*
+		Centroidal inertia
+	*/
+    auto centroidal_inertia = robot->getCentroidalInertiaMatrix();
+	std::cout << "centroidal inertia: \n" << centroidal_inertia << "\n";
 
 	return 0;
 }

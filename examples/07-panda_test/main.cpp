@@ -11,7 +11,7 @@
 using namespace std;
 
 const string robot_fname =
-	string(EXAMPLES_FOLDER) + "/02-update_model/panda_arm.urdf";
+	string(EXAMPLES_FOLDER) + "/07-panda_test/panda_arm.urdf";
 
 // Function to generate a sample vector with each component within specified ranges
 Eigen::VectorXd generatesample_vector(const Eigen::VectorXd& min_vals, const Eigen::VectorXd& max_vals) {
@@ -50,6 +50,13 @@ int main(int argc, char** argv) {
 		min_joint_limit(i) = joint_limits[i].position_lower;
 		max_joint_limit(i) = joint_limits[i].position_upper;
 	}
+
+	// compute task inertia for some point 
+	MatrixXd Jc = MatrixXd::Zero(2, robot->dof());
+	Jc(0, 2) = 1;
+	Jc(1, 4) = 1;
+	MatrixXd task_inertia = (Jc * robot->M() * Jc.transpose());
+	std::cout << "task inertia: \n" << task_inertia << "\n";
 
 	// test that the sqrt(eigenvalues) and eigenvectors of Lambda_inv is the same as 
 	// the singular values and singular vectors of J * L

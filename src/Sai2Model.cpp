@@ -53,13 +53,17 @@ namespace Sai2Model {
 
 Sai2Model::Sai2Model(const string path_to_model_file, bool verbose) {
 	_rbdl_model = new RigidBodyDynamics::Model();
+	_ad_rbdl_model = std::make_shared<AutoDiffRigidBodyDynamics::Model>(path_to_model_file);
+
+	setFilename(path_to_model_file);
 
 	// parse rbdl model from urdf
 	map<int, double> initial_joint_positions;
 	bool success = RigidBodyDynamics::URDFReadFromFile(
 		path_to_model_file.c_str(), _rbdl_model, _link_names_to_id_map,
 		_joint_names_to_id_map, initial_joint_positions,
-		_joint_names_to_child_link_names_map, _joint_limits, false, verbose);
+		_joint_names_to_child_link_names_map,
+		_joint_names_to_parent_link_names_map, _joint_limits, false, verbose);
 	if (!success) {
 		throw std::runtime_error("Error loading model [" + path_to_model_file +
 								 "]\n");
@@ -110,7 +114,7 @@ Sai2Model::Sai2Model(const string path_to_model_file, bool verbose) {
 
 	// Initialize state vectors
 	_q.setZero(_q_size);
-	for(const auto& pair : initial_joint_positions) {
+	for (const auto& pair : initial_joint_positions) {
 		_q(pair.first) = pair.second;
 	}
 	// special case handle spherical joints. See rbdl/Joint class for details.
@@ -121,8 +125,10 @@ Sai2Model::Sai2Model(const string path_to_model_file, bool verbose) {
 									   _q);
 			int index = _rbdl_model->mJoints[i].q_index;
 			int w_index = _rbdl_model->multdof3_w_index[i];
-			_spherical_joints.push_back(
-				SphericalJointDescription(jointName(index), index, w_index));
+			string joint_name = jointName(index);
+			_spherical_joints.push_back(SphericalJointDescription(
+				joint_name, parentLinkName(joint_name),
+				childLinkName(joint_name), index, w_index));
 		}
 	}
 
@@ -149,7 +155,7 @@ void Sai2Model::setQ(const Eigen::VectorXd& q) {
 							   q(sph_joint.index + 2), q(sph_joint.w_index))) {
 			throw invalid_argument(
 				"trying to set an invalid quaternion for joint " +
-				sph_joint.name + " at index " +
+				sph_joint.joint_name + " at index " +
 				std::to_string(sph_joint.index) +
 				", and w_index: " + std::to_string(sph_joint.w_index));
 			return;
@@ -207,7 +213,7 @@ VectorXd Sai2Model::jointLimitsPositionUpper() const {
 const Eigen::Quaterniond Sai2Model::sphericalQuat(
 	const std::string& joint_name) const {
 	for (auto joint : _spherical_joints) {
-		if (joint.name == joint_name) {
+		if (joint.joint_name == joint_name) {
 			int i = joint.index;
 			int iw = joint.w_index;
 			return Eigen::Quaterniond(_q(iw), _q(i), _q(i + 1), _q(i + 2));
@@ -221,7 +227,7 @@ const Eigen::Quaterniond Sai2Model::sphericalQuat(
 void Sai2Model::setSphericalQuat(const std::string& joint_name,
 								 const Eigen::Quaterniond quat) {
 	for (auto joint : _spherical_joints) {
-		if (joint.name == joint_name) {
+		if (joint.joint_name == joint_name) {
 			int i = joint.index;
 			int iw = joint.w_index;
 			_q(i) = quat.x();
@@ -605,7 +611,7 @@ int Sai2Model::sphericalJointIndexW(const string& joint_name) const {
 	}
 	for (auto it = _spherical_joints.cbegin(); it != _spherical_joints.cend();
 		 ++it) {
-		if (it->name == joint_name) {
+		if (it->joint_name == joint_name) {
 			return it->w_index;
 		}
 	}
@@ -628,12 +634,20 @@ std::string Sai2Model::childLinkName(const std::string& joint_name) const {
 	return _joint_names_to_child_link_names_map.at(joint_name);
 }
 
+std::string Sai2Model::parentLinkName(const std::string& joint_name) const {
+	if (_joint_names_to_id_map.find(joint_name) ==
+		_joint_names_to_id_map.end()) {
+		throw invalid_argument("joint [" + joint_name + "] does not exist");
+	}
+	return _joint_names_to_parent_link_names_map.at(joint_name);
+}
+
 std::vector<std::string> Sai2Model::jointNames() const {
 	std::vector<std::string> names;
-	names.reserve(_joint_names_to_id_map.size());
+	names.reserve(_joint_id_to_names_map.size());
 
-	for (const auto& pair : _joint_names_to_id_map) {
-		names.push_back(pair.first);
+	for (const auto& pair : _joint_id_to_names_map) {
+		names.push_back(pair.second);
 	}
 
 	return names;
@@ -676,6 +690,27 @@ MatrixXd Sai2Model::comJacobian() const {
 		robot_mass += b.mMass;
 	}
 	return Jv_com / robot_mass;
+}
+
+MatrixXd Sai2Model::comAngularJacobian() const {
+	MatrixXd Jw_com = MatrixXd::Zero(3, _dof);
+	// MatrixXd link_Jw, link_J;
+	MatrixXd link_J = MatrixXd::Zero(6, _dof);
+	double robot_mass = 0.0;
+	int n_bodies = _rbdl_model->mBodies.size();
+	for (int i = 0; i < n_bodies; i++) {
+		RigidBodyDynamics::Body b = _rbdl_model->mBodies[i];
+
+		// link_Jw.setZero(3, _dof);
+		link_J.setZero();
+		CalcPointJacobian6D(*_rbdl_model, _q, i, b.mCenterOfMass, link_J, false);
+		Jw_com += link_J.topRows<3>();
+
+		// Jv_com += link_Jv * b.mMass;
+		robot_mass += b.mMass;
+	}
+	// return Jv_com / robot_mass;
+	return Jw_com;
 }
 
 Eigen::MatrixXd Sai2Model::taskInertiaMatrix(
@@ -760,7 +795,7 @@ void Sai2Model::addEnvironmentalContact(const string link,
 										const ContactType contact_type) {
 	for (vector<ContactModel>::iterator it = _environmental_contacts.begin();
 		 it != _environmental_contacts.end(); ++it) {
-		if (it->_link_name == link) {
+		if (it->contact_link_name == link) {
 			throw invalid_argument(
 				"Environmental contact on link " + link +
 				" already exists in Sai2Model::addEnvironmentalContact()");
@@ -773,7 +808,7 @@ void Sai2Model::deleteEnvironmentalContact(const string link_name) {
 	vector<ContactModel> new_contacts;
 	for (vector<ContactModel>::iterator it = _environmental_contacts.begin();
 		 it != _environmental_contacts.end(); ++it) {
-		if (it->_link_name != link_name) {
+		if (it->contact_link_name != link_name) {
 			new_contacts.push_back(*it);
 		}
 	}
@@ -786,10 +821,10 @@ void Sai2Model::updateEnvironmentalContact(const string link,
 										   const ContactType contact_type) {
 	for (vector<ContactModel>::iterator it = _environmental_contacts.begin();
 		 it != _environmental_contacts.end(); ++it) {
-		if (it->_link_name == link) {
-			it->_contact_position = pos_in_link;
-			it->_contact_orientation = orientation;
-			it->_contact_type = contact_type;
+		if (it->contact_link_name == link) {
+			it->contact_position = pos_in_link;
+			it->contact_orientation = orientation;
+			it->contact_type = contact_type;
 			return;
 		}
 	}
@@ -804,7 +839,7 @@ void Sai2Model::addManipulationContact(const string link,
 									   const ContactType contact_type) {
 	for (vector<ContactModel>::iterator it = _manipulation_contacts.begin();
 		 it != _manipulation_contacts.end(); ++it) {
-		if (it->_link_name == link) {
+		if (it->contact_link_name == link) {
 			throw invalid_argument(
 				"Environmental contact on link " + link +
 				" already exists in Sai2Model::addManipulationContact()");
@@ -818,7 +853,7 @@ void Sai2Model::deleteManipulationContact(const string link_name) {
 	vector<ContactModel> new_contacts;
 	for (vector<ContactModel>::iterator it = _manipulation_contacts.begin();
 		 it != _manipulation_contacts.end(); ++it) {
-		if (it->_link_name != link_name) {
+		if (it->contact_link_name != link_name) {
 			new_contacts.push_back(*it);
 		}
 	}
@@ -831,10 +866,10 @@ void Sai2Model::updateManipulationContact(const string link,
 										  const ContactType contact_type) {
 	for (vector<ContactModel>::iterator it = _manipulation_contacts.begin();
 		 it != _manipulation_contacts.end(); ++it) {
-		if (it->_link_name == link) {
-			it->_contact_position = pos_in_link;
-			it->_contact_orientation = orientation;
-			it->_contact_type = contact_type;
+		if (it->contact_link_name == link) {
+			it->contact_position = pos_in_link;
+			it->contact_orientation = orientation;
+			it->contact_type = contact_type;
 			return;
 		}
 	}
@@ -873,14 +908,14 @@ GraspMatrixData Sai2Model::manipulationGraspMatrixAtGeometricCenter(
 	for (const auto& contact : _manipulation_contacts) {
 		if (resultant_in_world_frame) {
 			contact_locations.push_back(
-				positionInWorld(contact._link_name, contact._contact_position));
+				positionInWorld(contact.contact_link_name, contact.contact_position));
 
 		} else {
 			contact_locations.push_back(
-				position(contact._link_name, contact._contact_position));
+				position(contact.contact_link_name, contact.contact_position));
 		}
-		contact_types.push_back(contact._contact_type);
-		if (contact._contact_type == SurfaceContact) {
+		contact_types.push_back(contact.contact_type);
+		if (contact.contact_type == SurfaceContact) {
 			num_surface_contacts++;
 		}
 	}
@@ -894,12 +929,12 @@ GraspMatrixData Sai2Model::manipulationGraspMatrixAtGeometricCenter(
 			Matrix3d R_local;
 			if (resultant_in_world_frame) {
 				R_local = rotationInWorld(
-					_manipulation_contacts[i]._link_name,
-					_manipulation_contacts[i]._contact_orientation);
+					_manipulation_contacts[i].contact_link_name,
+					_manipulation_contacts[i].contact_orientation);
 			} else {
 				R_local =
-					rotation(_manipulation_contacts[i]._link_name,
-							 _manipulation_contacts[i]._contact_orientation);
+					rotation(_manipulation_contacts[i].contact_link_name,
+							 _manipulation_contacts[i].contact_orientation);
 			}
 
 			G_data.G
@@ -911,7 +946,7 @@ GraspMatrixData Sai2Model::manipulationGraspMatrixAtGeometricCenter(
 					   3 * (n_contact_points + num_surface_contacts))
 				.applyOnTheLeft(R_local.transpose());
 
-			if (_manipulation_contacts[i]._contact_type == SurfaceContact) {
+			if (_manipulation_contacts[i].contact_type == SurfaceContact) {
 				G_data.G
 					.block(0, 3 * (n_contact_points + current_surface_contact),
 						   3 * (n_contact_points + num_surface_contacts), 3)
@@ -971,14 +1006,14 @@ GraspMatrixData Sai2Model::environmentalGraspMatrixAtGeometricCenter(
 	for (const auto& contact : _environmental_contacts) {
 		if (resultant_in_world_frame) {
 			contact_locations.push_back(
-				positionInWorld(contact._link_name, contact._contact_position));
+				positionInWorld(contact.contact_link_name, contact.contact_position));
 
 		} else {
 			contact_locations.push_back(
-				position(contact._link_name, contact._contact_position));
+				position(contact.contact_link_name, contact.contact_position));
 		}
-		contact_types.push_back(contact._contact_type);
-		if (contact._contact_type == SurfaceContact) {
+		contact_types.push_back(contact.contact_type);
+		if (contact.contact_type == SurfaceContact) {
 			num_surface_contacts++;
 		}
 	}
@@ -992,12 +1027,12 @@ GraspMatrixData Sai2Model::environmentalGraspMatrixAtGeometricCenter(
 			Matrix3d R_local;
 			if (resultant_in_world_frame) {
 				R_local = rotationInWorld(
-					_environmental_contacts[i]._link_name,
-					_environmental_contacts[i]._contact_orientation);
+					_environmental_contacts[i].contact_link_name,
+					_environmental_contacts[i].contact_orientation);
 			} else {
 				R_local =
-					rotation(_environmental_contacts[i]._link_name,
-							 _environmental_contacts[i]._contact_orientation);
+					rotation(_environmental_contacts[i].contact_link_name,
+							 _environmental_contacts[i].contact_orientation);
 			}
 
 			G_data.G
@@ -1009,7 +1044,7 @@ GraspMatrixData Sai2Model::environmentalGraspMatrixAtGeometricCenter(
 					   3 * (n_contact_points + num_surface_contacts))
 				.applyOnTheLeft(R_local.transpose());
 
-			if (_environmental_contacts[i]._contact_type == SurfaceContact) {
+			if (_environmental_contacts[i].contact_type == SurfaceContact) {
 				G_data.G
 					.block(0, 3 * (n_contact_points + current_surface_contact),
 						   3 * (n_contact_points + num_surface_contacts), 3)
@@ -1097,7 +1132,7 @@ void Sai2Model::addLoad(const std::string& link_name,
 	_load_names_to_load_mass_map.insert(std::make_pair(body_name, LinkMassParams(mass, com_pos, inertia, link_name)));
 }
 
-void Sai2Model::Sai2Model::removeLoad(const std::string body_name) {
+void Sai2Model::removeLoad(const std::string body_name) {
 	if (_load_names_to_load_mass_map.find(body_name) != _load_names_to_load_mass_map.end()) {
 		LinkMassParams load_params = _load_names_to_load_mass_map.find(body_name)->second;
 		RigidBodyDynamics::Math::SpatialTransform joint_frame = \
@@ -1115,6 +1150,20 @@ void Sai2Model::Sai2Model::removeLoad(const std::string body_name) {
 		std::cout << "Load with name not found; skipping\n";
 		return;
 	}
+}
+
+MatrixXd Sai2Model::getCentroidalInertiaMatrix() {
+	RigidBodyDynamics::Math::SpatialRigidBodyInertia inertia_matrix;
+	Math::Vector3d angular_momentum;
+	RigidBodyDynamics::CalcCentroidalInertiaMatrix(*_rbdl_model, _q, _dq, inertia_matrix, angular_momentum, true);
+	return inertia_matrix.toMatrix().block(0, 0, 3, 3);
+}
+
+MatrixXd Sai2Model::getPointInertiaMatrix(const std::string& link_name, const Vector3d& pos_in_link) {
+	RigidBodyDynamics::Math::SpatialRigidBodyInertia inertia_matrix;
+	Math::Vector3d angular_momentum;
+	RigidBodyDynamics::CalcPointSpatialInertiaMatrix(*_rbdl_model, _q, _dq, linkIdRbdl(link_name), pos_in_link, inertia_matrix, angular_momentum, true);
+	return inertia_matrix.toMatrix().block(0, 0, 3, 3);	
 }
 
 void Sai2Model::updateDynamics() {
@@ -1261,27 +1310,27 @@ MatrixXd matrixRangeBasis(const MatrixXd& matrix, const double& tolerance) {
 		return MatrixXd::Zero(range_size, 1);
 	}
 
-	JacobiSVD<MatrixXd> svd(matrix, ComputeThinU | ComputeThinV);
+	SelfAdjointEigenSolver<MatrixXd> es(matrix * matrix.transpose());
 
-	double sigma_0 = svd.singularValues()(0);
-	if (sigma_0 < tolerance) {
+	double lambda_0 = es.eigenvalues()(range_size - 1);
+	if (lambda_0 < tolerance) {
 		return MatrixXd::Zero(range_size, 1);
 	}
 
 	const int max_range = min(matrix.rows(), matrix.cols());
 	int task_dof = max_range;
-	for (int i = svd.singularValues().size() - 1; i > 0; i--) {
-		if (svd.singularValues()(i) / sigma_0 < tolerance) {
+	for (int i = (range_size - max_range); i < range_size; ++i) {
+		if (es.eigenvalues()(i) / lambda_0 < tolerance) {
 			task_dof -= 1;
 		} else {
 			break;
 		}
 	}
 
-	if (task_dof == matrix.rows()) {
-		return MatrixXd::Identity(max_range, max_range);
+	if (task_dof == range_size) {
+		return MatrixXd::Identity(range_size, range_size);
 	} else {
-		return svd.matrixU().leftCols(task_dof);
+		return es.eigenvectors().rightCols(task_dof).rowwise().reverse();
 	}
 }
 

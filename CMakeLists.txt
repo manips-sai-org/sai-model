@@ -31,6 +31,10 @@ find_package(Eigen3 REQUIRED)
 set(RBDL_LOCAL_DIR ${PROJECT_SOURCE_DIR}/rbdl)
 set(RBDL_INCLUDE_DIR ${RBDL_LOCAL_DIR}/include ${RBDL_LOCAL_DIR}/build/include)
 
+#include adrbdl
+set(ADRBDL_LOCAL_DIR ${PROJECT_SOURCE_DIR}/ad-rbdl)
+set(ADRBDL_INCLUDE_DIR ${ADRBDL_LOCAL_DIR}/include ${ADRBDL_LOCAL_DIR}/build/include)
+
 # include sai2-URDF
 find_package(SAI2-URDF REQUIRED)
 
@@ -51,6 +55,7 @@ include_directories(
   ${PARSER_INCLUDE_DIR}
   ${EIGEN3_INCLUDE_DIR}
   ${RBDL_INCLUDE_DIR}
+  ${ADRBDL_INCLUDE_DIR}
 )
 
 # Create the library
@@ -60,7 +65,14 @@ find_library(
   RBDL_LIBRARIES rbdl
   PATHS ${RBDL_LOCAL_DIR}/build
   NO_DEFAULT_PATH)
-set(SAI2-MODEL_LIBRARIES sai2-model ${RBDL_LIBRARIES})
+
+find_library(
+  ADRBDL_LIBRARIES ad-rbdl
+  NAMES adrbdl
+  PATHS ${ADRBDL_LOCAL_DIR}/build
+  NO_DEFAULT_PATH)
+
+set(SAI2-MODEL_LIBRARIES sai2-model ${RBDL_LIBRARIES} ${ADRBDL_LIBRARIES})
 
 # set the urdf model folder
 set(URDF_MODELS_FOLDER ${PROJECT_SOURCE_DIR}/urdf_models)
@@ -82,7 +94,7 @@ export(TARGETS sai2-model FILE ${PROJECT_BINARY_DIR}/SAI2-MODELTargets.cmake)
 export(PACKAGE SAI2-MODEL)
 
 # configure package
-set(CONF_INCLUDE_DIRS ${SAI2-MODEL_INCLUDE_DIRS} ${RBDL_INCLUDE_DIR})
+set(CONF_INCLUDE_DIRS ${SAI2-MODEL_INCLUDE_DIRS} ${RBDL_INCLUDE_DIR} ${ADRBDL_INCLUDE_DIR})
 set(CONF_LIBRARIES ${SAI2-MODEL_LIBRARIES})
 
 # create package configuration and version files

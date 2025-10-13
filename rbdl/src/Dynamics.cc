@@ -876,4 +876,110 @@ RBDL_DLLAPI void CalcMInvTimesTau ( Model &model,
   LOG << "QDDot = " << QDDot.transpose() << std::endl;
 }
 
+/*
+  Added centroidal 
+*/
+void CalcPointSpatialInertiaMatrix(Model &model, VectorNd &q,
+                                  VectorNd &qdot, const Math::Vector3d &point_position,
+                                   Math::SpatialRigidBodyInertia &inertia_matrix,
+                                   Math::Vector3d& angular_momentum, bool update_kinematics)
+{
+  // if (update_kinematics)
+  //   UpdateKinematicsCustom(model, &q, &qdot, NULL);
+
+  // for (unsigned int i = 1; i < model.mBodies.size(); i++) {
+  //   if (update_kinematics) {
+  //     jcalc_X_lambda_S (model, i, q);
+  //   }
+  //   model.Ic[i] = model.I[i];
+  // }
+  // if (update_kinematics) {
+  //   UpdateKinematicsCustom(model, &q, &qdot, NULL);
+  // }
+
+  for (size_t i = 1; i < model.mBodies.size(); i++)
+  {
+    model.Ic[i] = model.I[i];
+    model.hc[i] = model.Ic[i].toMatrix() * model.v[i];
+  }
+
+  inertia_matrix = SpatialRigidBodyInertia(0., Vector3d(0., 0., 0.), Matrix3d::Zero(3, 3));
+  SpatialVector htot(SpatialVector::Zero());
+
+  for (size_t i = model.mBodies.size() - 1; i > 0; i--)
+  {
+    unsigned int lambda = model.lambda[i];
+
+    if (lambda != 0)
+    {
+      model.Ic[lambda] =
+          model.Ic[lambda] + model.X_lambda[i].applyTranspose(model.Ic[i]);
+      model.hc[lambda] =
+          model.hc[lambda] + model.X_lambda[i].applyTranspose(model.hc[i]);
+    }
+    else
+    { 
+      std::cout << "i: " << i << "\n";
+      Math::SpatialTransform tot_trans =
+          Xtrans(point_position).inverse() * model.X_lambda[i];
+      inertia_matrix = inertia_matrix + tot_trans.applyTranspose(model.Ic[i]);
+      htot = htot + tot_trans.applyTranspose(model.hc[i]);
+    }
+  }
+  LOG << "mass = " << inertia_matrix.m
+      << " com = " << (inertia_matrix.h / inertia_matrix.m).transpose()
+      << " htot = " << htot.transpose()
+      << " I = " << inertia_matrix.toMatrix().block(0, 0, 3, 3) << std::endl;
+
+  angular_momentum.set(htot[0], htot[1], htot[2]);
+}
+
+void CalcPointSpatialInertiaMatrix(Model &model, VectorNd &q, VectorNd &qdot,
+                                   unsigned int body_id, const Vector3d &point_position,
+                                   SpatialRigidBodyInertia &inertia_matrix,
+                                   Math::Vector3d& angular_momentum, bool update_kinematics)
+{
+  if (update_kinematics)
+    UpdateKinematicsCustom(model, &q, &qdot, NULL);
+
+  const Vector3d point_world =
+      CalcBodyToBaseCoordinates(model, q, body_id, point_position, false);
+  const Vector3d base_world = CalcBodyToBaseCoordinates(model, q, 0, Vector3d::Zero(), false);
+  CalcPointSpatialInertiaMatrix(model, q, qdot, point_world - base_world,
+                                inertia_matrix, angular_momentum, false);
+}
+
+void CalcCentroidalInertiaMatrix(Model &model, VectorNd &q, VectorNd &qdot,
+                                 SpatialRigidBodyInertia &inertia_matrix,
+                                 Math::Vector3d& angular_momentum, bool update_kinematics)
+{
+  if (update_kinematics) {
+    UpdateKinematicsCustom(model, &q, &qdot, NULL);
+    for (unsigned int i = 1; i < model.mBodies.size(); i++) {
+        jcalc_X_lambda_S (model, i, q);
+        model.Ic[i] = model.I[i];
+    }
+  }
+  Vector3d com_pos_world;
+  Math::Scalar mass;
+  Utils::CalcCenterOfMass (model, q, qdot, NULL, mass, com_pos_world, NULL, NULL, NULL, NULL, false);
+  const Vector3d base_world = CalcBodyToBaseCoordinates(model, q, 0, Vector3d::Zero(), false);
+  CalcPointSpatialInertiaMatrix(model, q, qdot, com_pos_world - base_world,
+                                inertia_matrix, angular_momentum, false);
+}
+
 } /* namespace RigidBodyDynamics */
+
+// RBDL_DLLAPI void CalcCenterOfMass (
+//   Model &model,
+//   const Math::VectorNd &q,
+//   const Math::VectorNd &qdot,
+//   const Math::VectorNd *qddot,
+//   Math::Scalar &mass,
+//   Math::Vector3d &com,
+//   Math::Vector3d *com_velocity = NULL,
+//   Math::Vector3d *com_acceleration = NULL, 
+//   Math::Vector3d *angular_momentum = NULL,
+//   Math::Vector3d *change_of_angular_momentum = NULL,
+//   bool update_kinematics = true
+// );

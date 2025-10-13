@@ -87,6 +87,7 @@
         "thread": "cpp",
         "cinttypes": "cpp",
         "future": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "unordered_set": "cpp"
     }
 }

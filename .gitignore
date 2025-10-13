@@ -33,6 +33,7 @@
 
 # Directories
 build/
+docs/html/
 
 # DS store file
 *.DS_Store
@@ -41,3 +42,4 @@ build/
 **/.DS_Store
 
 src/parser/Sai2Model_UrdfFolder.h
+ad-rbdl/

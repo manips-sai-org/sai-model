@@ -1,0 +1,316 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<robot name="mmp_panda" version="1.0">
+
+  <!-- GROUND LINK -->
+  <link name ="ground_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+      <mass value="0.001" />
+      <inertia ixx="1E-06" ixy="0.0" ixz="0.0" iyy="1E-06" iyz="0.0" izz="1E-06" />
+    </inertial>
+  </link>
+
+
+  <!-- MOBILE BASE LINKS -->
+  <link name ="base_x">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+      <mass value="0.001" />
+      <inertia ixx="1E-06" ixy="0.0" ixz="0.0" iyy="1E-06" iyz="0.0" izz="1E-06" />
+    </inertial>
+  </link>
+
+  <link name = "base_y">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+      <mass value = "0.001" />
+      <inertia ixx="1E-06" ixy="0.0" ixz="0.0" iyy="1E-06" iyz="0.0" izz="1E-06" />
+    </inertial>
+  </link>
+
+  <!-- MOBILE BASE + LINK 0 OF PANDA ARM -->
+  <link name = "base_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.1757" rpy="0 0 0" />
+      <mass value = "64.6" />
+      <inertia ixx="1.721" ixy="0.0" ixz="0.0" iyy="1.712" iyz="0.0" izz="2.030" />
+    </inertial>
+    <visual>
+      <geometry>
+        <mesh filename="./meshes/base-only.obj" />
+      </geometry>
+    </visual>
+  </link>
+
+
+      <link name="link0">
+            <visual>
+                  <origin xyz="0 0 0" rpy="0 0 0" />
+                  <geometry>
+                        <mesh filename="NewArm/meshes/visual/link0.obj"/>
+                  </geometry>
+                  <color rgba="0.2313725490196078538 0.38039215686274507888 0.7058823529411765163 1.0"/>
+            </visual>
+            <inertial>
+                  <origin xyz="0 0 0" rpy="0 0 0" />
+                  <!-- <origin xyz="-0.00016099510750323679418 2.1502668555687398937e-05 0.058687829031910367095" rpy="0 0 0"/> -->
+                  <mass value="4" />
+                  <inertia ixx="0.4" iyy="0.4" izz="0.4" ixy="0" ixz="0" iyz="0" />
+            </inertial>
+      </link>
+
+      <link name="link1">
+            <visual>
+                  <origin xyz="0 9.4695813744069095847e-18 0.16600000000000000866" rpy="3.141592653589793116 -0 0" />
+                  <geometry>
+                        <mesh filename="NewArm/meshes/visual/link1.obj"/>
+                  </geometry>
+                  <color rgba="0.76862745098039220171 0.88627450980392152857 0.95294117647058818044 1.0"/>
+            </visual>
+            <inertial>
+                  <!-- <origin xyz="0 0 0" rpy="0 0 0" /> -->
+                  <origin xyz="0 9.4695813744069095847e-18 0.16600000000000000866" />
+                  <mass value="3" />
+                  <inertia ixx="0.3" iyy="0.3" izz="0.3" ixy="0" ixz="0" iyz="0" />
+            </inertial>
+      </link>
+
+      <link name="link2">
+            <visual>
+                  <origin xyz="0 -0.3179339811320564535 0.045999999999999999223" rpy="-1.570796326794896558 -1.570796326794896558 0" />
+                  <geometry>
+                        <mesh filename="NewArm/meshes/visual/link2.obj"/>
+                  </geometry>
+                  <color rgba="0.97254901960784312376 0.52941176470588235947 0.0039215686274509803377 1.0"/>
+            </visual>
+            <inertial>
+                  <origin xyz="0 -0.3179339811320564535 0.045999999999999999223" />
+                  <!-- <origin xyz="0 0 0" rpy="0 0 0" /> -->
+                  <!-- <origin xyz="-3.6729464221465088155e-05 0.11817071381710209099 0.028628592604875144345" rpy="0 0 0"/> -->
+                  <mass value="3" />
+                  <inertia ixx="0.3" iyy="0.3" izz="0.3" ixy="0" ixz="0" iyz="0" />
+            </inertial>
+      </link>
+
+      <link name="link3">
+            <visual>
+                  <origin xyz="0 5.2353650663549403163e-18 0.58635055499979604754" rpy="3.141592653589793116 -0 0" />
+                  <geometry>
+                        <mesh filename="NewArm/meshes/visual/link3.obj"/>
+                  </geometry>
+                  <color rgba="0.64705882352941179736 0.64705882352941179736 0.64705882352941179736 1.0"/>
+            </visual>
+            <inertial>
+                  <!-- <origin xyz="0 0 0" rpy="0 0 0" /> -->
+                  <origin xyz="0 5.2353650663549403163e-18 0.58635055499979604754" />
+                  <!-- <origin xyz="0.012981288491593185111 -1.1523571783544505955e-08 -0.14358767857146281788" rpy="0 0 0"/> -->
+                  <mass value="3" />
+                  <inertia ixx="0.2" iyy="0.2" izz="0.2" ixy="0" ixz="0" iyz="0" />
+            </inertial>
+      </link>
+
+      <link name="link4">
+            <visual>
+                  <origin xyz="1.4995485331087220387e-17 -0.79635055499979601201 0.053419459464159900486" rpy="-1.570796326794896558 -1.5707963267948961139 0" />
+                  <geometry>
+                        <mesh filename="NewArm/meshes/visual/link4.obj"/>
+                  </geometry>
+                  <color rgba="0.61568627450980395466 0.81176470588235294379 0.92941176470588238168 1.0"/>
+            </visual>
+            <inertial>
+                  <origin xyz="0 0 0" rpy="0 0 0" />
+                  <origin xyz="1.4995485331087220387e-17 -0.79635055499979601201 0.053419459464159900486"  />
+                  <mass value="3" />
+                  <inertia ixx="0.2" iyy="0.2" izz="0.2" ixy="0" ixz="0" iyz="0" />
+            </inertial>
+      </link>
+
+      <link name="link5">
+            <visual>
+                  <origin xyz="0 -0.015499999999999998154 -0.29159496446436361516" rpy="3.141592653589793116 0 0" />
+                  <geometry>
+                        <mesh filename="NewArm/meshes/visual/link5.obj"/>
+                  </geometry>
+                  <color rgba="0.2313725490196078538 0.38039215686274507888 0.7058823529411765163 1.0"/>
+            </visual>
+            <inertial>
+                  <origin xyz="0 -0.015499999999999998154 -0.29159496446436361516"  />
+                  <!-- <origin xyz="0 0 0" rpy="0 0 0" /> -->
+                  <!-- <origin xyz="-8.21933361848521435e-06 -0.007466120949285713973 -0.14523156181851704094" rpy="0 0 0"/> -->
+                  <mass value="3" />
+                  <inertia ixx="0.2" iyy="0.2" izz="0.2" ixy="0" ixz="0" iyz="0" />
+            </inertial>
+      </link>
+
+      <link name="link6">
+            <visual>
+                  <origin xyz="0 0 -0.031500000000000000222" rpy="1.57079632679489678 -0 0" />
+                  <geometry>
+                        <mesh filename="NewArm/meshes/visual/link6.obj"/>
+                  </geometry>
+                  <color rgba="0.64705882352941179736 0.64705882352941179736 0.64705882352941179736 1.0"/>
+            </visual>
+            <inertial>
+                  <!-- <origin xyz="0 0 0" rpy="0 0 0" /> -->
+                  <origin xyz="0 0 -0.031500000000000000222"  />
+                  <!-- <origin xyz="-0.001345266003644674099 -0.00020159549865029303744 -0.043031802213445387306" rpy="0 0 0"/> -->
+                  <mass value="1" />
+                  <inertia ixx="0.1" iyy="0.1" izz="0.1" ixy="0" ixz="0" iyz="0" />
+            </inertial>
+      </link>
+
+      <link name="link7">
+            <visual>
+                  <origin xyz="0.015499999999999999889 0 0.050000000000000002776" rpy="-1.570796326794896558 -1.570796326794896558 0" />
+                  <geometry>
+                        <mesh filename="NewArm/meshes/visual/link7.obj"/>
+                  </geometry>
+                  <color rgba="0.61568627450980395466 0.81176470588235294379 0.92941176470588238168 1.0"/>
+            </visual>
+            <inertial>
+                  <!-- <origin xyz="0 0 0" rpy="0 0 0" /> -->
+                  <origin xyz="0.015499999999999999889 0 0.050000000000000002776"  />
+                  <!-- <origin xyz="-6.2987087946048472831e-05 0.025638578406572624935 0.0031196393179788173278" rpy="0 0 0"/> -->
+                  <mass value="1" />
+                  <inertia ixx="0.09" iyy="0.05" izz="0.07" ixy="0" ixz="0" iyz="0" />
+            </inertial>
+      </link>
+
+      <link name="ultrasound_probe">
+            <visual>
+                  <!-- <origin xyz="0 0.1 0.05" rpy="1.57 0 0" /> -->
+                  <!-- <origin xyz="0 0.1 0.05" rpy="0 0 0" /> -->
+                  <origin xyz="0 0.1 0.05" rpy="0 1.57 0" />
+                  <geometry>
+                        <!-- <mesh filename="NewArm/meshes/visual/ultrasound_probe.obj"/> -->
+                        <sphere radius="0.05" />
+                  </geometry>
+                  <!-- <material name="black"> -->
+                    <!-- <color rgba="0.0 0.0 0.0 1.0"/> -->
+                  <!-- </material> -->
+            </visual>
+            <inertial>
+                  <origin xyz="0 0 0" rpy="0 0 0" />
+                  <mass value="0.1" />
+                  <inertia ixx="0.02" iyy="0.02" izz="0.02" ixy="0" ixz="0" iyz="0" />
+            </inertial>
+      </link>
+
+
+  <!-- JOINTS -->
+  <joint name = "base_prismatic_x" type = "prismatic">
+    <origin xyz = "0 0 0" rpy = "0 0 0"/> 
+    <parent link = "ground_link" />
+    <child link= "base_x"/>
+    <axis xyz = "1 0 0" />
+    <limit effort="87" lower="-2.8973" upper="2.9873" velocity="2.1750" />
+  </joint>
+
+  <joint name = "base_prismatic_y" type = "prismatic">
+    <origin xyz = "0 0 0" rpy = "0 0 0"/> 
+    <parent link = "base_x" />
+    <child link= "base_y"/>
+    <axis xyz = "0 1 0" />
+    <limit effort="87" lower="-2.8973" upper="2.9873" velocity="2.1750" />
+  </joint>
+
+  <joint name = "base_revolute" type = "revolute">
+    <origin xyz = "0 0 0.0" rpy = "0 0 0"/> 
+    <parent link = "base_y" />
+    <child link= "base_link"/>
+    <axis xyz = "0 0 1" />
+    <limit effort="87" lower="-2.8973" upper="2.8973" velocity="2.1750" />
+  </joint>
+
+  <joint name = "base_connection" type = "fixed">
+    <origin xyz = "0 0 0" rpy = "0 0 0"/> 
+    <parent link = "base_link" />
+    <child link= "link0"/>
+    <axis xyz = "0 0 1" />
+  </joint>
+
+      <joint name="joint8" type="fixed">
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <parent link="link7" />
+            <child link="ultrasound_probe" />
+            <axis xyz="0 0 1"/>
+            <!-- <limit effort="40" lower="-2.8973" upper="2.8973" velocity="2.6100"/> -->
+            <joint_properties friction="0.0"/>
+      </joint>
+
+      <joint name="joint7" type="revolute">
+            <safety_controller k_position="400.0" k_velocity="50.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
+            <origin xyz="-0.050000000000000002776 0 -0.047000000000000000111" rpy="-3.141592653589793116 -1.570796326794896558 0" />
+            <parent link="link6" />
+            <child link="link7" />
+            <axis xyz="0 0 1"/>
+            <limit effort="40" lower="-2.8973" upper="2.8973" velocity="2.6100"/>
+            <joint_properties friction="0.0"/>
+            <calibration falling="90"/>
+      </joint>
+
+      <joint name="joint6" type="revolute">
+            <safety_controller k_position="400.0" k_velocity="50.0" soft_lower_limit="-0.0175" soft_upper_limit="3.7525"/>
+            <origin xyz="0 -0.047000000000000000111 -0.29159496446436361516" rpy="1.570796326794896558 -0 0" />
+            <parent link="link5" />
+            <child link="link6" />
+            <axis xyz="0 0 1"/>
+            <limit effort="40" lower="-2.8973" upper="2.8973" velocity="2.6100"/>
+            <joint_properties friction="0.0"/>
+      </joint>
+
+      <joint name="joint5" type="revolute">
+            <safety_controller k_position="400.0" k_velocity="50.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
+            <origin xyz="1.6959599987181876448e-17 0.17708054053583999199 0.053419459464159900486" rpy="1.570796326794896558 -1.5707963267948961139 0" />
+            <parent link="link4" />
+            <child link="link5" />
+            <axis xyz="0 0 1"/>
+            <limit effort="100" lower="-2.8973" upper="2.8973" velocity="2.6100"/>
+            <joint_properties friction="0.0"/>
+      </joint>
+
+      <joint name="joint4" type="revolute">
+            <safety_controller k_position="400.0" k_velocity="50.0" soft_lower_limit="-3.0718" soft_upper_limit="-0.0698"/>
+            <origin xyz="-0.053419459464159900486 5.8601767272768710364e-17 -0.20999999999999996447" rpy="-1.570796326794896558 0 -1.5707963267948972241" />
+            <parent link="link3" />
+            <child link="link4" />
+            <axis xyz="0 0 1"/>
+            <limit effort="176" lower="-2.8973" upper="2.8973" velocity="2.1750"/>
+            <joint_properties friction="0.0"/>
+            <calibration falling="90" />
+      </joint>
+
+      <joint name="joint3" type="revolute">
+            <safety_controller k_position="400.0" k_velocity="50.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
+            <origin xyz="4.2758655842075647651e-18 0.26841657386773959404 0.045999999999999999223" rpy="1.570796326794896558 -1.570796326794896558 0" />
+            <parent link="link2" />
+            <child link="link3" />
+            <axis xyz="0 0 1"/>
+            <limit effort="176" lower="-2.8973" upper="2.8973" velocity="2.1750"/>
+            <joint_properties friction="0.0"/>
+      </joint>
+
+      <joint name="joint2" type="revolute">
+            <safety_controller k_position="400.0" k_velocity="50.0" soft_lower_limit="-1.7628" soft_upper_limit="1.7628"/>
+            <origin xyz="-0.045999999999999999223 9.4695813744069095847e-18 -0.15193398113205644484" rpy="-1.570796326794896558 0.0 -1.570796326794896558" />
+            <parent link="link1" />
+            <child link="link2" />
+            <axis xyz="0 0 1"/>
+            <limit effort="176" lower="-1.7628" upper="1.7628" velocity="2.1750"/>
+            <joint_properties friction="0.0"/>
+            <calibration falling="-20"/>
+      </joint>
+
+      <joint name="joint1" type="revolute">
+            <safety_controller k_position="400.0" k_velocity="50.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
+            <origin xyz="0 9.4695813744069095847e-18 0.16600000000000000866" rpy="3.141592653589793116 -0 0" />
+            <parent link="link0" />
+            <child link="link1" />
+            <axis xyz="0 0 1"/>
+            <limit effort="176" lower="-3.0543" upper="3.0543" velocity="2.1750"/>
+            <joint_properties friction="0.0"/>
+            <calibration falling="-90"/>
+      </joint>
+  
+</robot> 
