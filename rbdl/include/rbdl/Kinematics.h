@@ -182,10 +182,17 @@ RBDL_DLLAPI void CalcPointJacobian6D (Model &model,
  * @param J 
  * @return RBDL_DLLAPI 
  */
-RBDL_DLLAPI void calcLinkDependency (
+RBDL_DLLAPI void CalcLinkDependency (
     Model &model,
     unsigned int body_id,
-    Math::MatrixNd &J);
+    Math::MatrixNd &J,
+    bool update_kinematics = true);
+
+RBDL_DLLAPI void CalcLinkDependency (
+    Model &model,
+    unsigned int body_id,
+    std::vector<int>& indices,
+    bool update_kinematics = true);
 
 /** \brief Computes the spatial jacobian for a body
  *
@@ -431,6 +438,13 @@ RBDL_DLLAPI bool InverseKinematics (
     Math::VectorNd &Qres
     );
 #endif
+
+std::vector<Eigen::MatrixXd> calcJacobianDerivative(
+    Model &model,
+    const Eigen::VectorXd &Q,        // joint configuration
+    unsigned int ee_body_id,
+    const Eigen::Vector3d& pos_in_link,
+    const bool update = true);
 
 /** @} */
 

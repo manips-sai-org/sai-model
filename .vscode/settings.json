@@ -88,6 +88,7 @@
         "cinttypes": "cpp",
         "future": "cpp",
         "regex": "cpp",
-        "unordered_set": "cpp"
+        "unordered_set": "cpp",
+        "filesystem": "cpp"
     }
 }

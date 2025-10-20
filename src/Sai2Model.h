@@ -9,7 +9,7 @@
 #define SAI2MODEL_H_
 
 #include <rbdl/rbdl.h>
-#include <adrbdl/adrbdl.h>
+// #include <adrbdl/adrbdl.h>
 
 #include "JointLimits.h"
 #include "parser/Sai2ModelParserUtils.h"
@@ -1031,7 +1031,9 @@ public:
 	 * @param link_name 	link of robot to compute the joint selection matrix
 	 * @return MatrixXd 	joint selection matrix
 	 */
-	MatrixXd linkDependency(const std::string& link_name);
+	MatrixXd linkDependency(const std::string& link_name, const bool update = false);
+
+	std::vector<int> linkDependencyVector(const std::string& link_name, const bool update = false);
 
 	/**
 	 * @brief Computes the joint accelerations given an applied torque 
@@ -1094,8 +1096,14 @@ public:
 	/*
 		ad-rbdl access
 	*/
-    std::shared_ptr<AutoDiffRigidBodyDynamics::Model> getAdRobot() {
-		return _ad_rbdl_model;
+    // std::shared_ptr<AutoDiffRigidBodyDynamics::Model> getAdRobot() {
+		// return _ad_rbdl_model;
+	// }
+
+	std::vector<MatrixXd> getJacobianDerivative(const std::string& link_name,
+												const Vector3d& pos_in_link,
+												const bool update = false) {
+		return calcJacobianDerivative(*_rbdl_model, _q, linkIdRbdl(link_name), pos_in_link, update);
 	}
 
 private:
@@ -1156,7 +1164,7 @@ private:
 	RigidBodyDynamics::Model* _rbdl_model;
 
 	/// @brief internal ad-rbdl model
-	std::shared_ptr<AutoDiffRigidBodyDynamics::Model> _ad_rbdl_model;
+	// std::shared_ptr<AutoDiffRigidBodyDynamics::Model> _ad_rbdl_model;
 
 	/// @brief Joint positions. Note: _q size can differ from dof() since
 	/// spherical joints use quaternions.

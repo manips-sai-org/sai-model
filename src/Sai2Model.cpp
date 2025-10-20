@@ -53,7 +53,7 @@ namespace Sai2Model {
 
 Sai2Model::Sai2Model(const string path_to_model_file, bool verbose) {
 	_rbdl_model = new RigidBodyDynamics::Model();
-	_ad_rbdl_model = std::make_shared<AutoDiffRigidBodyDynamics::Model>(path_to_model_file);
+	// _ad_rbdl_model = std::make_shared<AutoDiffRigidBodyDynamics::Model>(path_to_model_file);
 
 	setFilename(path_to_model_file);
 
@@ -1108,10 +1108,16 @@ void Sai2Model::displayLinks() {
 	cout << endl;
 }
 
-MatrixXd Sai2Model::linkDependency(const std::string& link_name) {
+MatrixXd Sai2Model::linkDependency(const std::string& link_name, const bool update) {
 	MatrixXd J;
-	calcLinkDependency(*_rbdl_model, linkIdRbdl(link_name), J);
+	CalcLinkDependency(*_rbdl_model, linkIdRbdl(link_name), J, update);
 	return J;
+}
+
+std::vector<int> Sai2Model::linkDependencyVector(const std::string& link_name, const bool update) {
+	std::vector<int> d;
+	CalcLinkDependency(*_rbdl_model, linkIdRbdl(link_name), d, update);
+	return d;
 }
 
 void Sai2Model::addLoad(const std::string& link_name,
