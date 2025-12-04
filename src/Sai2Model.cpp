@@ -713,6 +713,16 @@ MatrixXd Sai2Model::comAngularJacobian() const {
 	return Jw_com;
 }
 
+Vector3d Sai2Model::comAcceleration() const {
+	double mass;
+	RigidBodyDynamics::Math::Vector3d com;
+	RigidBodyDynamics::Math::Vector3d com_velocity;
+	RigidBodyDynamics::Math::Vector3d com_acceleration;
+	RigidBodyDynamics::Utils::CalcCenterOfMass(*_rbdl_model, _q, _dq, &_ddq, 
+					 						   mass, com, &com_velocity, &com_acceleration);
+	return com_acceleration;
+}
+
 Eigen::MatrixXd Sai2Model::taskInertiaMatrix(
 	const MatrixXd& task_jacobian) const {
 	// check the task jacobian is compatible with the robot model

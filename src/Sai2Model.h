@@ -823,6 +823,11 @@ public:
 	MatrixXd comAngularJacobian() const;
 
 	/**
+	 * @brief		return com acceleration
+	 */
+	Vector3d comAcceleration() const;
+
+	/**
 	 * @brief      Computes the operational space inertia matrix corresponding
 	 * to a given Jacobian
 	 *
