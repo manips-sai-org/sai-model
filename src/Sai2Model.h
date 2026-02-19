@@ -1107,7 +1107,8 @@ public:
 	std::vector<MatrixXd> getMassMatrixDerivative(const bool update = false) {
 		std::vector<MatrixXd> dMdq(_dof, MatrixXd::Zero(_dof, _dof));
 		MatrixXd M_tmp = MatrixXd::Zero(_dof, _dof);
-		RigidBodyDynamics::ED::CompositeRigidBodyAlgorithm(*_rbdl_model, *_ed_rbdl_model, _q, _identity, M_tmp, dMdq, update);
+		// RigidBodyDynamics::ED::CompositeRigidBodyAlgorithm(*_rbdl_model, *_ed_rbdl_model, _q, _identity, M_tmp, dMdq, update);
+		RigidBodyDynamics::ED::CompositeRigidBodyAlgorithm(*_rbdl_model, *_ed_rbdl_model, _q, _identity, dMdq, update);
 		return dMdq;
 	}
 
@@ -1115,15 +1116,18 @@ public:
 		MatrixXd dbdq = MatrixXd::Zero(_dof, _dof);
 		MatrixXd dbddq = MatrixXd::Zero(_dof, _dof);
 		VectorXd tau = VectorXd::Zero(_dof);
-		RigidBodyDynamics::ED::NonlinearEffects(*_rbdl_model, *_ed_rbdl_model, _q, _identity, _dq, _zero, tau, dbdq);
-		RigidBodyDynamics::ED::NonlinearEffects(*_rbdl_model, *_ed_rbdl_model, _q, _zero, _dq, _identity, tau, dbddq);
+		// RigidBodyDynamics::ED::NonlinearEffects(*_rbdl_model, *_ed_rbdl_model, _q, _identity, _dq, _zero, tau, dbdq);
+		// RigidBodyDynamics::ED::NonlinearEffects(*_rbdl_model, *_ed_rbdl_model, _q, _zero, _dq, _identity, tau, dbddq);
+		RigidBodyDynamics::ED::NonlinearEffects(*_rbdl_model, *_ed_rbdl_model, _q, _identity, _dq, _zero, dbdq);
+		RigidBodyDynamics::ED::NonlinearEffects(*_rbdl_model, *_ed_rbdl_model, _q, _zero, _dq, _identity, dbddq);
 		return std::make_pair(dbdq, dbddq);
 	}
 
 	MatrixXd getGravityDerivative(const bool update = false) {
 		MatrixXd dgdq = MatrixXd::Zero(_dof, _dof);
 		VectorXd tau = VectorXd::Zero(_dof);
-		RigidBodyDynamics::ED::NonlinearEffects(*_rbdl_model, *_ed_rbdl_model, _q, _identity, _dq * 0, _zero, tau, dgdq);
+		// RigidBodyDynamics::ED::NonlinearEffects(*_rbdl_model, *_ed_rbdl_model, _q, _identity, _dq * 0, _zero, tau, dgdq);
+		RigidBodyDynamics::ED::NonlinearEffects(*_rbdl_model, *_ed_rbdl_model, _q, _identity, _dq * 0, _zero, dgdq);
 		return dgdq;
 	}
 

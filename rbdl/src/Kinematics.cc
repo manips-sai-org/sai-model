@@ -1073,99 +1073,92 @@ bool InverseKinematics (
 RBDL_DLLAPI
 std::vector<Eigen::MatrixXd> calcJacobianDerivative(
     Model &model,
-    const Eigen::VectorXd &Q,
+    const Eigen::VectorXd &Q,        // joint configuration
     unsigned int ee_body_id,
     const Eigen::Vector3d& pos_in_link,
     const bool update)
 {
-    const unsigned int n = model.q_size;
+    const unsigned int n = static_cast<unsigned int>(model.q_size);
 
-    if (update)
+    if (update) {
         UpdateKinematicsCustom(model, &Q, nullptr, nullptr);
+    }
 
-    // --- End-effector position and Jacobian ---
-    Eigen::Vector3d ee_pos =
-        CalcBodyToBaseCoordinates(model, Q, ee_body_id, pos_in_link, false);
-
-    Eigen::MatrixXd Jv_ee(3, n);
-    CalcPointJacobian(model, Q, ee_body_id, pos_in_link, Jv_ee, false);
-
-    // --- Dependency list ---
     std::vector<int> joint_dependency;
     CalcLinkDependency(model, ee_body_id, joint_dependency, false);
 
-    std::vector<bool> is_dep(n, false);
-    for (int id : joint_dependency)
-        is_dep[id] = true;
-
-    // --- Precompute joint axes and p vectors ---
-    std::vector<Eigen::Vector3d> z_axes(n);
-    std::vector<Eigen::Vector3d> p_axes(n);
-    std::vector<bool> is_revolute(n);
-
-    for (int i : joint_dependency) {
-
-        const Math::SpatialTransform &X_base_i = model.X_base[i + 1];
-
-        // Joint origin already available
-        Eigen::Vector3d joint_pos = X_base_i.r;
-        p_axes[i] = ee_pos - joint_pos;
-
-        const Math::SpatialVector &S = model.S[i + 1];
-        Eigen::Vector3d angular = S.head<3>();
-        Eigen::Vector3d linear  = S.tail<3>();
-
-        is_revolute[i] = (angular.norm() > 0.0);
-
-        Eigen::Vector3d axis_local =
-            is_revolute[i] ? angular : linear;
-
-        // Express in world frame
-        z_axes[i] = X_base_i.E.transpose() * axis_local;
+    // 1. Pre-allocate and return early if there are no dependent joints
+    std::vector<Eigen::MatrixXd> dJdq(n, Eigen::MatrixXd::Zero(6, n));
+    if (joint_dependency.empty()) {
+        return dJdq;
     }
 
-    // --- Allocate output ---
-    std::vector<Eigen::MatrixXd> dJdq(n);
-    for (unsigned int k = 0; k < n; ++k)
-        dJdq[k] = Eigen::MatrixXd::Zero(6, n);
+    Eigen::Vector3d ee_pos = CalcBodyToBaseCoordinates(model, Q, ee_body_id, pos_in_link, false);
+    
+    Eigen::MatrixXd Jv_ee(3, n);
+    CalcPointJacobian(model, Q, ee_body_id, pos_in_link, Jv_ee, false);
 
-    // --- Main computation (only dependent joints) ---
+    std::vector<int> joint_type(n, -1);
+    std::vector<Eigen::Vector3d> z_axes(n);
+    std::vector<Eigen::Vector3d> p_axes(n);
+
+    // 2. Compute kinematics ONLY for dependent joints
+    for (int i : joint_dependency) {
+        unsigned int body_id = i + 1; // RBDL uses 1-based indexing for bodies
+        const Math::SpatialTransform &X_base_i = model.X_base[body_id];
+
+        p_axes[i] = ee_pos - CalcBodyToBaseCoordinates(model, Q, body_id, Eigen::Vector3d::Zero(), false);
+
+        Math::SpatialVector S = model.S[body_id];
+        
+        // 3. Avoid expensive .norm() and square roots; use fixed-size Eigen accessors
+        if (S.head<3>().squaredNorm() > 0.5) { 
+            joint_type[i] = 0;  // revolute
+            z_axes[i] = (X_base_i.E.transpose() * S.head<3>()).normalized();
+        } else {
+            joint_type[i] = 1;  // prismatic
+            z_axes[i] = (X_base_i.E.transpose() * S.tail<3>()).normalized();
+        }
+    }
+
+    // 4. Iterate directly over dependencies, dropping O(N^3) complexity
     for (int k : joint_dependency) {
-
         const Eigen::Vector3d &z_k = z_axes[k];
         const Eigen::Vector3d &p_k = p_axes[k];
+        const int type_k = joint_type[k];
+        
+        // Hoist out constant vector fetch for inner loop
+        Eigen::Vector3d Jv_col_k;
+        if (type_k == 1) {
+            Jv_col_k = Jv_ee.col(k); 
+        }
 
         for (int i : joint_dependency) {
-
             const Eigen::Vector3d &z_i = z_axes[i];
-            const Eigen::Vector3d &p_i = p_axes[i];
+            const int type_i = joint_type[i];
 
-            auto &col = dJdq[k].col(i);
-
-            if (is_revolute[i] && is_revolute[k]) {
-
+            if (type_i == 0 && type_k == 0) {
+                // (i = r, j = r)
                 if (k < i) {
-                    col.head<3>() =
-                        (z_k.cross(z_i)).cross(p_i)
-                        + z_i.cross(z_k.cross(p_i));
-                    col.tail<3>() = z_k.cross(z_i);
+                    // Cache the cross product to avoid computing it twice
+                    Eigen::Vector3d z_k_cross_z_i = z_k.cross(z_i); 
+                    dJdq[k].col(i).head<3>() = z_k_cross_z_i.cross(p_axes[i]) + z_i.cross(z_k.cross(p_axes[i]));
+                    dJdq[k].col(i).tail<3>() = z_k_cross_z_i;
                 } else {
-                    col.head<3>() =
-                        z_i.cross(z_k.cross(p_k));
+                    dJdq[k].col(i).head<3>() = z_i.cross(z_k.cross(p_k));
                 }
-
-            } else if (is_revolute[i] && !is_revolute[k]) {
-
-                if (k >= i)
-                    col.head<3>() = z_i.cross(Jv_ee.col(k));
-
-            } else if (!is_revolute[i] && is_revolute[k]) {
-
-                if (k < i)
-                    col.head<3>() = z_k.cross(z_i);
-
+            } else if (type_i == 0 && type_k == 1) {
+                // (i = r, j = p)
+                if (k >= i) {
+                    dJdq[k].col(i).head<3>() = z_i.cross(Jv_col_k);
+                }
+            } else if (type_i == 1 && type_k == 0) {
+                // (i = p, j = r)
+                if (k < i) {
+                    dJdq[k].col(i).head<3>() = z_k.cross(z_i);
+                }
             }
-            // prismatic-prismatic → zero
+            // (p, p) does nothing, skipped
         }
     }
 

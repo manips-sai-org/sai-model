@@ -42,7 +42,7 @@ void NonlinearEffects (
     const Math::MatrixNd & q_dirs,
     const Math::VectorNd & qdot,
     const Math::MatrixNd & qdot_dirs,
-    Math::VectorNd & tau,
+    // Math::VectorNd & tau,
     Math::MatrixNd & ed_tau
     );
 
@@ -53,7 +53,7 @@ void CompositeRigidBodyAlgorithm (
   EDModel &ed_model,
   Math::VectorNd const & q,
   Math::MatrixNd const & q_dirs,
-  Math::MatrixNd & H,
+  // Math::MatrixNd & H,
   std::vector<Math::MatrixNd> & H_dirs,
   bool update_kinematics = true
 );
