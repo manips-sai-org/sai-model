@@ -9,7 +9,7 @@
 #define SAI2MODEL_H_
 
 #include <rbdl/rbdl.h>
-// #include <adrbdl/adrbdl.h>
+#include <rbdl_ad.h>
 
 #include "JointLimits.h"
 #include "parser/Sai2ModelParserUtils.h"
@@ -1083,9 +1083,7 @@ public:
 	 */
 	void removeLoad(const std::string body_name);
 
-	/*
-		Centroidal 
-	*/
+	// centroidal
     MatrixXd getCentroidalInertiaMatrix();
 
 	MatrixXd getPointInertiaMatrix(const std::string& link_name, const Vector3d& pos_in_link);
@@ -1098,17 +1096,35 @@ public:
 		_urdf_fname = fname;
 	}
 
-	/*
-		ad-rbdl access
-	*/
-    // std::shared_ptr<AutoDiffRigidBodyDynamics::Model> getAdRobot() {
-		// return _ad_rbdl_model;
-	// }
-
-	std::vector<MatrixXd> getJacobianDerivative(const std::string& link_name,
-												const Vector3d& pos_in_link,
-												const bool update = false) {
+	// derivatives
+	std::vector<MatrixXd> getJacobianDerivative(
+		const std::string& link_name,
+		const Vector3d& pos_in_link,
+		const bool update = false) {
 		return calcJacobianDerivative(*_rbdl_model, _q, linkIdRbdl(link_name), pos_in_link, update);
+	}
+
+	std::vector<MatrixXd> getMassMatrixDerivative(const bool update = false) {
+		std::vector<MatrixXd> dMdq(_dof, MatrixXd::Zero(_dof, _dof));
+		MatrixXd M_tmp = MatrixXd::Zero(_dof, _dof);
+		RigidBodyDynamics::ED::CompositeRigidBodyAlgorithm(*_rbdl_model, *_ed_rbdl_model, _q, _identity, M_tmp, dMdq, update);
+		return dMdq;
+	}
+
+	std::pair<MatrixXd, MatrixXd> getDynamicBiasDerivative(const bool update = false) {
+		MatrixXd dbdq = MatrixXd::Zero(_dof, _dof);
+		MatrixXd dbddq = MatrixXd::Zero(_dof, _dof);
+		VectorXd tau = VectorXd::Zero(_dof);
+		RigidBodyDynamics::ED::NonlinearEffects(*_rbdl_model, *_ed_rbdl_model, _q, _identity, _dq, _zero, tau, dbdq);
+		RigidBodyDynamics::ED::NonlinearEffects(*_rbdl_model, *_ed_rbdl_model, _q, _zero, _dq, _identity, tau, dbddq);
+		return std::make_pair(dbdq, dbddq);
+	}
+
+	MatrixXd getGravityDerivative(const bool update = false) {
+		MatrixXd dgdq = MatrixXd::Zero(_dof, _dof);
+		VectorXd tau = VectorXd::Zero(_dof);
+		RigidBodyDynamics::ED::NonlinearEffects(*_rbdl_model, *_ed_rbdl_model, _q, _identity, _dq * 0, _zero, tau, dgdq);
+		return dgdq;
 	}
 
 private:
@@ -1167,6 +1183,11 @@ private:
 
 	/// @brief internal rbdl model
 	RigidBodyDynamics::Model* _rbdl_model;
+
+	/// @brief internal ed rbdl model
+	RigidBodyDynamics::EDModel* _ed_rbdl_model;
+	MatrixXd _identity;
+	MatrixXd _zero;
 
 	/// @brief internal ad-rbdl model
 	// std::shared_ptr<AutoDiffRigidBodyDynamics::Model> _ad_rbdl_model;

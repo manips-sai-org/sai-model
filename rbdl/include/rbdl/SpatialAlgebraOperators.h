@@ -74,12 +74,35 @@ struct RBDL_DLLAPI SpatialRigidBodyInertia {
         );
   }
 
+  SpatialRigidBodyInertia operator+= (const SpatialRigidBodyInertia& rbi) {
+    m += rbi.m;
+    h += rbi.h;
+    Ixx += rbi.Ixx;
+    Iyx += rbi.Iyx;
+    Iyy += rbi.Iyy;
+    Izx += rbi.Izx;
+    Izy += rbi.Izy;
+    Izz += rbi.Izz;
+    return *this;
+  }
+
   void createFromMatrix (const SpatialMatrix &Ic) {
     m = Ic(3,3);
     h.set (-Ic(1,5), Ic(0,5), -Ic(0,4));
     Ixx = Ic(0,0);
     Iyx = Ic(1,0); Iyy = Ic(1,1);
     Izx = Ic(2,0); Izy = Ic(2,1); Izz = Ic(2,2);
+  }
+
+  void setZero() {
+    m = 0.0;
+    h.setZero();
+    Ixx = 0.0;
+    Iyx = 0.0;
+    Iyy = 0.0;
+    Izx = 0.0;
+    Izy = 0.0;
+    Izz = 0.0;
   }
 
   SpatialMatrix toMatrix() const {
@@ -308,6 +331,17 @@ struct RBDL_DLLAPI SpatialTransform {
     E *= XT.E;
   }
 
+  void setZero() {
+    E.setZero();
+    r.setZero();
+  }
+
+  static SpatialTransform Zero() {
+    SpatialTransform res;
+    res.setZero();
+    return res;
+  }
+
   Matrix3d E;
   Vector3d r;
 };
@@ -442,6 +476,26 @@ inline SpatialVector crossf (const SpatialVector &v1, const SpatialVector &v2) {
         v1[2] * v2[3] - v1[0] * v2[5],
       - v1[1] * v2[3] + v1[0] * v2[4]
       );
+}
+
+inline SpatialMatrix crossf_rhs(const SpatialVector & w)   {
+  return SpatialMatrix (
+       0.,   -w[2],    w[1],      0.,   -w[5],    w[4],
+     w[2],      0.,   -w[0],    w[5],      0.,   -w[3],
+    -w[1],    w[0],      0.,   -w[4],    w[3],      0.,
+       0.,   -w[5],    w[4],      0.,      0.,      0.,
+     w[5],      0.,   -w[3],      0.,      0.,      0.,
+    -w[4],    w[3],      0.,      0.,      0.,      0.);
+}
+
+inline SpatialMatrix crossf_rhs_T(const SpatialVector & w)   {
+  return SpatialMatrix (
+       0.,    w[2],   -w[1],      0.,    w[5],   -w[4],
+    -w[2],      0.,    w[0],   -w[5],      0.,    w[3],
+     w[1],   -w[0],      0.,    w[4],   -w[3],      0.,
+       0.,    w[5],   -w[4],      0.,      0.,      0.,
+    -w[5],      0.,    w[3],      0.,      0.,      0.,
+     w[4],   -w[3],      0.,      0.,      0.,      0.);
 }
 
 } /* Math */

@@ -1,0 +1,377 @@
+/*
+ * RBDL - Rigid Body Dynamics Library
+ * Copyright (c) 2011-2015 Martin Felis <martin.felis@iwr.uni-heidelberg.de>
+ *
+ * Licensed under the zlib license. See LICENSE for more details.
+ */
+
+#include "rbdl/rbdl_mathutils.h"
+#include "rbdl/Logging.h"
+
+#include "rbdl/Model.h"
+#include "rbdl/Kinematics.h"
+
+#include "KinematicsAD.h"
+#include "KinematicsFD.h"
+#include "ModelEntryFDC.h"
+
+#include <cfloat>
+
+using namespace std;
+using namespace RigidBodyDynamics::Math;
+
+// -----------------------------------------------------------------------------
+namespace RigidBodyDynamics {
+// -----------------------------------------------------------------------------
+namespace FDC {
+// -----------------------------------------------------------------------------
+
+// define constant difference perturbation according to theory,
+// i.e. EPS = eps^(1/3) = cubic_root(eps).
+// Here, we us cmath cubic root implementation, i.e. cubic_root = cbrt.
+// NOTE assumes that directions are normalized to one
+const double EPS = cbrt(DBL_EPSILON);
+const double EPSx2 = 2.0*EPS; // for convenience, we directly compute the denominator
+
+
+/*
+RBDL_DLLAPI Vector3d CalcBodyToBaseCoordinates (
+    Model & model,
+    ADModel * fd_model,
+    VectorNd const & q,
+    MatrixNd const & q_dirs,
+    unsigned int body_id,
+    Vector3d const & point_body_coordinates,
+    MatrixNd & fd_body_to_base_coordinates) {
+  unsigned ndirs = q_dirs.cols();
+  assert(ndirs == fd_body_to_base_coordinates.cols());
+  double const h = 1e-8;
+
+  Vector3d res =
+      CalcBodyToBaseCoordinates(model, q, body_id, point_body_coordinates);
+
+  for (unsigned idir = 0; idir < ndirs; idir++) {
+    Model * modelh;
+    if (fd_model) {
+      modelh = new Model(model);
+    } else {
+      modelh = &model;
+    }
+    VectorNd qh   = q + h * q_dirs.col(idir);
+    Vector3d resh =
+        CalcBodyToBaseCoordinates(*modelh, qh, body_id, point_body_coordinates);
+    fd_body_to_base_coordinates.col(idir) = (resh - res) / h;
+    if (fd_model) {
+      computeFDEntry(model, *modelh, h, idir, *fd_model);
+      delete modelh;
+    }
+  }
+
+  return res;
+}
+
+RBDL_DLLAPI Vector3d CalcBaseToBodyCoordinates (
+    Model & model,
+    ADModel * fd_model,
+    VectorNd const & q,
+    MatrixNd const & q_dirs,
+    unsigned body_id,
+    Vector3d const & base_point_position,
+    MatrixNd const & base_point_position_dirs,
+    MatrixNd & fd_base_to_body_coordinates
+) {
+  unsigned ndirs = q_dirs.cols();
+  assert(ndirs == base_point_position_dirs.cols());
+
+  Vector3d b2b = CalcBaseToBodyCoordinates (model, q, body_id,
+      base_point_position);
+
+  double h = 1e-8;
+  for (unsigned idir = 0; idir < ndirs; idir++) {
+    Model * modelh;
+    if (fd_model) {
+      modelh = new Model(model);
+    } else {
+      modelh = &model;
+    }
+
+    VectorNd qh = q + h * q_dirs.col(idir);
+    Vector3d base_point_positionh =
+        base_point_position + h * base_point_position_dirs.col(idir);
+
+    Vector3d b2bh = CalcBaseToBodyCoordinates(*modelh, qh, body_id,
+        base_point_positionh);
+
+    fd_base_to_body_coordinates.col(idir) = (b2bh - b2b) / h;
+
+    if (fd_model) {
+      computeFDEntry(model, *modelh, h, idir, *fd_model);
+      delete modelh;
+    }
+  }
+
+  return b2b;
+}
+
+RBDL_DLLAPI Matrix3d CalcBodyWorldOrientation (
+        Model & model,
+        VectorNd const & q,
+        MatrixNd const & q_dirs,
+        const unsigned int body_id,
+        vector<Matrix3d> & fd_derivative
+) {
+    unsigned ndirs = q_dirs.cols();
+    double h = 1e-8;
+    Matrix3d ref = CalcBodyWorldOrientation(model, q, body_id, true);
+    for (unsigned idir = 0; idir < ndirs; idir++) {
+        VectorNd q_dir  = q_dirs.block(0, idir, model.q_size, 1);
+        Matrix3d res_hd = CalcBodyWorldOrientation(model, q + h * q_dir, body_id, true);
+        fd_derivative[idir] = (res_hd - ref) / h;
+    }
+    return ref;
+}
+
+RBDL_DLLAPI Vector3d CalcPointVelocity (
+    Model & model,
+    VectorNd const & q,
+    MatrixNd const & q_dirs,
+    VectorNd const & qdot,
+    MatrixNd const & qdot_dirs,
+    unsigned int body_id,
+    Vector3d const & point_position,
+    MatrixNd & fd_point_velocity
+) {
+  unsigned ndirs = q_dirs.cols();
+  assert(ndirs == qdot_dirs.cols());
+  assert(3     == fd_point_velocity.rows());
+  assert(ndirs == fd_point_velocity.cols());
+  double h = 1e-8;
+  Vector3d ref = CalcPointVelocity(model, q, qdot, body_id, point_position,
+      true);
+  for (unsigned idir = 0; idir < ndirs; idir++) {
+    VectorNd qh = q + h * q_dirs.col(idir);
+    VectorNd qdh = qdot + h * qdot_dirs.col(idir);
+    fd_point_velocity.col(idir) = (CalcPointVelocity(model, qh, qdh, body_id,
+        point_position, true) - ref) / h;
+  }
+  return ref;
+}
+
+RBDL_DLLAPI SpatialVector CalcPointVelocity6D (
+    Model &model,
+    ADModel *fd_model, // NULL means execution without fd_model update
+    const VectorNd &q,
+    const MatrixNd &q_dirs,
+    const VectorNd &qdot,
+    const MatrixNd &qdot_dirs,
+    unsigned int body_id,
+    const Vector3d &point_position,
+    vector<SpatialVector> &pv6d_dirs) {
+  unsigned const ndirs = q_dirs.cols();
+  assert(ndirs == static_cast<unsigned>(qdot_dirs.cols()));
+
+  double const h = 1e-8;
+
+  SpatialVector pv6d =
+    CalcPointVelocity6D(model, q, qdot, body_id, point_position);
+
+  for (unsigned idir = 0; idir < ndirs; idir++) {
+    Model *modelh = &model;
+    VectorNd qh = q + h * q_dirs.col(idir);
+    VectorNd qdoth = qdot + h * qdot_dirs.col(idir);
+    if (fd_model) {
+      modelh = new Model(model);
+    }
+
+    SpatialVector pv6dh =
+        CalcPointVelocity6D(*modelh, qh, qdoth, body_id, point_position);
+
+    pv6d_dirs[idir] = (pv6dh - pv6d) / h;
+
+    if (fd_model) {
+      computeFDEntry(model, *modelh, h, idir, *fd_model);
+      delete modelh;
+    }
+  }
+
+  return pv6d;
+}
+
+
+RBDL_DLLAPI Vector3d CalcPointAcceleration (
+		Model & model,
+		VectorNd const & q,
+		MatrixNd const & q_dirs,
+		VectorNd const & qdot,
+		MatrixNd const & qdot_dirs,
+		VectorNd const & qddot,
+		MatrixNd const & qddot_dirs,
+		unsigned int body_id,
+		Vector3d const & point_position,
+		MatrixNd & fd_derivative) {
+	Vector3d ref = CalcPointAcceleration(model, q, qdot, qddot, body_id,
+			point_position, true);
+	unsigned int const ndirs = q_dirs.cols();
+	double const h = 1e-8;
+	for (unsigned idir = 0; idir < ndirs; idir++) {
+		VectorNd q_dir     = q_dirs.block(0, idir, model.q_size, 1);
+		VectorNd qdot_dir  = qdot_dirs.block(0, idir, model.qdot_size, 1);
+		VectorNd qddot_dir = qddot_dirs.block(0, idir, model.qdot_size, 1);
+		Vector3d res_hd  = CalcPointAcceleration(model, q + h * q_dir,
+				qdot + h * qdot_dir, qddot + h * qddot_dir, body_id,
+				point_position, true);
+		fd_derivative.block<3,1>(0, idir) = (res_hd - ref) / h;
+	}
+	return ref;
+}
+*/
+
+RBDL_DLLAPI
+void CalcPointJacobian (
+    Model &model,
+    ADModel *fd_model,
+    Math::VectorNd const &q,
+    Math::MatrixNd const &q_dirs,
+    unsigned int body_id,
+    Math::Vector3d const &point_position,
+    Math::MatrixNd &G,
+    std::vector<Math::MatrixNd> &G_dirs
+) {
+  const unsigned int ndirs = q_dirs.cols();
+  assert(G_dirs.size() == ndirs);
+
+  if (fd_model) {
+    fd_model->resize_directions(ndirs);
+  }
+
+  bool const update_kinematics = true;
+
+  MatrixNd Gh = MatrixNd::Zero (G.rows(), G.cols());
+  MatrixNd Gm = MatrixNd::Zero (G.rows(), G.cols());
+
+  for (unsigned idir = 0; idir < ndirs; idir++) {
+    Model *modelh;
+    if (fd_model) {
+      modelh = new Model(model);
+    } else {
+      modelh = &model;
+    }
+
+    // forward perturbation
+    CalcPointJacobian (
+      *modelh,
+      q + EPS * q_dirs.col(idir),
+      body_id, point_position,
+      Gh,
+      update_kinematics
+    );
+
+    // backward perturbation
+    CalcPointJacobian (
+      model,
+      q - EPS * q_dirs.col(idir),
+      body_id, point_position,
+      Gm,
+      update_kinematics
+    );
+
+    G_dirs[idir] = (Gh - Gm) / EPSx2;
+
+    if (fd_model) {
+      computeFDCEntry(*modelh, model, EPS, idir, *fd_model);
+      delete modelh;
+    }
+  }
+
+  // nominal evaluation
+  CalcPointJacobian (model, q, body_id, point_position, G, update_kinematics);
+}
+
+RBDL_DLLAPI void CalcPointJacobian6D (
+    Model &model,
+    ADModel *fd_model,
+    VectorNd const &q,
+    MatrixNd const &q_dirs,
+    unsigned body_id,
+    Vector3d const &point_position,
+    MatrixNd &G,
+    vector<MatrixNd> &fd_G
+) {
+  const unsigned int ndirs = q_dirs.cols();
+  assert(ndirs == fd_G.size());
+
+  G.setZero();
+  MatrixNd Gh = MatrixNd::Zero (G.rows(), G.cols());
+
+  for (unsigned idir = 0; idir < ndirs; idir++) {
+
+    Model *modelh;
+    if (fd_model) {
+      modelh = new Model(model);
+    } else {
+      modelh = &model;
+    }
+
+    // forward perturbation
+    CalcPointJacobian6D(
+      *modelh, q + EPS * q_dirs.col(idir), body_id, point_position, Gh
+    );
+
+    // backward perturbation
+    CalcPointJacobian6D(
+      model, q - EPS * q_dirs.col(idir), body_id, point_position, G
+    );
+
+    fd_G[idir] = (Gh - G) / EPSx2;
+
+    if (fd_model) {
+      computeFDCEntry(*modelh, model, EPS, idir, *fd_model);
+      delete modelh;
+    }
+  }
+
+  // nominal evaluation
+  CalcPointJacobian6D(model, q, body_id, point_position, G);
+}
+
+/*
+RBDL_DLLAPI
+void UpdateKinematicsCustom (
+    Model &model,
+    ADModel *fd_model,
+    VectorNd const & q,
+    MatrixNd const & q_dirs,
+    VectorNd const & qd,
+    MatrixNd const & qd_dirs,
+    VectorNd const & qdd,
+    MatrixNd const & qdd_dirs) {
+  unsigned const ndirs = q_dirs.cols();
+  double const h = 1e-8;
+
+  UpdateKinematicsCustom(model, &q, &qd, &qdd);
+
+  for (unsigned idir = 0; idir < ndirs; idir++) {
+    Model *modelh;
+    if (fd_model) {
+      modelh = new Model(model);
+    } else {
+      modelh = &model;
+    }
+    VectorNd qh   = q + h * q_dirs.col(idir);
+    VectorNd qdh  = qd + h * qd_dirs.col(idir);
+    VectorNd qddh = qdd + h * qdd_dirs.col(idir);
+
+    UpdateKinematicsCustom(*modelh, &qh, &qdh, &qddh);
+    if (fd_model) {
+      computeFDEntry(model, *modelh, h, idir, *fd_model);
+      delete modelh;
+    }
+  }
+}
+*/
+
+// -----------------------------------------------------------------------------
+} // Namespace FDC
+// -----------------------------------------------------------------------------
+} // Namespace RigidBodyDynamics
+// -----------------------------------------------------------------------------
