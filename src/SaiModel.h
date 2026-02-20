@@ -9,6 +9,7 @@
 #define SaiModel_H_
 
 #include <rbdl/rbdl.h>
+#include <rbdl_ad.h>
 
 #include "JointLimits.h"
 #include "parser/SaiModelParserUtils.h"
@@ -33,10 +34,12 @@ struct LinkMassParams {
 	Vector3d com_pos;
 	/// @brief Inertia of the link in the center of mass frame
 	Matrix3d inertia;
+	/// @brief Name of the link
+	std::string link_name;
 
 	LinkMassParams(const double& mass, const Vector3d& com_pos,
-				   const Matrix3d& inertia)
-		: mass(mass), com_pos(com_pos), inertia(inertia) {}
+				   const Matrix3d& inertia, const std::string& link_name = "")
+		: mass(mass), com_pos(com_pos), inertia(inertia), link_name(link_name) {}
 };
 
 /**
@@ -1009,6 +1012,122 @@ public:
 	 */
 	void displayLinks();
 
+	/**
+	 * @brief Computes the joint selection matrix for the joints leading up to the link
+	 * 
+	 * @param link_name 	link of robot to compute the joint selection matrix
+	 * @param update 		if kinematics needs to be updated
+	 * @return MatrixXd 	joint selection matrix
+	 */
+	MatrixXd linkDependency(const std::string& link_name, const bool update = false);
+
+	/**
+	 * @brief Computes the joint index vector for the joints leading up to the link
+	 * 
+	 * @param link_name 	link of robot to compute the joint index vector
+	 * @param update 		if kinematics needs to be updated
+	 * @return std::vector<int> joint selection vector
+	 */
+	std::vector<int> linkDependencyVector(const std::string& link_name, const bool update = false);
+
+	/**
+	 * @brief Computes \dot{J}\dot{q} 
+	 * 
+	 * @param link_name 			link of robot to compute \dot{J}\dot{q}
+	 * @param pos_in_link 			position in link 
+	 * @param update_kinematics 	if kinematics needs to be updated
+	 * @return Vector6d 			\dot{J}\dot{q} vector 
+	 */
+	VectorXd jDotQDot(
+		const std::string& link_name, 
+		const Vector3d& pos_in_link = Vector3d::Zero(), 
+		const bool update_kinematics = false);
+
+	/**
+	 * @brief Computes the centroidal inertia matrix 
+	 * 
+	 * @return MatrixXd 		centroidal inertia matrix
+	 */
+	MatrixXd getCentroidalInertiaMatrix();
+
+	/**
+	 * @brief Computes the point inertia matrix
+	 * 
+	 * @param link_name 		link of robot to compute point inertia matrix
+	 * @param pos_in_link 		position in link
+	 * @return MatrixXd 		point inertia matrix
+	 */
+	MatrixXd getPointInertiaMatrix(const std::string& link_name, const Vector3d& pos_in_link);
+
+	/**
+	 * @brief Computes the kinematic Hessian tensor
+	 * 
+	 * @param link_name 		link of robot to compute kinematic Hessian
+	 * @param pos_in_link 		position in link
+	 * @param update 			if kinematics needs to be updated
+	 * @return std::vector<MatrixXd> kinematic Hessian tensor, where each index of the vector (size dof) is the derivative of J (6xdof) wrt the kth joint
+	 */
+	std::vector<MatrixXd> getJacobianDerivative(
+		const std::string& link_name,
+		const Vector3d& pos_in_link,
+		const bool update = false);
+
+	/**
+	 * @brief Computes the mass matrix derivative
+	 * 
+	 * @param update 		if kinematics needs to be updated
+	 * @return std::vector<MatrixXd> tensor, where each index of the vector (size dof) is the derivative of M (dofxdof) wrt the kth joint
+	 */
+	std::vector<MatrixXd> getMassMatrixDerivative(const bool update = false);
+
+	/**
+	 * @brief Computes the dynamic bias (coriolis + centrifugal + gravity) derivative (jacobian) wrt q (joint position)
+	 * @param gravity_opt 		true if gravity component is considered
+	 * 
+	 * @return MatrixXd dynamic bias jacobian 
+	 */
+	MatrixXd getDynamicBiasDerivativeWrtQ(const bool gravity_opt = true);
+
+	/**
+	 * @brief Computes the dynamic bias (coriolis + centrifugal + gravity) derivative (jacobian) wrt dq (joint velocity)
+	 * @param gravity_opt 		true if gravity component is considered
+	 * 
+	 * @return MatrixXd dynamic bias jacobian 
+	 */
+	MatrixXd getDynamicBiasDerivativeWrtDq(const bool gravity_opt = true);
+
+	/**
+	 * @brief Computes the gravity derivative (jacobian) wrt q (joint position)
+	 * 
+	 * @return MatrixXd gravity jacobian
+	 */
+	MatrixXd getGravityDerivative();
+
+	/**
+	 * @brief Add load to link
+	 * 
+	 * @param link_name 		link to attach load
+	 * @param mass 				mass of load
+	 * @param com_pos 			com of load
+	 * @param inertia 			inertia of load
+	 * @param link_transform 	transform in link to attach load
+	 * @param body_name 		custom load name
+	 */
+	void addLoad(
+		const std::string& link_name,
+		const double& mass,
+		const Vector3d& com_pos,
+		const Matrix3d& inertia,
+		const Affine3d& link_transform = Affine3d::Identity(),
+		const std::string& body_name = "");
+
+	/**
+	 * @brief Remove load from link
+	 * 
+	 * @param body_name		  	custom load name
+	 */
+	void removeLoad(const std::string& body_name);
+
 private:
 	/**
 	 * @brief      update the dynamics (mass matrix and its inverse) for the
@@ -1066,6 +1185,13 @@ private:
 	/// @brief internal rbdl model
 	RigidBodyDynamics::Model* _rbdl_model;
 
+	/// @brief internal ed (explicit derivative) rbdl model
+	RigidBodyDynamics::EDModel* _ed_rbdl_model;
+
+	/// @brief internal identity (dof x dof) and zero (dof x dof) matrices for ed model
+	MatrixXd _identity;
+	MatrixXd _zero;
+
 	/// @brief Joint positions. Note: _q size can differ from dof() since
 	/// spherical joints use quaternions.
 	VectorXd _q;
@@ -1118,6 +1244,10 @@ private:
 
 	/// @brief joint limits for positions, velocity and torque, parsed from URDF
 	vector<JointLimit> _joint_limits;
+
+	/// \brief map for added loads 
+	map<string, std::tuple<std::string, RigidBodyDynamics::Math::SpatialTransform, RigidBodyDynamics::Body>> _load_names_to_load_body_map;
+
 };
 
 /**

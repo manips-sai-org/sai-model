@@ -31,6 +31,10 @@ find_package(Eigen3 REQUIRED)
 set(RBDL_LOCAL_DIR ${PROJECT_SOURCE_DIR}/rbdl)
 set(RBDL_INCLUDE_DIR ${RBDL_LOCAL_DIR}/include ${RBDL_LOCAL_DIR}/build/include)
 
+# include RBDL derivatives
+set(ED_RBDL_LOCAL_DIR ${PROJECT_SOURCE_DIR}/rbdl/addons/differentiation)
+set(ED_RBDL_INCLUDE_DIR ${ED_RBDL_LOCAL_DIR})
+
 # include sai-URDF
 find_package(SAI-URDF REQUIRED)
 
@@ -51,6 +55,7 @@ include_directories(
   ${PARSER_INCLUDE_DIR}
   ${EIGEN3_INCLUDE_DIR}
   ${RBDL_INCLUDE_DIR}
+  ${ED_RBDL_INCLUDE_DIR}
 )
 
 # Create the library
@@ -60,7 +65,13 @@ find_library(
   RBDL_LIBRARIES rbdl
   PATHS ${RBDL_LOCAL_DIR}/build
   NO_DEFAULT_PATH)
-set(SAI-MODEL_LIBRARIES sai-model ${RBDL_LIBRARIES})
+
+find_library(
+  ED_RBDL_LIBRARIES rbdl_ad
+  PATHS ${RBDL_LOCAL_DIR}/build/addons/differentiation
+  NO_DEFAULT_PATH)
+
+set(SAI-MODEL_LIBRARIES sai-model ${RBDL_LIBRARIES} ${ED_RBDL_LIBRARIES})
 
 # set the urdf model folder
 set(URDF_MODELS_FOLDER ${PROJECT_SOURCE_DIR}/urdf_models)

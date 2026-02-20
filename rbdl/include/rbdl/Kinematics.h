@@ -311,6 +311,59 @@ RBDL_DLLAPI
       bool update_kinematics = true
       );
 
+/**
+ * @brief Computes the joint dependency for a given link
+ * 
+ * @param model rigid body model
+ * @param body_id the id of the body
+ * @param J the joint selection matrix
+ * @param update_kinematics whether UpdateKinematics() should be called or not (default: true)
+ * @return RBDL_DLLAPI 
+ */
+RBDL_DLLAPI void CalcLinkDependency (
+    Model &model,
+    unsigned int body_id,
+    Math::MatrixNd &J,
+    bool update_kinematics = true
+    );
+
+/**
+ * @brief Computes the joint dependency for a given link
+ * 
+ * @param model rigid body model
+ * @param body_id the id of the body
+ * @param indices the vector of joints
+ * @param update_kinematics whether UpdateKinematics() should be called or not (default: true)
+ * @return RBDL_DLLAPI 
+ */
+RBDL_DLLAPI void CalcLinkDependency (
+    Model &model,
+    unsigned int body_id,
+    std::vector<int>& indices,
+    bool update_kinematics = true
+    );
+
+/**
+ * @brief Computes the kinematic Hessian (supports only revolute and prismatic joints)
+ * 
+ * @param model rigid body model
+ * @param Q state vector of the internal joints
+ * @param ee_body_id the id of the end-effector point
+ * @param pos_in_link the position of the point in body-local data
+ * @param dJdq kinematic Hessian tensor, where each index of the vector (size dof) is the derivative of J (6xdof) wrt the kth joint
+ * @param update whether UpdateKinematics() should be called or not (default: true)
+ * @return RBDL_DLLAPI 
+ */
+RBDL_DLLAPI
+void calcJacobianDerivative(
+    Model &model,
+    const Eigen::VectorXd &Q,
+    unsigned int ee_body_id,
+    const Eigen::Vector3d& pos_in_link,
+    std::vector<Eigen::MatrixXd>& dJdq,
+    const bool update = true
+    );
+
 #ifndef RBDL_USE_CASADI_MATH
 /** \brief Computes the inverse kinematics iteratively using a damped Levenberg-Marquardt method (also known as Damped Least Squares method)
  *

@@ -68,7 +68,7 @@ OPTION (RBDL_BUILD_EXECUTABLES "Build addon executables, disable this if you onl
 OPTION (RBDL_USE_PYTHON_2 "Use python 2 instead of python 3" OFF)
 OPTION (RBDL_BUILD_CASADI "Use the CasADi backend" OFF)
 OPTION (RBDL_VCPKG_BUILD "Building RBDL in vcpkg environment" OFF)
-
+OPTION (RBDL_BUILD_ADDON_DIFFERENTIATION "Build the automatic differentiation addon" ON)
 
 # Find and use the system's Eigen3 library
 FIND_PACKAGE (Eigen3 3.0.0)
@@ -147,6 +147,12 @@ SET ( RBDL_SOURCES
 	src/Model.cc
 	src/Kinematics.cc
 	)
+
+set(BUILD_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+set(BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
+IF (RBDL_BUILD_ADDON_DIFFERENTIATION)
+  ADD_SUBDIRECTORY ( addons/differentiation )
+ENDIF (RBDL_BUILD_ADDON_DIFFERENTIATION)
 
 # Static / dynamic builds
 IF (RBDL_BUILD_STATIC)

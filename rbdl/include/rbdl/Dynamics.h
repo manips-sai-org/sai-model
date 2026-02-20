@@ -13,6 +13,7 @@
 
 #include "rbdl/rbdl_math.h"
 #include "rbdl/rbdl_mathutils.h"
+#include "rbdl/rbdl_utils.h"
 
 #include "rbdl/Logging.h"
 
@@ -175,6 +176,33 @@ RBDL_DLLAPI void CalcMInvTimesTau (
     Math::VectorNd &QDDot,
     bool update_kinematics=true
     );
+
+RBDL_DLLAPI void CalcPointSpatialInertiaMatrix(
+    Model &model, 
+    Math::VectorNd &q,
+    Math::VectorNd &qdot, 
+    const Math::Vector3d &point_position,
+    Math::SpatialRigidBodyInertia &inertia_matrix,
+    Math::Vector3d& angular_momentum, 
+    bool update_kinematics=true);
+
+RBDL_DLLAPI void CalcPointSpatialInertiaMatrix(
+    Model &model, 
+    Math::VectorNd &q, 
+    Math::VectorNd &qdot,
+    unsigned int body_id, 
+    const Math::Vector3d &point_position,
+    Math::SpatialRigidBodyInertia &inertia_matrix,
+    Math::Vector3d& angular_momentum, 
+    bool update_kinematics=true);
+
+RBDL_DLLAPI void CalcCentroidalInertiaMatrix(
+    Model &model, 
+    Math::VectorNd &q, 
+    Math::VectorNd &qdot,
+    Math::SpatialRigidBodyInertia &inertia_matrix,
+    Math::Vector3d& angular_momentum, 
+    bool update_kinematics=true);
 
 /** @} */
 

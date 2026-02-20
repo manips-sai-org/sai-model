@@ -135,6 +135,10 @@ SaiModel::SaiModel(const string path_to_model_file, bool verbose) {
 	_M_inv.setIdentity(_dof, _dof);
 
 	updateModel();
+
+	_ed_rbdl_model = new RigidBodyDynamics::EDModel(*_rbdl_model);
+	_identity = MatrixXd::Identity(_dof, _dof);
+	_zero = MatrixXd::Zero(_dof, _dof);
 }
 
 SaiModel::~SaiModel() {
@@ -1641,6 +1645,115 @@ GraspMatrixData graspMatrixAtGeometricCenter(
 	}
 
 	return GraspMatrixData(G, G_inv, R, geometric_center);
+}
+
+MatrixXd SaiModel::linkDependency(const std::string& link_name, const bool update) {
+	MatrixXd J;
+	CalcLinkDependency(*_rbdl_model, linkIdRbdl(link_name), J, update);
+	return J;
+}
+
+std::vector<int> SaiModel::linkDependencyVector(const std::string& link_name, const bool update) {
+	std::vector<int> d;
+	CalcLinkDependency(*_rbdl_model, linkIdRbdl(link_name), d, update);
+	return d;
+}
+
+VectorXd SaiModel::jDotQDot(const string& link_name, const Vector3d& pos_in_link, const bool update_kinematics) {
+	Vector3d prev_gravity = _rbdl_model->gravity;
+	_rbdl_model->gravity.setZero();
+	VectorXd acc6d = CalcPointAcceleration6D(*_rbdl_model, _q, _dq, VectorXd::Zero(_ddq.size()), linkIdRbdl(link_name), pos_in_link, true);
+	acc6d.head(3).swap(acc6d.tail(3));
+	_rbdl_model->gravity = prev_gravity;
+	updateKinematics();
+	return acc6d;
+}
+
+MatrixXd SaiModel::getCentroidalInertiaMatrix() {
+	RigidBodyDynamics::Math::SpatialRigidBodyInertia inertia_matrix;
+	Math::Vector3d angular_momentum;
+	RigidBodyDynamics::CalcCentroidalInertiaMatrix(*_rbdl_model, _q, _dq, inertia_matrix, angular_momentum, true);
+	// return inertia_matrix.toMatrix().block(0, 0, 3, 3);
+	return inertia_matrix.toMatrix();
+}
+
+MatrixXd SaiModel::getPointInertiaMatrix(const std::string& link_name, const Vector3d& pos_in_link) {
+	RigidBodyDynamics::Math::SpatialRigidBodyInertia inertia_matrix;
+	Math::Vector3d angular_momentum;
+	RigidBodyDynamics::CalcPointSpatialInertiaMatrix(*_rbdl_model, _q, _dq, linkIdRbdl(link_name), pos_in_link, inertia_matrix, angular_momentum, true);
+	// return inertia_matrix.toMatrix().block(0, 0, 3, 3);	
+	return inertia_matrix.toMatrix();
+}
+
+std::vector<MatrixXd> SaiModel::getJacobianDerivative(
+	const std::string& link_name,
+	const Vector3d& pos_in_link,
+	const bool update) {
+	std::vector<MatrixXd> dJdq(_dof, MatrixXd::Zero(6, _dof));
+	calcJacobianDerivative(*_rbdl_model, _q, linkIdRbdl(link_name), pos_in_link, dJdq, update);
+	return dJdq;
+}
+
+std::vector<MatrixXd> SaiModel::getMassMatrixDerivative(const bool update) {
+	std::vector<MatrixXd> dMdq(_dof, MatrixXd::Zero(_dof, _dof));
+	RigidBodyDynamics::ED::CompositeRigidBodyAlgorithm(*_rbdl_model, *_ed_rbdl_model, _q, _identity, dMdq, update);
+	return dMdq;
+}
+
+MatrixXd SaiModel::getDynamicBiasDerivativeWrtQ(const bool gravity_opt) {
+	MatrixXd dbdq = MatrixXd::Zero(_dof, _dof);
+	RigidBodyDynamics::ED::NonlinearEffects(*_rbdl_model, *_ed_rbdl_model, _q, _identity, _dq, _zero, dbdq, gravity_opt);
+	return dbdq;
+}
+
+MatrixXd SaiModel::getDynamicBiasDerivativeWrtDq(const bool gravity_opt) {
+	MatrixXd dbddq = MatrixXd::Zero(_dof, _dof);
+	RigidBodyDynamics::ED::NonlinearEffects(*_rbdl_model, *_ed_rbdl_model, _q, _zero, _dq, _identity, dbddq, gravity_opt);
+	return dbddq;
+}
+
+MatrixXd SaiModel::getGravityDerivative() {
+	MatrixXd dgdq = MatrixXd::Zero(_dof, _dof);
+	RigidBodyDynamics::ED::NonlinearEffects(*_rbdl_model, *_ed_rbdl_model, _q, _identity, _dq * 0, _zero, dgdq);
+	return dgdq;
+}
+
+void SaiModel::addLoad(
+	const std::string& link_name,
+	const double& mass,
+	const Vector3d& com_pos,
+	const Matrix3d& inertia,
+	const Affine3d& link_transform,
+	const std::string& body_name) {
+	if (_load_names_to_load_body_map.find(body_name) != _load_names_to_load_body_map.end()) {
+		std::cout << "Load with name already added; skipping\n";
+		return;
+	} 
+	RigidBodyDynamics::Math::SpatialTransform transform = 
+		RigidBodyDynamics::Math::SpatialTransform(link_transform.linear(), link_transform.translation());
+	RigidBodyDynamics::Body load_body = 
+		RigidBodyDynamics::Body(mass, RigidBodyDynamics::Math::Vector3d(com_pos), RigidBodyDynamics::Math::Matrix3d(inertia));
+	_rbdl_model->mBodies[linkIdRbdl(link_name)].Join(transform, load_body);
+	auto combined_body = _rbdl_model->mBodies[linkIdRbdl(link_name)];
+	_rbdl_model->I[linkIdRbdl(link_name)] = RigidBodyDynamics::Math::SpatialRigidBodyInertia::createFromMassComInertiaC(
+																combined_body.mMass,
+																combined_body.mCenterOfMass,
+																combined_body.mInertia);
+	_load_names_to_load_body_map[body_name] = std::make_tuple(link_name, transform, load_body);
+}
+
+void SaiModel::removeLoad(const std::string& body_name) {
+	auto it = _load_names_to_load_body_map.find(body_name);
+    if (it == _load_names_to_load_body_map.end()) return;
+	
+	auto [link_name, link_transform, load_body] = it->second;
+	_rbdl_model->mBodies[linkIdRbdl(link_name)].Separate(link_transform, load_body);
+	auto separated_body = _rbdl_model->mBodies[linkIdRbdl(link_name)];
+	_rbdl_model->I[linkIdRbdl(link_name)] = RigidBodyDynamics::Math::SpatialRigidBodyInertia::createFromMassComInertiaC(
+																separated_body.mMass,
+																separated_body.mCenterOfMass,
+																separated_body.mInertia);
+	_load_names_to_load_body_map.erase(it);
 }
 
 }  // namespace SaiModel
