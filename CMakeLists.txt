@@ -93,7 +93,7 @@ export(TARGETS sai-model FILE ${PROJECT_BINARY_DIR}/SAI-MODELTargets.cmake)
 export(PACKAGE SAI-MODEL)
 
 # configure package
-set(CONF_INCLUDE_DIRS ${SAI-MODEL_INCLUDE_DIRS} ${RBDL_INCLUDE_DIR})
+set(CONF_INCLUDE_DIRS ${SAI-MODEL_INCLUDE_DIRS} ${RBDL_INCLUDE_DIR} ${ED_RBDL_INCLUDE_DIR})
 set(CONF_LIBRARIES ${SAI-MODEL_LIBRARIES})
 
 # create package configuration and version files
