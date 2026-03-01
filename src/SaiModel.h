@@ -1128,6 +1128,13 @@ public:
 	 */
 	void removeLoad(const std::string& body_name);
 
+	/**
+	 * @brief COM acceleration
+	 * 
+	 * @return Vector3d com acceleration
+	 */
+	Vector3d comAcceleration();
+
 private:
 	/**
 	 * @brief      update the dynamics (mass matrix and its inverse) for the

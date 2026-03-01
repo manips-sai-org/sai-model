@@ -1756,4 +1756,14 @@ void SaiModel::removeLoad(const std::string& body_name) {
 	_load_names_to_load_body_map.erase(it);
 }
 
+Vector3d SaiModel::comAcceleration() {
+	double mass;
+	RigidBodyDynamics::Math::Vector3d com;
+	RigidBodyDynamics::Math::Vector3d com_velocity;
+	RigidBodyDynamics::Math::Vector3d com_acceleration;
+	RigidBodyDynamics::Utils::CalcCenterOfMass(*_rbdl_model, _q, _dq, &_ddq, 
+					 						   mass, com, &com_velocity, &com_acceleration);
+	return com_acceleration;
+}
+
 }  // namespace SaiModel
