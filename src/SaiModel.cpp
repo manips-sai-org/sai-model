@@ -1766,4 +1766,97 @@ Vector3d SaiModel::comAcceleration() {
 	return com_acceleration;
 }
 
+void SaiModel::addMuscleSystem(const std::string& muscle_xml, const std::string& name) {
+	if (_muscle_system.find(name) != _muscle_system.end()) {
+		std:cout << "Muscle group already exists; skipping\n";
+		return;
+	}
+	_muscle_system[name] = parseMuscleXML(muscle_xml);
+}
+
+// MatrixXd SaiModel::computeMuscleJacobian() {
+// 	int n_muscles = 0;
+// 	for (auto& [_, system] : _muscle_system) {
+// 		n_muscles += system.muscles.size();
+// 	}
+// 	MatrixXd L = MatrixXd::Zero(n_muscles, _dof);
+// 	int i = 0;
+// 	for (auto& [name, system] : _muscle_system) {
+// 		for (auto& node : system.muscles) {
+// 			auto& waypoints = node.contractor.muscle_tendon_path;
+// 			for (int j = 0; j < waypoints.size() - 1; ++j) {
+// 				if (waypoints[j].link_name != waypoints[j + 1].link_name) {
+// 					Vector3d d = positionInWorld(waypoints[j + 1].link_name) - positionInWorld(waypoints[j].link_name);
+// 					L.row(i) += (1. / d.norm()) * 
+// 						d.transpose() * (Jv(waypoints[j + 1].link_name, waypoints[j + 1].point) - Jv(waypoints[j].link_name, waypoints[j].point));
+// 				}
+// 			}
+// 			++i;
+// 		}
+// 	}
+// 	return L;
+// }
+
+MatrixXd SaiModel::computeMuscleJacobian() {
+    // 1. Pre-calculate total number of muscles to allocate L once
+    int n_muscles = 0;
+    for (const auto& [_, system] : _muscle_system) {
+        n_muscles += system.muscles.size();
+    }
+    
+    MatrixXd L = MatrixXd::Zero(n_muscles, _dof);
+    if (n_muscles == 0 || _dof == 0) return L;
+
+    int i = 0;
+    // 2. Use const references to avoid accidental deep copies
+    for (const auto& [name, system] : _muscle_system) {
+        for (const auto& node : system.muscles) {
+            const auto& waypoints = node.contractor.muscle_tendon_path;
+            
+            bool has_cached = false;
+            Vector3d pos_j;
+            MatrixXd Jv_j; // If Jv returns a specific fixed-size type, use that instead of MatrixXd
+
+            // Safe loop condition avoiding size_t underflow if waypoints is empty
+            for (size_t j = 0; j + 1 < waypoints.size(); ++j) {
+                const auto& wp0 = waypoints[j];
+                const auto& wp1 = waypoints[j + 1];
+
+                if (wp0.link_name != wp1.link_name) {
+                    // 3. Lazy evaluation & caching of kinematic quantities
+                    if (!has_cached) {
+                        pos_j = positionInWorld(wp0.link_name);
+                        Jv_j = Jv(wp0.link_name, wp0.point);
+                    }
+
+                    Vector3d pos_next = positionInWorld(wp1.link_name);
+                    auto Jv_next = Jv(wp1.link_name, wp1.point);
+
+                    Vector3d d = pos_next - pos_j;
+                    double d_norm = d.norm();
+
+                    // 4. Safety check to prevent division by zero or NaN propagation
+                    if (d_norm > 1e-8) { 
+                        // 5. Eliminate Eigen temporary matrices via math distribution
+                        RowVector3d u = d.transpose() / d_norm;
+                        L.row(i).noalias() += u * Jv_next;
+                        L.row(i).noalias() -= u * Jv_j;
+                    }
+
+                    // Cache the "next" values for the following segment
+                    pos_j = pos_next;
+                    Jv_j = std::move(Jv_next); // Move semantics to avoid copying
+                    has_cached = true;
+                } else {
+                    // If the segment stays on the same link, cache is broken because 
+                    // the subsequent joint crossing will originate from a different local point.
+                    has_cached = false;
+                }
+            }
+            ++i;
+        }
+    }
+    return L;
+}
+
 }  // namespace SaiModel

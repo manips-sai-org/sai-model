@@ -21,8 +21,13 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
                                                "MinSizeRel" "RelWithDebInfo")
 endif()
 
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+endif()
+
 option(BUILD_EXAMPLES "Build examples" ON)
 option(BUILD_TESTS "Build tests" OFF)
+option(BUILD_PYTHON_BINDINGS "Build Python bindings with pybind11" OFF)
 
 # include Eigen
 find_package(Eigen3 REQUIRED)
@@ -113,4 +118,8 @@ endif()
 if(BUILD_TESTS)
   # add tests
   add_subdirectory(${PROJECT_SOURCE_DIR}/tests)
+endif()
+
+if(BUILD_PYTHON_BINDINGS)
+  add_subdirectory(${PROJECT_SOURCE_DIR}/python)
 endif()

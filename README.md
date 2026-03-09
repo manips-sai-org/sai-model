@@ -57,6 +57,28 @@ cd build/examples/01-create_model_from_file
 ./01-create_model_from_file
 ```
 
+## Python bindings
+
+Python bindings are provided through `pybind11`.
+
+Build with:
+
+```
+mkdir -p build
+cd build
+cmake .. -DBUILD_PYTHON_BINDINGS=ON -DPython_EXECUTABLE=$(which python3)
+make -j8 sai_model_py
+```
+
+If the build succeeds, the module `sai_model_py` is generated in the build tree
+and can be imported from Python by adding that directory to `PYTHONPATH`.
+
+Example:
+
+```
+PYTHONPATH=build/python python3 -c "import sai_model_py; print(sai_model_py.SaiModel)"
+```
+
 ## Documentation
 
 The documentation can also be accessed online at the following [link](https://manips-sai-org.github.io/sai-model/)

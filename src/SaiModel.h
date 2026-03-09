@@ -13,6 +13,7 @@
 
 #include "JointLimits.h"
 #include "parser/SaiModelParserUtils.h"
+#include "parser/MuscleParser.h"
 
 using namespace std;
 using namespace Eigen;
@@ -1135,6 +1136,20 @@ public:
 	 */
 	Vector3d comAcceleration();
 
+	/**
+	 * @brief Add muscle group to model
+	 * 
+	 * @param muscle_xml 
+	 */
+	void addMuscleSystem(const std::string& muscle_xml, const std::string& name);
+
+	/**
+	 * @brief L matrix in the muscle relationship dl = L dq, for l a vector of muscle fiber lengths
+	 * 
+	 * @return MatrixXd 
+	 */
+	MatrixXd computeMuscleJacobian();
+
 private:
 	/**
 	 * @brief      update the dynamics (mass matrix and its inverse) for the
@@ -1254,6 +1269,9 @@ private:
 
 	/// \brief map for added loads 
 	map<string, std::tuple<std::string, RigidBodyDynamics::Math::SpatialTransform, RigidBodyDynamics::Body>> _load_names_to_load_body_map;
+
+	/// \brief muscle system
+	map<string, MuscleSystemNode> _muscle_system;
 
 };
 

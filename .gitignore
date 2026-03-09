@@ -34,6 +34,7 @@
 # Directories
 build/
 docs/html/
+build-py314/
 
 # DS store file
 **/.DS_Store

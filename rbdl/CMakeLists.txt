@@ -35,6 +35,8 @@ IF (MSVC)
   SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj /permissive- /std:c++17")
 ENDIF (MSVC)
 
+SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+
 IF(APPLE)
   SET(CMAKE_CXX_STANDARD 17)
   INCLUDE_DIRECTORIES("/usr/local/include")
@@ -71,7 +73,7 @@ OPTION (RBDL_VCPKG_BUILD "Building RBDL in vcpkg environment" OFF)
 OPTION (RBDL_BUILD_ADDON_DIFFERENTIATION "Build the automatic differentiation addon" ON)
 
 # Find and use the system's Eigen3 library
-FIND_PACKAGE (Eigen3 3.0.0)
+FIND_PACKAGE (Eigen3 REQUIRED)
 
 IF (NOT EIGEN3_FOUND)
     MESSAGE (WARNING "Could not find Eigen3 on your system. Please install it!")
