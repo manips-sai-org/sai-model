@@ -1774,6 +1774,7 @@ void SaiModel::addMuscleSystem(const std::string& muscle_xml, const std::string&
 	_muscle_system[name] = parseMuscleXML(muscle_xml);
 }
 
+// original function
 // MatrixXd SaiModel::computeMuscleJacobian() {
 // 	int n_muscles = 0;
 // 	for (auto& [_, system] : _muscle_system) {

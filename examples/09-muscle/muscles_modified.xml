@@ -1,0 +1,3872 @@
+<?xml version="1.0"?>
+<!DOCTYPE SAImuscle SYSTEM "msc.dtd">
+
+<muscleSystemNode>
+<muscleSystemName>my_system</muscleSystemName>
+<comments>This is a sample muscle system.</comments>
+<robotName>human</robotName>
+<fiberLengthNorm>
+    0.5000,
+    0.5200,
+    0.5400,
+    0.5600,
+    0.5800,
+    0.6000,
+    0.6200,
+    0.6400,
+    0.6600,
+    0.6800,
+    0.7000,
+    0.7200,
+    0.7400,
+    0.7600,
+    0.7800,
+    0.8000,
+    0.8200,
+    0.8400,
+    0.8600,
+    0.8800,
+    0.9000,
+    0.9200,
+    0.9400,
+    0.9600,
+    0.9800,
+    1.0000,
+    1.0200,
+    1.0400,
+    1.0600,
+    1.0800,
+    1.1000,
+    1.1200,
+    1.1400,
+    1.1600,
+    1.1800,
+    1.2000,
+    1.2200,
+    1.2400,
+    1.2600,
+    1.2800,
+    1.3000,
+    1.3200,
+    1.3400,
+    1.3600,
+    1.3800,
+    1.4000,
+    1.4200,
+    1.4400,
+    1.4600,
+    1.4800,
+    1.5000,
+</fiberLengthNorm>
+<isoForceNorm>
+    0.0000,
+    0.0175,
+    0.0600,
+    0.1152,
+    0.1964,
+    0.3013,
+    0.4126,
+    0.5128,
+    0.5936,
+    0.6605,
+    0.7200,
+    0.7770,
+    0.8297,
+    0.8747,
+    0.9090,
+    0.9332,
+    0.9507,
+    0.9647,
+    0.9772,
+    0.9880,
+    0.9968,
+    1.0033,
+    1.0072,
+    1.0081,
+    1.0058,
+    1.0000,
+    0.9899,
+    0.9733,
+    0.9489,
+    0.9174,
+    0.8800,
+    0.8374,
+    0.7902,
+    0.7389,
+    0.6838,
+    0.6251,
+    0.5627,
+    0.4964,
+    0.4277,
+    0.3609,
+    0.3000,
+    0.2482,
+    0.2037,
+    0.1635,
+    0.1251,
+    0.0888,
+    0.0571,
+    0.0322,
+    0.0150,
+    0.0040,
+    0.0000,
+</isoForceNorm>
+
+<muscleNode>
+<muscleName>per_tert_r</muscleName>
+<comments>Muscle data from Brand, Delp, and Friedrich.</comments>
+<ID>0</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>right_lower_leg</linkName>
+<point>0.0010, -0.0231, 0.1496</point>
+<linkName>right_lower_leg</linkName>
+<point>0.0229, -0.0159, 0.0231</point>
+<linkName>pelvis</linkName>
+<point>0.0863, -0.0378, 0.0228</point>
+</muscleTendonPath>
+<optFiberLength>0.0790</optFiberLength>
+<slackTendonLength>0.1000</slackTendonLength>
+<maxFiberVelocity>0.790</maxFiberVelocity>
+<peakIsoForce>90.0</peakIsoForce>
+<pennationAngle>13.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>per_long_r</muscleName>
+<comments>Muscle data from Delp and Wick.</comments>
+<ID>1</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>right_lower_leg</linkName>
+<point>0.0005, -0.0362, 0.2732</point>
+<linkName>right_lower_leg</linkName>
+<point>-0.0207, -0.0286, 0.0095</point>
+<linkName>right_lower_leg</linkName>
+<point>-0.0162, -0.0289, -0.0019</point>
+<linkName>pelvis</linkName>
+<point>0.0444, -0.0300, 0.0230</point>
+<linkName>pelvis</linkName>
+<point>0.0687, -0.0363, 0.0106</point>
+<linkName>pelvis</linkName>
+<point>0.0858, -0.0197, 0.0070</point>
+<linkName>pelvis</linkName>
+<point>0.1209, 0.0105, 0.0085</point>
+</muscleTendonPath>
+<optFiberLength>0.0490</optFiberLength>
+<slackTendonLength>0.3450</slackTendonLength>
+<maxFiberVelocity>0.490</maxFiberVelocity>
+<peakIsoForce>754.0</peakIsoForce>
+<pennationAngle>10.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>per_brev_r</muscleName>
+<comments>Muscle data from Delp and Wick.</comments>
+<ID>2</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>right_lower_leg</linkName>
+<point>-0.0070, -0.0325, 0.1654</point>
+<linkName>right_lower_leg</linkName>
+<point>-0.0198, -0.0283, 0.0116</point>
+<linkName>right_lower_leg</linkName>
+<point>-0.0144, -0.0289, 0.0005</point>
+<linkName>pelvis</linkName>
+<point>0.0477, -0.0312, 0.0270</point>
+<linkName>pelvis</linkName>
+<point>0.0683, -0.0422, 0.0219</point>
+</muscleTendonPath>
+<optFiberLength>0.0500</optFiberLength>
+<slackTendonLength>0.1610</slackTendonLength>
+<maxFiberVelocity>0.500  </maxFiberVelocity>
+<peakIsoForce>348.0</peakIsoForce>
+<pennationAngle>5.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>tib_ant_r</muscleName>
+<comments>Muscle data from Delp and Wick.</comments>
+<ID>3</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>right_lower_leg</linkName>
+<point>0.0179, -0.0115, 0.2676</point>
+<linkName>right_lower_leg</linkName>
+<point>0.0329, 0.0177, 0.0349</point>
+<linkName>pelvis</linkName>
+<point>0.1172, 0.0226, 0.0178</point>
+</muscleTendonPath>
+<optFiberLength>0.0980</optFiberLength>
+<slackTendonLength>0.2230</slackTendonLength>
+<maxFiberVelocity>0.980</maxFiberVelocity>
+<peakIsoForce>603.0</peakIsoForce>
+<pennationAngle>5.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>tib_post_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>4</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>right_lower_leg</linkName>
+<point>-0.0094, -0.0019, 0.2952</point>
+<linkName>right_lower_leg</linkName>
+<point>-0.0144, 0.0229, 0.0249</point>
+<linkName>pelvis</linkName>
+<point>0.0349, 0.0207, 0.0334</point>
+<linkName>pelvis</linkName>
+<point>0.0778, 0.0202, 0.0159</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>1270.0</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>soleus_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>5</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>right_lower_leg</linkName>
+<point>-0.0024, -0.0071, 0.2767</point>
+<linkName>pelvis</linkName>
+<point>0.005, -0.0026, 0.0310</point>
+</muscleTendonPath>
+<optFiberLength>0.0300</optFiberLength>
+<slackTendonLength>0.2680</slackTendonLength>
+<maxFiberVelocity>0.3000</maxFiberVelocity>
+<peakIsoForce>2839.0</peakIsoForce>
+<pennationAngle>25.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>gas_lat_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>6</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>right_upper_leg</linkName>
+<point>-0.0155, -0.0272, 0.0014</point>
+<linkName>right_upper_leg</linkName>
+<point>-0.0254, -0.0274, -0.0058</point>
+<linkName>right_lower_leg</linkName>
+<point>-0.0242, -0.0235, 0.3819</point>
+<linkName>pelvis</linkName>
+<point>0.005, -0.0026, 0.0310</point>
+</muscleTendonPath>
+<optFiberLength>0.0640</optFiberLength>
+<slackTendonLength>0.3850</slackTendonLength>
+<maxFiberVelocity>0.6400</maxFiberVelocity>
+<peakIsoForce>488.0</peakIsoForce>
+<pennationAngle>8.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>gas_med_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>7</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>right_upper_leg</linkName>
+<point>-0.0127, 0.0235, 0.0031</point>
+<linkName>right_upper_leg</linkName>
+<point>-0.0239, 0.0258, -0.0062</point>
+<linkName>right_lower_leg</linkName>
+<point>-0.0217, 0.0295, 0.3813</point>
+<linkName>pelvis</linkName>
+<point>0.005, -0.0026, 0.0310</point>
+</muscleTendonPath>
+<optFiberLength>0.0450</optFiberLength>
+<slackTendonLength>0.4080</slackTendonLength>
+<maxFiberVelocity>0.4500</maxFiberVelocity>
+<peakIsoForce>1113.0</peakIsoForce>
+<pennationAngle>17.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>vas_lat_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>8</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>right_upper_leg</linkName>
+<point>0.0048, -0.0349, 0.2106</point>
+<linkName>right_upper_leg</linkName>
+<point>0.0269, -0.0409, 0.1369</point>
+<linkName>right_upper_leg</linkName>
+<point>0.0361, -0.0205, -0.0070</point>
+<linkName>right_upper_leg</linkName>
+<point>0.0253, -0.0184, -0.0283</point>
+<linkName>right_lower_leg</linkName>
+<point>0.0599, -0.0165, 0.4496</point>
+</muscleTendonPath>
+<optFiberLength>0.0840</optFiberLength>
+<slackTendonLength>0.1570</slackTendonLength>
+<maxFiberVelocity>0.8400</maxFiberVelocity>
+<peakIsoForce>1871.0</peakIsoForce>
+<pennationAngle>5.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>vas_int_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>9</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>right_upper_leg</linkName>
+<point>0.0290, -0.0310, 0.2036</point>
+<linkName>right_upper_leg</linkName>
+<point>0.0335, -0.0285, 0.1876</point>
+<linkName>right_upper_leg</linkName>
+<point>0.0343, -0.0055, -0.0070</point>
+<linkName>right_lower_leg</linkName>
+<point>0.0554, -0.0018, 0.4553</point>
+</muscleTendonPath>
+<optFiberLength>0.0870</optFiberLength>
+<slackTendonLength>0.1360</slackTendonLength>
+<maxFiberVelocity>0.8700</maxFiberVelocity>
+<peakIsoForce>1365.0</peakIsoForce>
+<pennationAngle>3.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>vas_med_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>10</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>right_upper_leg</linkName>
+<point>0.0140, -0.0188, 0.1861</point>
+<linkName>right_upper_leg</linkName>
+<point>0.0356, -0.0009, 0.1191</point>
+<linkName>right_upper_leg</linkName>
+<point>0.0370, 0.0125, -0.0088</point>
+<linkName>right_upper_leg</linkName>
+<point>0.0274, 0.0131, -0.0295</point>
+<linkName>right_lower_leg</linkName>
+<point>0.0559, 0.0146, 0.4518</point>
+</muscleTendonPath>
+<optFiberLength>0.0890</optFiberLength>
+<slackTendonLength>0.1260</slackTendonLength>
+<maxFiberVelocity>0.8900</maxFiberVelocity>
+<peakIsoForce>1294.0</peakIsoForce>
+<pennationAngle>5.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>bi_fem_sh_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>11</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>right_upper_leg</linkName>
+<point>0.005, -0.0234, 0.1849</point>
+<linkName>right_lower_leg</linkName>
+<point>-0.0101, -0.0406, 0.3575</point>
+</muscleTendonPath>
+<optFiberLength>0.1730</optFiberLength>
+<slackTendonLength>0.1000</slackTendonLength>
+<maxFiberVelocity>1.7300</maxFiberVelocity>
+<peakIsoForce>402.0</peakIsoForce>
+<pennationAngle>23.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>bi_fem_lh_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>12</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>0.0274, 0.0131, -0.0295</point>
+<linkName>right_lower_leg</linkName>
+<point>-0.0081, -0.0423, 0.3571</point>
+</muscleTendonPath>
+<optFiberLength>0.1090</optFiberLength>
+<slackTendonLength>0.3410</slackTendonLength>
+<maxFiberVelocity>1.0900</maxFiberVelocity>
+<peakIsoForce>717.0</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>semiten_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>13</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>-0.053, 0.0232, -0.0382</point>
+<linkName>right_lower_leg</linkName>
+<point>-0.0314, 0.0146, 0.3755</point>
+<linkName>right_lower_leg</linkName>
+<point>-0.0113, 0.0245, 0.3554</point>
+<linkName>right_lower_leg</linkName>
+<point>0.0027, 0.0193, 0.3344</point>
+</muscleTendonPath>
+<optFiberLength>0.2010</optFiberLength>
+<slackTendonLength>0.2620</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>328.0</peakIsoForce>
+<pennationAngle>5.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>semimem_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>14</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>-0.0485, 0.014, -0.0354</point>
+<linkName>right_lower_leg</linkName>
+<point>-0.0243, 0.0194, 0.3764</point>
+</muscleTendonPath>
+<optFiberLength>0.0800</optFiberLength>
+<slackTendonLength>0.3590</slackTendonLength>
+<maxFiberVelocity>0.8000</maxFiberVelocity>
+<peakIsoForce>1030.0</peakIsoForce>
+<pennationAngle>15.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>gracilis_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>15</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>0.0144, 0.0756, -0.0377</point>
+<linkName>right_lower_leg</linkName>
+<point>-0.0154,	0.0358, 0.3825</point>
+<linkName>right_lower_leg</linkName>
+<point>0.006, 0.0228, 0.3464</point>
+</muscleTendonPath>
+<optFiberLength>0.3520</optFiberLength>
+<slackTendonLength>0.1400</slackTendonLength>
+<maxFiberVelocity>3.5200</maxFiberVelocity>
+<peakIsoForce>108.0</peakIsoForce>
+<pennationAngle>3.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>ten_fas_lat_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>16</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>0.0396, -0.0406, 0.0875</point>
+<linkName>right_upper_leg</linkName>
+<point>0.0294, -0.0597, 0.2965</point>
+<linkName>right_upper_leg</linkName>
+<point>0.0054, -0.0357, -0.0089</point>
+<linkName>right_lower_leg</linkName>
+<point>0.006, -0.0297, 0.3813</point>
+</muscleTendonPath>
+<optFiberLength>0.0950</optFiberLength>
+<slackTendonLength>0.4250</slackTendonLength>
+<maxFiberVelocity>0.9500</maxFiberVelocity>
+<peakIsoForce>155.0</peakIsoForce>
+<pennationAngle>3.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>rectus_fem_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>17</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>0.0412, -0.0133, 0.0350</point>
+<linkName>right_upper_leg</linkName>
+<point>0.0334, -0.0019, -0.0070</point>
+<linkName>right_lower_leg</linkName>
+<point>0.0617, -0.0014, 0.4510</point>
+</muscleTendonPath>
+<optFiberLength>0.0840</optFiberLength>
+<slackTendonLength>0.3460</slackTendonLength>
+<maxFiberVelocity>0.8400</maxFiberVelocity>
+<peakIsoForce>779.0</peakIsoForce>
+<pennationAngle>5.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>sartorius_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>18</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>0.0554, -0.0407, 0.0648</point>
+<linkName>right_upper_leg</linkName>
+<point>-0.0030, 0.0421, 0.0392</point>
+<linkName>right_lower_leg</linkName>
+<point>-0.0056, 0.0399, 0.3881</point>
+<linkName>right_lower_leg</linkName>
+<point>0.0060, 0.0383, 0.3711</point>
+<linkName>right_lower_leg</linkName>
+<point>0.0243, 0.0252, 0.3460</point>
+</muscleTendonPath>
+<optFiberLength>0.5790</optFiberLength>
+<slackTendonLength>0.0400</slackTendonLength>
+<maxFiberVelocity>5.7900</maxFiberVelocity>
+<peakIsoForce>104.0</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>add_mag3_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>19</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>-0.0064, 0.0559, -0.0520</point>
+<linkName>right_upper_leg</linkName>
+<point>0.0070, 0.0266, 0.0123</point>
+</muscleTendonPath>
+<optFiberLength>0.1310</optFiberLength>
+<slackTendonLength>0.2600</slackTendonLength>
+<maxFiberVelocity>1.3100</maxFiberVelocity>
+<peakIsoForce>444.0</peakIsoForce>
+<pennationAngle>5.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>add_mag2_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>20</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>-0.0124, 0.0527, -0.0531</point>
+<linkName>right_upper_leg</linkName>
+<point>0.0054, -0.0227, 0.1675</point>
+</muscleTendonPath>
+<optFiberLength>0.1210</optFiberLength>
+<slackTendonLength>0.1300</slackTendonLength>
+<maxFiberVelocity>1.2100</maxFiberVelocity>
+<peakIsoForce>312.0</peakIsoForce>
+<pennationAngle>3.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>add_mag1_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>21</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>-0.0025, 0.0580, -0.0513</point>
+<linkName>right_upper_leg</linkName>
+<point>-0.0045, -0.0339, 0.2749</point>
+</muscleTendonPath>
+<optFiberLength>0.0870</optFiberLength>
+<slackTendonLength>0.0600</slackTendonLength>
+<maxFiberVelocity>0.8700</maxFiberVelocity>
+<peakIsoForce>346.0</peakIsoForce>
+<pennationAngle>5.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>add_brev_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>22</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>0.0120, 0.0671, -0.0254</point>
+<linkName>right_upper_leg</linkName>
+<point>0.0009, -0.0294, 0.2764</point>
+</muscleTendonPath>
+<optFiberLength>0.1330</optFiberLength>
+<slackTendonLength>0.0200</slackTendonLength>
+<maxFiberVelocity>1.3300</maxFiberVelocity>
+<peakIsoForce>286.0</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>add_long_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>23</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>0.0391, 0.0666, -0.0175</point>
+<linkName>right_upper_leg</linkName>
+<point>0.0050, -0.0234, 0.1849</point>
+</muscleTendonPath>
+<optFiberLength>0.1380</optFiberLength>
+<slackTendonLength>0.1100</slackTendonLength>
+<maxFiberVelocity>1.3800</maxFiberVelocity>
+<peakIsoForce>418.0</peakIsoForce>
+<pennationAngle>6.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>glut_med3_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>24</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>-0.0516, 0.0187, 0.0766</point>
+<linkName>right_upper_leg</linkName>
+<point>-0.0309, -0.0518, 0.3913</point>
+</muscleTendonPath>
+<optFiberLength>0.0646</optFiberLength>
+<slackTendonLength>0.0530</slackTendonLength>
+<maxFiberVelocity>0.6460</maxFiberVelocity>
+<peakIsoForce>435.0</peakIsoForce>
+<pennationAngle>19.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>glut_med2_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>25</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>-0.0148, 0.0069, 0.1106</point>
+<linkName>right_upper_leg</linkName>
+<point>-0.0258, -0.0527, 0.3902</point>
+</muscleTendonPath>
+<optFiberLength>0.0845</optFiberLength>
+<slackTendonLength>0.0530</slackTendonLength>
+<maxFiberVelocity>0.8450</maxFiberVelocity>
+<peakIsoForce>382.0</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>glut_med1_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>26</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>0.0299, -0.0374, 0.0965</point>
+<linkName>right_upper_leg</linkName>
+<point>-0.0218, -0.0555, 0.3843</point>
+</muscleTendonPath>
+<optFiberLength>0.0535</optFiberLength>
+<slackTendonLength>0.0780</slackTendonLength>
+<maxFiberVelocity>0.5350</maxFiberVelocity>
+<peakIsoForce>546.0</peakIsoForce>
+<pennationAngle>8.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>glut_max3_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>27</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>-0.0581, 0.0732, 0.0238</point>
+<linkName>pelvis</linkName>
+<point>-0.0822, 0.0432, -0.0391</point>
+<linkName>right_upper_leg</linkName>
+<point>-0.0299, -0.0135, 0.2919</point>
+<linkName>right_upper_leg</linkName>
+<point>-0.006, -0.0411, 0.2541</point>
+</muscleTendonPath>
+<optFiberLength>0.1440</optFiberLength>
+<slackTendonLength>0.1450</slackTendonLength>
+<maxFiberVelocity>1.4400</maxFiberVelocity>
+<peakIsoForce>368.0</peakIsoForce>
+<pennationAngle>5.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>glut_max2_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>28</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>-0.0642, 0.0272, 0.0837</point>
+<linkName>pelvis</linkName>
+<point>-0.0669, -0.0079, 0.0141</point>
+<linkName>right_upper_leg</linkName>
+<point>-0.0426, -0.0293, 0.343</point>
+<linkName>right_upper_leg</linkName>
+<point>-0.0156, -0.0419, 0.2944</point>
+</muscleTendonPath>
+<optFiberLength>0.1470</optFiberLength>
+<slackTendonLength>0.1270</slackTendonLength>
+<maxFiberVelocity>1.4700</maxFiberVelocity>
+<peakIsoForce>546.0</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>glut_max1_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>29</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>-0.0488, 0.0135, 0.1273</point>
+<linkName>pelvis</linkName>
+<point>-0.0584, -0.0051, 0.0673</point>
+<linkName>right_upper_leg</linkName>
+<point>-0.0457, -0.0392, 0.3712</point>
+<linkName>right_upper_leg</linkName>
+<point>-0.0277, -0.047, 0.3394</point>
+</muscleTendonPath>
+<optFiberLength>0.1420</optFiberLength>
+<slackTendonLength>0.1250</slackTendonLength>
+<maxFiberVelocity>1.4200</maxFiberVelocity>
+<peakIsoForce>382.0</peakIsoForce>
+<pennationAngle>5.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>iliocost_lum_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>30</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0841, 0.1103, 0.3097</point>
+<linkName>torso</linkName>
+<point>-0.0927, 0.1012, 0.2813</point>
+<linkName>torso</linkName>
+<point>-0.089, 0.0825, 0.214</point>
+<linkName>pelvis</linkName>
+<point>-0.0525, 0.1079, 0.0899</point>
+</muscleTendonPath>
+<optFiberLength>0.1417</optFiberLength>
+<slackTendonLength>0.2176</slackTendonLength>
+<maxFiberVelocity>1.4170</maxFiberVelocity>
+<peakIsoForce>183.6</peakIsoForce>
+<pennationAngle>13.8</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>long_thor_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>31</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0876, 0.0528, 0.3548</point>
+<linkName>torso</linkName>
+<point>-0.0949, 0.0473, 0.3007</point>
+<linkName>torso</linkName>
+<point>-0.0911, 0.0421, 0.2418</point>
+<linkName>pelvis</linkName>
+<point>-0.0579, 0.0979, 0.0909</point>
+</muscleTendonPath>
+<optFiberLength>0.1168</optFiberLength>
+<slackTendonLength>0.2742</slackTendonLength>
+<maxFiberVelocity>1.1680</maxFiberVelocity>
+<peakIsoForce>266.81</peakIsoForce>
+<pennationAngle>12.6</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>rect_abd_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>32</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>0.1046, 0.0469, 0.2826</point>
+<linkName>torso</linkName>
+<point>0.1131, 0.043, 0.2507</point>
+<linkName>torso</linkName>
+<point>0.1172, 0.0402, 0.2299</point>
+<linkName>pelvis</linkName>
+<point>0.0438, 0.0989, -0.0051</point>
+</muscleTendonPath>
+<optFiberLength>0.2798</optFiberLength>
+<slackTendonLength>0.1115</slackTendonLength>
+<maxFiberVelocity>2.7980</maxFiberVelocity>
+<peakIsoForce>118.94</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>quad_lumbL1_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>33</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0371, 0.0316, 0.1476</point>
+<linkName>pelvis</linkName>
+<point>-0.0292, 0.1424, 0.1463</point>
+</muscleTendonPath>
+<optFiberLength>0.0825</optFiberLength>
+<slackTendonLength>0.0345</slackTendonLength>
+<maxFiberVelocity>0.8250</maxFiberVelocity>
+<peakIsoForce>69.57</peakIsoForce>
+<pennationAngle>7.4</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>quad_lumbL2_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>34</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0243, 0.0303, 0.1154</point>
+<linkName>pelvis</linkName>
+<point>-0.0402, 0.1373, 0.1335</point>
+</muscleTendonPath>
+<optFiberLength>0.0562</optFiberLength>
+<slackTendonLength>0.0373</slackTendonLength>
+<maxFiberVelocity>0.5620</maxFiberVelocity>
+<peakIsoForce>55.85</peakIsoForce>
+<pennationAngle>7.4</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+
+<muscleNode>
+<muscleName>iliocost_lum_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>35</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0841, -0.1103, 0.3097</point>
+<linkName>torso</linkName>
+<point>-0.0927, -0.1012, 0.2813</point>
+<linkName>torso</linkName>
+<point>-0.089, -0.0825, 0.214</point>
+<linkName>pelvis</linkName>
+<point>-0.0525, 0.0591, 0.0899</point>
+</muscleTendonPath>
+<optFiberLength>0.1417</optFiberLength>
+<slackTendonLength>0.2176</slackTendonLength>
+<maxFiberVelocity>1.4170</maxFiberVelocity>
+<peakIsoForce>183.6</peakIsoForce>
+<pennationAngle>13.8</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>long_thor_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>36</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0876, -0.0528, 0.3548</point>
+<linkName>torso</linkName>
+<point>-0.0949, -0.0473, 0.3007</point>
+<linkName>torso</linkName>
+<point>-0.0911, -0.0421, 0.2418</point>
+<linkName>pelvis</linkName>
+<point>-0.0579, 0.0691, 0.0909</point>
+</muscleTendonPath>
+<optFiberLength>0.1168</optFiberLength>
+<slackTendonLength>0.2742</slackTendonLength>
+<maxFiberVelocity>1.1680</maxFiberVelocity>
+<peakIsoForce>266.81</peakIsoForce>
+<pennationAngle>12.6</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>rect_abd_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>37</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>0.1046, -0.0469, 0.2826</point>
+<linkName>torso</linkName>
+<point>0.1131, -0.043, 0.2507</point>
+<linkName>torso</linkName>
+<point>0.1172, -0.0402, 0.2299</point>
+<linkName>pelvis</linkName>
+<point>0.0438, 0.0681, -0.0051</point>
+</muscleTendonPath>
+<optFiberLength>0.2798</optFiberLength>
+<slackTendonLength>0.1115</slackTendonLength>
+<maxFiberVelocity>2.7980</maxFiberVelocity>
+<peakIsoForce>118.94</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>quad_lumbL1_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>38</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0371, -0.0316, 0.1476</point>
+<linkName>pelvis</linkName>
+<point>-0.0292, 0.0246, 0.1463</point>
+</muscleTendonPath>
+<optFiberLength>0.0825</optFiberLength>
+<slackTendonLength>0.0345</slackTendonLength>
+<maxFiberVelocity>0.8250</maxFiberVelocity>
+<peakIsoForce>69.57</peakIsoForce>
+<pennationAngle>7.4</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>quad_lumbL2_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>39</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0243, -0.0303, 0.1154</point>
+<linkName>pelvis</linkName>
+<point>-0.0402, 0.0297, 0.1335</point>
+</muscleTendonPath>
+<optFiberLength>0.0562</optFiberLength>
+<slackTendonLength>0.0373</slackTendonLength>
+<maxFiberVelocity>0.5620</maxFiberVelocity>
+<peakIsoForce>55.85</peakIsoForce>
+<pennationAngle>7.4</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>infraspi1_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>40</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0737, 0.1123, 0.3731</point>
+<linkName>torso</linkName>
+<point>-0.0537, 0.1416, 0.3879</point>
+<linkName>left_upper_arm</linkName>
+<point>0.00109, 0.01553, 0.01082</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>246.960</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>infraspi2_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>41</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0659, 0.1266, 0.3407</point>
+<linkName>torso</linkName>
+<point>-0.0432, 0.1599, 0.3695</point>
+<linkName>left_upper_arm</linkName>
+<point>-0.00115, 0.01504, 0.00743</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>246.960</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>infraspi3_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>42</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0612, 0.1345, 0.2936</point>
+<linkName>torso</linkName>
+<point>-0.0423, 0.1727, 0.3534</point>
+<linkName>left_upper_arm</linkName>
+<point>-0.00384, 0.01581, 0.00366</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>246.960</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>supraspi1_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>43</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0614, 0.1126, 0.4221</point>
+<linkName>left_upper_arm</linkName>
+<point>0.01135, 0.00961, 0.01339</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>246.960</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>supraspi2_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>44</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0681, 0.1215, 0.4060</point>
+<linkName>left_upper_arm</linkName>
+<point>0.01135, 0.00961, 0.01339</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>246.960</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>supraspi3_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>45</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0554, 0.1259, 0.4103</point>
+<linkName>left_upper_arm</linkName>
+<point>0.01135, 0.00961, 0.01339</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>246.960</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>teres_maj1_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>46</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0509, 0.1642, 0.3105</point>
+<linkName>torso</linkName>
+<point>-0.0466, 0.1676, 0.3148</point>
+<linkName>left_upper_arm</linkName>
+<point>0.00096, -0.01335, -0.05393</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>246.960</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>teres_maj2_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>47</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0532, 0.1514, 0.3001</point>
+<linkName>torso</linkName>
+<point>-0.0483, 0.1665, 0.3078</point>
+<linkName>left_upper_arm</linkName>
+<point>0.00092, -0.01278, -0.05884</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>246.960</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>teres_maj3_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>48</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0507, 0.1558, 0.2875</point>
+<linkName>torso</linkName>
+<point>-0.0476, 0.1641, 0.2955</point>
+<linkName>left_upper_arm</linkName>
+<point>-0.00001, -0.01177, -0.06794</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>246.960</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>lat_dorsi1_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>49</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.1053, 0.0052, 0.2950</point>
+<linkName>left_upper_arm</linkName>
+<point>0.00818, -0.01213, -0.06266</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>100.0</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>lat_dorsi2_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>50</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0987, 0.0057, 0.2695</point>
+<linkName>left_upper_arm</linkName>
+<point>0.00935, -0.01208, -0.05756</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>100.0</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>lat_dorsi3_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>51</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0907, 0.0359, 0.2220</point>
+<linkName>left_upper_arm</linkName>
+<point>0.01008, -0.01230, -0.05428</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>100.0</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>lat_dorsi4_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>52</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0733, 0.0653, 0.1782</point>
+<linkName>left_upper_arm</linkName>
+<point>0.00962, -0.01200, -0.05013</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>100.0</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>lat_dorsi5_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>53</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0541, 0.0937, 0.1378</point>
+<linkName>left_upper_arm</linkName>
+<point>0.00901, -0.01143, -0.04507</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>100.0</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>pecmaj_s1_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>54</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>0.0386, 0.0138, 0.4195</point>
+<linkName>left_upper_arm</linkName>
+<point>0.0064, -0.01294, -0.05376</point>
+<linkName>left_upper_arm</linkName>
+<point>0.01297, -0.00634, -0.05967</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>102.600</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>pecmaj_s2_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>55</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>0.0621, 0.0116, 0.3801</point>
+<linkName>left_upper_arm</linkName>
+<point>0.00593, -0.01433, -0.04892</point>
+<linkName>left_upper_arm</linkName>
+<point>0.01255, -0.00564, -0.05318</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>102.600</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>pecmaj_s3_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>56</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>0.0803, 0.0111, 0.346</point>
+<linkName>left_upper_arm</linkName>
+<point>0.00193, -0.01702, -0.04315</point>
+<linkName>left_upper_arm</linkName>
+<point>0.01451, -0.00612, -0.04444</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>102.600</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>pecmaj_s4_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>57</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>0.0913, 0.0305, 0.3087</point>
+<linkName>left_upper_arm</linkName>
+<point>0.00031, -0.01637, -0.03723</point>
+<linkName>left_upper_arm</linkName>
+<point>0.0165, -0.00607, -0.03146</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>102.600</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>bi_brac_sh_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>58</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>0.0513, 0.1588, 0.4154</point>
+<linkName>left_upper_arm</linkName>
+<point>0.0478, -0.00405, -0.26151</point>
+<linkName>left_lower_arm</linkName>
+<point>0.00017, 0.03158, -0.02041</point>
+<linkName>left_lower_arm</linkName>
+<point>0.00217, 0.02678, -0.02661</point>
+<linkName>left_lower_arm</linkName>
+<point>0.00067, 0.02258, -0.03091</point>
+<linkName>left_lower_arm</linkName>
+<point>-0.00761, 0.02049, -0.0434</point>
+</muscleTendonPath>
+<optFiberLength>0.1500</optFiberLength>
+<slackTendonLength>0.1500</slackTendonLength>
+<maxFiberVelocity>1.5000</maxFiberVelocity>
+<peakIsoForce>74.090</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>bi_brac_lh_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>59</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>0.0156, 0.1726, 0.4239</point>
+<linkName>left_upper_arm</linkName>
+<point>0.01063, -0.00703, 0.02026</point>
+<linkName>left_upper_arm</linkName>
+<point>0.01842, 0.00485, 0.01066</point>
+<linkName>left_upper_arm</linkName>
+<point>0.02277, 0.00569, -0.00152</point>
+<linkName>left_upper_arm</linkName>
+<point>0.0478, -0.00405, -0.26151</point>
+<linkName>left_lower_arm</linkName>
+<point>0.00017, 0.03158, -0.02041</point>
+<linkName>left_lower_arm</linkName>
+<point>0.00217, 0.02678, -0.02661</point>
+<linkName>left_lower_arm</linkName>
+<point>0.00067, 0.02258, -0.03091</point>
+<linkName>left_lower_arm</linkName>
+<point>-0.00761, 0.02049, -0.0434</point>
+</muscleTendonPath>
+<optFiberLength>0.1360</optFiberLength>
+<slackTendonLength>0.2120</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>88.200</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>tri_long_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>60</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>0.0013, 0.1881, 0.3849</point>
+<linkName>left_lower_arm</linkName>
+<point>-0.03182, -0.00064, 0.0063</point>
+</muscleTendonPath>
+<optFiberLength>0.10200</optFiberLength>
+<slackTendonLength>0.16500</slackTendonLength>
+<maxFiberVelocity>1.0200</maxFiberVelocity>
+<peakIsoForce>236.380</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>tri_med_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>61</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>left_upper_arm</linkName>
+<point>-0.0067, -0.00816, -0.17078</point>
+<linkName>left_upper_arm</linkName>
+<point>-0.01158, -0.00932, -0.1928</point>
+<linkName>left_lower_arm</linkName>
+<point>-0.03208, -0.00083, 0.00626</point>
+</muscleTendonPath>
+<optFiberLength>0.06300</optFiberLength>
+<slackTendonLength>0.06500</slackTendonLength>
+<maxFiberVelocity>0.6300</maxFiberVelocity>
+<peakIsoForce>215.210</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>tri_lat_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>62</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>left_upper_arm</linkName>
+<point>-0.00885, 0.00034, -0.0993</point>
+<linkName>left_lower_arm</linkName>
+<point>-0.03162, -0.00044, 0.00664</point>
+</muscleTendonPath>
+<optFiberLength>0.0840</optFiberLength>
+<slackTendonLength>0.1100</slackTendonLength>
+<maxFiberVelocity>0.8400</maxFiberVelocity>
+<peakIsoForce>211.680</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>brachialis1_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>63</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>left_upper_arm</linkName>
+<point>0.01051, -0.0052, -0.16117</point>
+<linkName>left_upper_arm</linkName>
+<point>0.03618, -0.01253, -0.26503</point>
+<linkName>left_lower_arm</linkName>
+<point>-0.00751, 0.00243, -0.03263</point>
+</muscleTendonPath>
+<optFiberLength>0.11500</optFiberLength>
+<slackTendonLength>0.10000</slackTendonLength>
+<maxFiberVelocity>1.1500</maxFiberVelocity>
+<peakIsoForce>340.0</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>brachialis2_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>64</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>left_upper_arm</linkName>
+<point>0.00964, -0.00053, -0.22887</point>
+<linkName>left_lower_arm</linkName>
+<point>-0.00751, 0.00243, -0.03263</point>
+</muscleTendonPath>
+<optFiberLength>0.11500</optFiberLength>
+<slackTendonLength>0.10000</slackTendonLength>
+<maxFiberVelocity>1.1500</maxFiberVelocity>
+<peakIsoForce>340.0</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>brachialis3_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>65</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>left_upper_arm</linkName>
+<point>0.01021, -0.01524, -0.24816</point>
+<linkName>left_lower_arm</linkName>
+<point>-0.00751, 0.00243, -0.03263</point>
+</muscleTendonPath>
+<optFiberLength>0.11500</optFiberLength>
+<slackTendonLength>0.10000</slackTendonLength>
+<maxFiberVelocity>1.1500</maxFiberVelocity>
+<peakIsoForce>340.0</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>anconeus1_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>66</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>left_upper_arm</linkName>
+<point>0.00540, 0.01371, -0.28826</point>
+<linkName>left_lower_arm</linkName>
+<point>-0.03223, 0.00849, -0.01143</point>
+<linkName>left_lower_arm</linkName>
+<point>-0.03179, 0.00328, -0.01650</point>
+</muscleTendonPath>
+<optFiberLength>0.20000</optFiberLength>
+<slackTendonLength>0.10000</slackTendonLength>
+<maxFiberVelocity>2.0000</maxFiberVelocity>
+<peakIsoForce>246.960</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>anconeus2_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>67</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>left_upper_arm</linkName>
+<point>0.00540, 0.01371, -0.28826</point>
+<linkName>left_lower_arm</linkName>
+<point>-0.03118, 0.01515, -0.02338</point>
+<linkName>left_lower_arm</linkName>
+<point>-0.03047, 0.00815, -0.04150</point>
+</muscleTendonPath>
+<optFiberLength>0.20000</optFiberLength>
+<slackTendonLength>0.10000</slackTendonLength>
+<maxFiberVelocity>2.0000</maxFiberVelocity>
+<peakIsoForce>246.960</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>flex_carp_rad_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>68</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>left_upper_arm</linkName>
+<point>0.00661, -0.03651, -0.28532</point>
+<linkName>left_lower_arm</linkName>
+<point>0.00313, 0.03835, -0.24288</point>
+<linkName>left_hand</linkName>
+<point>0.0115, 0.00649, -0.00604</point>
+<linkName>left_hand</linkName>
+<point>0.01713,0.00751, -0.02145</point>
+<linkName>left_hand</linkName>
+<point>0.00491, 0.00593, -0.02593</point>
+</muscleTendonPath>
+<optFiberLength>0.06280</optFiberLength>
+<slackTendonLength>0.21850</slackTendonLength>
+<maxFiberVelocity>0.6280</maxFiberVelocity>
+<peakIsoForce>59.700</peakIsoForce>
+<pennationAngle>3.1</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>flex_carp_uln_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>69</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>left_upper_arm</linkName>
+<point>0.00479, -0.03647, -0.2854</point>
+<linkName>left_lower_arm</linkName>
+<point>-0.00481, 0.01604, -0.24215</point>
+<linkName>left_lower_arm</linkName>
+<point>-0.01416, 0.01802, -0.24384</point>
+<linkName>left_hand</linkName>
+<point>0.01098, -0.01836, -0.02126</point>
+<linkName>left_hand</linkName>
+<point>0.00336, -0.01908, -0.02938</point>
+</muscleTendonPath>
+<optFiberLength>0.05090</optFiberLength>
+<slackTendonLength>0.24200</slackTendonLength>
+<maxFiberVelocity>0.50900</maxFiberVelocity>
+<peakIsoForce>102.600</peakIsoForce>
+<pennationAngle>12.1</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>ex_carp_uln_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>70</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>left_upper_arm</linkName>
+<point>0.02347, 0.0199, -0.28521</point>
+<linkName>left_lower_arm</linkName>
+<point>-0.0092, 0.03779, -0.02578</point>
+<linkName>left_lower_arm</linkName>
+<point>-0.01805, 0.03359, -0.05159</point>
+<linkName>left_lower_arm</linkName>
+<point>-0.02543, 0.01719, -0.10205</point>
+<linkName>left_lower_arm</linkName>
+<point>-0.03075, 0.03059, -0.24263</point>
+<linkName>left_hand</linkName>
+<point>-0.01219, -0.01829, -0.01292</point>
+<linkName>left_hand</linkName>
+<point>-0.00883, -0.02199, -0.03177</point>
+</muscleTendonPath>
+<optFiberLength>0.06220</optFiberLength>
+<slackTendonLength>0.23100</slackTendonLength>
+<maxFiberVelocity>0.6220</maxFiberVelocity>
+<peakIsoForce>117.000</peakIsoForce>
+<pennationAngle>3.5</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>ex_carp_rad_brev_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>71</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>left_upper_arm</linkName>
+<point>0.02333, 0.01989, -0.2853</point>
+<linkName>left_lower_arm</linkName>
+<point>-0.01071, 0.05952, -0.15006</point>
+<linkName>left_lower_arm</linkName>
+<point>-0.02099, 0.06211, -0.23893</point>
+<linkName>left_hand</linkName>
+<point>-0.0151, 0.01104, -0.01211</point>
+<linkName>left_hand</linkName>
+<point>-0.01291, 0.00357, -0.0319</point>
+</muscleTendonPath>
+<optFiberLength>0.05850</optFiberLength>
+<slackTendonLength>0.22050</slackTendonLength>
+<maxFiberVelocity>0.5850</maxFiberVelocity>
+<peakIsoForce>122.900</peakIsoForce>
+<pennationAngle>8.9</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>ex_carp_rad_long_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>72</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>left_upper_arm</linkName>
+<point>0.01384, 0.02512, -0.27885</point>
+<linkName>left_upper_arm</linkName>
+<point>0.02317, 0.01985, -0.28552</point>
+<linkName>left_lower_arm</linkName>
+<point>-0.00813, 0.05919, -0.15497</point>
+<linkName>left_lower_arm</linkName>
+<point>-0.01532, 0.06489, -0.24111</point>
+<linkName>left_hand</linkName>
+<point>-0.01173, 0.01855, -0.01359</point>
+<linkName>left_hand</linkName>
+<point>-0.01034, 0.01671, -0.02575</point>
+<linkName>left_hand</linkName>
+<point>-0.00707, 0.01521, -0.02969</point>
+</muscleTendonPath>
+<optFiberLength>0.09360</optFiberLength>
+<slackTendonLength>0.2026</slackTendonLength>
+<maxFiberVelocity>0.9360</maxFiberVelocity>
+<peakIsoForce>65.700</peakIsoForce>
+<pennationAngle>2.5</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>infraspi1_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>73</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0737, -0.1123, 0.3731</point>
+<linkName>torso</linkName>
+<point>-0.0537, -0.1416, 0.3879</point>
+<linkName>right_upper_arm</linkName>
+<point>0.00109, -0.01553, 0.01082</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>246.960</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>infraspi2_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>74</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0659, -0.1266, 0.3407</point>
+<linkName>torso</linkName>
+<point>-0.0432, -0.1599, 0.3695</point>
+<linkName>right_upper_arm</linkName>
+<point>-0.00115, -0.01504, 0.00743</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>246.960</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>infraspi3_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>75</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0612, -0.1345, 0.2936</point>
+<linkName>torso</linkName>
+<point>-0.0423, -0.1727, 0.3534</point>
+<linkName>right_upper_arm</linkName>
+<point>-0.00384, -0.01581, 0.00366</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>246.960</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>supraspi1_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>76</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0614, -0.1126, 0.4221</point>
+<linkName>right_upper_arm</linkName>
+<point>0.01135, -0.00961, 0.01339</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>246.960</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>supraspi2_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>77</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0681, -0.1215, 0.4060</point>
+<linkName>right_upper_arm</linkName>
+<point>0.01135, -0.00961, 0.01339</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>246.960</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>supraspi3_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>78</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0554, -0.1259, 0.4103</point>
+<linkName>right_upper_arm</linkName>
+<point>0.01135, -0.00961, 0.01339</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>246.960</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>teres_maj1_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>79</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0509, -0.1642, 0.3105</point>
+<linkName>torso</linkName>
+<point>-0.0466, -0.1676, 0.3148</point>
+<linkName>right_upper_arm</linkName>
+<point>0.00096, 0.01335, -0.05393</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>246.960</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>teres_maj2_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>80</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0532, -0.1514, 0.3001</point>
+<linkName>torso</linkName>
+<point>-0.0483, -0.1665, 0.3078</point>
+<linkName>right_upper_arm</linkName>
+<point>0.00092, 0.01278, -0.05884</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>246.960</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>teres_maj3_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>81</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0507, -0.1558, 0.2875</point>
+<linkName>torso</linkName>
+<point>-0.0476, -0.1641, 0.2955</point>
+<linkName>right_upper_arm</linkName>
+<point>-0.00001, 0.01177, -0.06794</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>246.960</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>lat_dorsi1_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>82</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.1053, -0.0052, 0.2950</point>
+<linkName>right_upper_arm</linkName>
+<point>0.00818, 0.01213, -0.06266</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>100.0</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>lat_dorsi2_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>83</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0987, -0.0057, 0.2695</point>
+<linkName>right_upper_arm</linkName>
+<point>0.00935, 0.01208, -0.05756</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>100.0</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>lat_dorsi3_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>84</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0907, -0.0359, 0.2220</point>
+<linkName>right_upper_arm</linkName>
+<point>0.01008, 0.01230, -0.05428</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>100.0</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>lat_dorsi4_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>85</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0733, -0.0653, 0.1782</point>
+<linkName>right_upper_arm</linkName>
+<point>0.00962, 0.01200, -0.05013</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>100.0</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>lat_dorsi5_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>86</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>-0.0541, -0.0937, 0.1378</point>
+<linkName>right_upper_arm</linkName>
+<point>0.00901, 0.01143, -0.04507</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>100.0</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>pecmaj_s1_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>87</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>0.0386, -0.0138, 0.4195</point>
+<linkName>right_upper_arm</linkName>
+<point>0.0064, 0.01294, -0.05376</point>
+<linkName>right_upper_arm</linkName>
+<point>0.01297, 0.00634, -0.05967</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>102.600</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>pecmaj_s2_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>88</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>0.0621, -0.0116, 0.3801</point>
+<linkName>right_upper_arm</linkName>
+<point>0.00593, 0.01433, -0.04892</point>
+<linkName>right_upper_arm</linkName>
+<point>0.01255, 0.00564, -0.05318</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>102.600</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>pecmaj_s3_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>89</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>0.0803, -0.0111, 0.346</point>
+<linkName>right_upper_arm</linkName>
+<point>0.00193, 0.01702, -0.04315</point>
+<linkName>right_upper_arm</linkName>
+<point>0.01451, 0.00612, -0.04444</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>102.600</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>pecmaj_s4_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>90</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>0.0913, -0.0305, 0.3087</point>
+<linkName>right_upper_arm</linkName>
+<point>0.00031, 0.01637, -0.03723</point>
+<linkName>right_upper_arm</linkName>
+<point>0.0165, 0.00607, -0.03146</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>102.600</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>bi_brac_sh_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>91</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>0.0513, -0.1588, 0.4154</point>
+<linkName>right_upper_arm</linkName>
+<point>0.0478, 0.00405, -0.26151</point>
+<linkName>right_lower_arm</linkName>
+<point>0.00017, -0.03158, -0.02041</point>
+<linkName>right_lower_arm</linkName>
+<point>0.00217, -0.02678, -0.02661</point>
+<linkName>right_lower_arm</linkName>
+<point>0.00067, -0.02258, -0.03091</point>
+<linkName>right_lower_arm</linkName>
+<point>-0.00761, -0.02049, -0.0434</point>
+</muscleTendonPath>
+<optFiberLength>0.1500</optFiberLength>
+<slackTendonLength>0.1500</slackTendonLength>
+<maxFiberVelocity>1.5000</maxFiberVelocity>
+<peakIsoForce>74.090</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>bi_brac_rh_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>92</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>0.0156, -0.1726, 0.4239</point>
+<linkName>right_upper_arm</linkName>
+<point>0.01063, 0.00703, 0.02026</point>
+<linkName>right_upper_arm</linkName>
+<point>0.01842, -0.00485, 0.01066</point>
+<linkName>right_upper_arm</linkName>
+<point>0.02277, -0.00569, -0.00152</point>
+<linkName>right_upper_arm</linkName>
+<point>0.0478, 0.00405, -0.26151</point>
+<linkName>right_lower_arm</linkName>
+<point>0.00017, -0.03158, -0.02041</point>
+<linkName>right_lower_arm</linkName>
+<point>0.00217, -0.02678, -0.02661</point>
+<linkName>right_lower_arm</linkName>
+<point>0.00067, -0.02258, -0.03091</point>
+<linkName>right_lower_arm</linkName>
+<point>-0.00761, -0.02049, -0.0434</point>
+</muscleTendonPath>
+<optFiberLength>0.1360</optFiberLength>
+<slackTendonLength>0.2120</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>88.200</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>tri_long_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>93</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>torso</linkName>
+<point>0.0013, -0.1881, 0.3849</point>
+<linkName>right_lower_arm</linkName>
+<point>-0.03182, 0.00064, 0.0063</point>
+</muscleTendonPath>
+<optFiberLength>0.10200</optFiberLength>
+<slackTendonLength>0.16500</slackTendonLength>
+<maxFiberVelocity>1.0200</maxFiberVelocity>
+<peakIsoForce>236.380</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>tri_med_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>94</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>right_upper_arm</linkName>
+<point>-0.0067, 0.00816, -0.17078</point>
+<linkName>right_upper_arm</linkName>
+<point>-0.01158, 0.00932, -0.1928</point>
+<linkName>right_lower_arm</linkName>
+<point>-0.03208, 0.00083, 0.00626</point>
+</muscleTendonPath>
+<optFiberLength>0.06300</optFiberLength>
+<slackTendonLength>0.06500</slackTendonLength>
+<maxFiberVelocity>0.6300</maxFiberVelocity>
+<peakIsoForce>215.210</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>tri_lat_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>95</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>right_upper_arm</linkName>
+<point>-0.00885, -0.00034, -0.0993</point>
+<linkName>right_lower_arm</linkName>
+<point>-0.03162, 0.00044, 0.00664</point>
+</muscleTendonPath>
+<optFiberLength>0.0840</optFiberLength>
+<slackTendonLength>0.1100</slackTendonLength>
+<maxFiberVelocity>0.8400</maxFiberVelocity>
+<peakIsoForce>211.680</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>brachialis1_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>96</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>right_upper_arm</linkName>
+<point>0.01051, 0.0052, -0.16117</point>
+<linkName>right_upper_arm</linkName>
+<point>0.03618, 0.01253, -0.26503</point>
+<linkName>right_lower_arm</linkName>
+<point>-0.00751, -0.00243, -0.03263</point>
+</muscleTendonPath>
+<optFiberLength>0.11500</optFiberLength>
+<slackTendonLength>0.10000</slackTendonLength>
+<maxFiberVelocity>1.1500</maxFiberVelocity>
+<peakIsoForce>340.0</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>brachialis2_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>97</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>right_upper_arm</linkName>
+<point>0.00964, 0.00053, -0.22887</point>
+<linkName>right_lower_arm</linkName>
+<point>-0.00751, -0.00243, -0.03263</point>
+</muscleTendonPath>
+<optFiberLength>0.11500</optFiberLength>
+<slackTendonLength>0.10000</slackTendonLength>
+<maxFiberVelocity>1.1500</maxFiberVelocity>
+<peakIsoForce>340.0</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>brachialis3_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>98</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>right_upper_arm</linkName>
+<point>0.01021, 0.01524, -0.24816</point>
+<linkName>right_lower_arm</linkName>
+<point>-0.00751, -0.00243, -0.03263</point>
+</muscleTendonPath>
+<optFiberLength>0.11500</optFiberLength>
+<slackTendonLength>0.10000</slackTendonLength>
+<maxFiberVelocity>1.1500</maxFiberVelocity>
+<peakIsoForce>340.0</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>anconeus1_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>99</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>right_upper_arm</linkName>
+<point>0.00540, -0.01371, -0.28826</point>
+<linkName>right_lower_arm</linkName>
+<point>-0.03223, -0.00849, -0.01143</point>
+<linkName>right_lower_arm</linkName>
+<point>-0.03179, -0.00328, -0.01650</point>
+</muscleTendonPath>
+<optFiberLength>0.20000</optFiberLength>
+<slackTendonLength>0.10000</slackTendonLength>
+<maxFiberVelocity>2.0000</maxFiberVelocity>
+<peakIsoForce>246.960</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>anconeus2_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>100</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>right_upper_arm</linkName>
+<point>0.00540, -0.01371, -0.28826</point>
+<linkName>right_lower_arm</linkName>
+<point>-0.03118, -0.01515, -0.02338</point>
+<linkName>right_lower_arm</linkName>
+<point>-0.03047, -0.00815, -0.04150</point>
+</muscleTendonPath>
+<optFiberLength>0.20000</optFiberLength>
+<slackTendonLength>0.10000</slackTendonLength>
+<maxFiberVelocity>2.0000</maxFiberVelocity>
+<peakIsoForce>246.960</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>flex_carp_rad_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>101</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>right_upper_arm</linkName>
+<point>0.00661, 0.03651, -0.28532</point>
+<linkName>right_lower_arm</linkName>
+<point>0.00313, -0.03835, -0.24288</point>
+<linkName>right_hand</linkName>
+<point>0.0115, -0.00649, -0.00604</point>
+<linkName>right_hand</linkName>
+<point>0.01713, -0.00751, -0.02145</point>
+<linkName>right_hand</linkName>
+<point>0.00491, -0.00593, -0.02593</point>
+</muscleTendonPath>
+<optFiberLength>0.06280</optFiberLength>
+<slackTendonLength>0.21850</slackTendonLength>
+<maxFiberVelocity>0.6280</maxFiberVelocity>
+<peakIsoForce>59.700</peakIsoForce>
+<pennationAngle>3.1</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>flex_carp_uln_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>102</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>right_upper_arm</linkName>
+<point>0.00479, 0.03647, -0.2854</point>
+<linkName>right_lower_arm</linkName>
+<point>-0.00481, -0.01604, -0.24215</point>
+<linkName>right_lower_arm</linkName>
+<point>-0.01416, -0.01802, -0.24384</point>
+<linkName>right_hand</linkName>
+<point>0.01098, 0.01836, -0.02126</point>
+<linkName>right_hand</linkName>
+<point>0.00336, 0.01908, -0.02938</point>
+</muscleTendonPath>
+<optFiberLength>0.05090</optFiberLength>
+<slackTendonLength>0.24200</slackTendonLength>
+<maxFiberVelocity>0.50900</maxFiberVelocity>
+<peakIsoForce>102.600</peakIsoForce>
+<pennationAngle>12.1</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>ex_carp_uln_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>103</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>right_upper_arm</linkName>
+<point>0.02347, -0.0199, -0.28521</point>
+<linkName>right_lower_arm</linkName>
+<point>-0.0092, -0.03779, -0.02578</point>
+<linkName>right_lower_arm</linkName>
+<point>-0.01805, -0.03359, -0.05159</point>
+<linkName>right_lower_arm</linkName>
+<point>-0.02543, -0.01719, -0.10205</point>
+<linkName>right_lower_arm</linkName>
+<point>-0.03075, -0.03059, -0.24263</point>
+<linkName>right_hand</linkName>
+<point>-0.01219, 0.01829, -0.01292</point>
+<linkName>right_hand</linkName>
+<point>-0.00883, 0.02199, -0.03177</point>
+</muscleTendonPath>
+<optFiberLength>0.06220</optFiberLength>
+<slackTendonLength>0.23100</slackTendonLength>
+<maxFiberVelocity>0.6220</maxFiberVelocity>
+<peakIsoForce>117.000</peakIsoForce>
+<pennationAngle>3.5</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>ex_carp_rad_brev_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>104</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>right_upper_arm</linkName>
+<point>0.02333, -0.01989, -0.2853</point>
+<linkName>right_lower_arm</linkName>
+<point>-0.01071, -0.05952, -0.15006</point>
+<linkName>right_lower_arm</linkName>
+<point>-0.02099, -0.06211, -0.23893</point>
+<linkName>right_hand</linkName>
+<point>-0.0151, -0.01104, -0.01211</point>
+<linkName>right_hand</linkName>
+<point>-0.01291, -0.00357, -0.0319</point>
+</muscleTendonPath>
+<optFiberLength>0.05850</optFiberLength>
+<slackTendonLength>0.22050</slackTendonLength>
+<maxFiberVelocity>0.5850</maxFiberVelocity>
+<peakIsoForce>122.900</peakIsoForce>
+<pennationAngle>8.9</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>ex_carp_rad_long_r</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>105</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>right_upper_arm</linkName>
+<point>0.01384, -0.02512, -0.27885</point>
+<linkName>right_upper_arm</linkName>
+<point>0.02317, -0.01985, -0.28552</point>
+<linkName>right_lower_arm</linkName>
+<point>-0.00813, -0.05919, -0.15497</point>
+<linkName>right_lower_arm</linkName>
+<point>-0.01532, -0.06489, -0.24111</point>
+<linkName>right_hand</linkName>
+<point>-0.01173, -0.01855, -0.01359</point>
+<linkName>right_hand</linkName>
+<point>-0.01034, -0.01671, -0.02575</point>
+<linkName>right_hand</linkName>
+<point>-0.00707, -0.01521, -0.02969</point>
+</muscleTendonPath>
+<optFiberLength>0.09360</optFiberLength>
+<slackTendonLength>0.2026</slackTendonLength>
+<maxFiberVelocity>0.9360</maxFiberVelocity>
+<peakIsoForce>65.700</peakIsoForce>
+<pennationAngle>2.5</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>glut_max1_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>106</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>-0.0488, 0.1535, 0.1273</point>
+<linkName>pelvis</linkName>
+<point>-0.0584, 0.1721, 0.0673</point>
+<linkName>left_upper_leg</linkName>
+<point>-0.0457, 0.0392, -0.0248</point>
+<linkName>left_upper_leg</linkName>
+<point>-0.0277, 0.047, -0.0566</point>
+</muscleTendonPath>
+<optFiberLength>0.1420</optFiberLength>
+<slackTendonLength>0.1250</slackTendonLength>
+<maxFiberVelocity>1.4200</maxFiberVelocity>
+<peakIsoForce>382.0</peakIsoForce>
+<pennationAngle>5.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>glut_max2_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>107</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>-0.0642, 0.1398, 0.0837</point>
+<linkName>pelvis</linkName>
+<point>-0.0669, 0.1749, 0.0141</point>
+<linkName>left_upper_leg</linkName>
+<point>-0.0426, 0.0293, -0.053</point>
+<linkName>left_upper_leg</linkName>
+<point>-0.0156, 0.0419, -0.1016</point>
+</muscleTendonPath>
+<optFiberLength>0.1470</optFiberLength>
+<slackTendonLength>0.1270</slackTendonLength>
+<maxFiberVelocity>1.470</maxFiberVelocity>
+<peakIsoForce>546.0</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>glut_max3_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>108</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>-0.0581, 0.0938, 0.0238</point>
+<linkName>pelvis</linkName>
+<point>-0.0822, 0.1238, -0.0391</point>
+<linkName>left_upper_leg</linkName>
+<point>-0.0299, 0.0135, -0.1041</point>
+<linkName>left_upper_leg</linkName>
+<point>-0.006, 0.0411, -0.1419</point>
+</muscleTendonPath>
+<optFiberLength>0.1440</optFiberLength>
+<slackTendonLength>0.1450</slackTendonLength>
+<maxFiberVelocity>1.440</maxFiberVelocity>
+<peakIsoForce>368.0</peakIsoForce>
+<pennationAngle>5.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>glut_med1_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>109</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>0.0299, 0.2044, 0.0965</point>
+<linkName>left_upper_leg</linkName>
+<point>-0.0218, 0.0555, -0.0117</point>
+</muscleTendonPath>
+<optFiberLength>0.0535</optFiberLength>
+<slackTendonLength>0.0780</slackTendonLength>
+<maxFiberVelocity>0.5350</maxFiberVelocity>
+<peakIsoForce>546.0</peakIsoForce>
+<pennationAngle>8.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>glut_med2_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>110</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>-0.0148, 0.1601, 0.1106</point>
+<linkName>left_upper_leg</linkName>
+<point>-0.0258, 0.0527, -0.0058</point>
+</muscleTendonPath>
+<optFiberLength>0.0845</optFiberLength>
+<slackTendonLength>0.0530</slackTendonLength>
+<maxFiberVelocity>0.8450</maxFiberVelocity>
+<peakIsoForce>382.0</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>glut_med3_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>111</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>-0.0516, 0.1483, 0.0766</point>
+<linkName>left_upper_leg</linkName>
+<point>-0.0309, 0.0518, -0.0047</point>
+</muscleTendonPath>
+<optFiberLength>0.0646</optFiberLength>
+<slackTendonLength>0.0530</slackTendonLength>
+<maxFiberVelocity>0.6460</maxFiberVelocity>
+<peakIsoForce>435.0</peakIsoForce>
+<pennationAngle>19.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>add_long_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>112</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>0.0391, 0.1004, -0.0175</point>
+<linkName>left_upper_leg</linkName>
+<point>0.0050, 0.0234, -0.2111</point>
+</muscleTendonPath>
+<optFiberLength>0.1380</optFiberLength>
+<slackTendonLength>0.1100</slackTendonLength>
+<maxFiberVelocity>1.380</maxFiberVelocity>
+<peakIsoForce>418.0</peakIsoForce>
+<pennationAngle>6.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>add_brev_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>113</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>0.0120, 0.0999, -0.0254</point>
+<linkName>left_upper_leg</linkName>
+<point>0.0009, 0.0294, -0.1196</point>
+</muscleTendonPath>
+<optFiberLength>0.1330</optFiberLength>
+<slackTendonLength>0.0200</slackTendonLength>
+<maxFiberVelocity>1.330</maxFiberVelocity>
+<peakIsoForce>286.0</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>add_mag1_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>114</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>-0.0025, 0.1090, -0.0513</point>
+<linkName>left_upper_leg</linkName>
+<point>-0.0045, 0.0339, -0.1211</point>
+</muscleTendonPath>
+<optFiberLength>0.0870</optFiberLength>
+<slackTendonLength>0.0600</slackTendonLength>
+<maxFiberVelocity>0.8700</maxFiberVelocity>
+<peakIsoForce>346.0</peakIsoForce>
+<pennationAngle>5.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>add_mag2_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>115</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>-0.0124, 0.1143, -0.0531</point>
+<linkName>left_upper_leg</linkName>
+<point>0.0054, 0.0227, -0.2285</point>
+</muscleTendonPath>
+<optFiberLength>0.1210</optFiberLength>
+<slackTendonLength>0.1300</slackTendonLength>
+<maxFiberVelocity>1.2100</maxFiberVelocity>
+<peakIsoForce>312.0</peakIsoForce>
+<pennationAngle>3.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>add_mag3_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>116</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>-0.0064, 0.1111, -0.0520</point>
+<linkName>left_upper_leg</linkName>
+<point>0.0070, -0.0266, -0.3837</point>
+</muscleTendonPath>
+<optFiberLength>0.1310</optFiberLength>
+<slackTendonLength>0.2600</slackTendonLength>
+<maxFiberVelocity>1.3100</maxFiberVelocity>
+<peakIsoForce>444.0</peakIsoForce>
+<pennationAngle>5.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>sartorius_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>117</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>0.0554, 0.2077, 0.0648</point>
+<linkName>left_upper_leg</linkName>
+<point>-0.0030, -0.0421, -0.3568</point>
+<linkName>left_lower_leg</linkName>
+<point>-0.0056, -0.0399, -0.0419</point>
+<linkName>left_lower_leg</linkName>
+<point>0.0060, -0.0383, -0.0589</point>
+<linkName>left_lower_leg</linkName>
+<point>0.0243, -0.0252, -0.0840</point>
+</muscleTendonPath>
+<optFiberLength>0.5790</optFiberLength>
+<slackTendonLength>0.0400</slackTendonLength>
+<maxFiberVelocity>5.7900</maxFiberVelocity>
+<peakIsoForce>104.0</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>rectus_fem_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>118</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>0.0412, 0.1803, 0.0350</point>
+<linkName>left_upper_leg</linkName>
+<point>0.0334, 0.0019, -0.4030 </point>
+<linkName>left_lower_leg</linkName>
+<point>0.0617, 0.0014, 0.0210</point>
+</muscleTendonPath>
+<optFiberLength>0.0840</optFiberLength>
+<slackTendonLength>0.3460</slackTendonLength>
+<maxFiberVelocity>0.8400</maxFiberVelocity>
+<peakIsoForce>779.0</peakIsoForce>
+<pennationAngle>5.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>ten_fas_lat_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>119</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>0.0396, 0.2076, 0.0875</point>
+<linkName>left_upper_leg</linkName>
+<point>0.0294, 0.0597, -0.0995</point>
+<linkName>left_upper_leg</linkName>
+<point>0.0054, 0.0357, -0.4049</point>
+<linkName>left_lower_leg</linkName>
+<point>0.006, 0.0297, -0.0487</point>
+</muscleTendonPath>
+<optFiberLength>0.0950</optFiberLength>
+<slackTendonLength>0.4250</slackTendonLength>
+<maxFiberVelocity>0.9500</maxFiberVelocity>
+<peakIsoForce>155.0</peakIsoForce>
+<pennationAngle>3.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>gracilis_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>120</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>0.0144, 0.0914, -0.0377</point>
+<linkName>left_lower_leg</linkName>
+<point>-0.0154, -0.0358, -0.0475</point>
+<linkName>left_lower_leg</linkName>
+<point>0.006, -0.0228, -0.0836</point>
+</muscleTendonPath>
+<optFiberLength>0.3520</optFiberLength>
+<slackTendonLength>0.1400</slackTendonLength>
+<maxFiberVelocity>3.5200</maxFiberVelocity>
+<peakIsoForce>108.0</peakIsoForce>
+<pennationAngle>3.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>semimem_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>121</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>-0.0485, 0.153, -0.0354</point>
+<linkName>left_lower_leg</linkName>
+<point>-0.0243, -0.0194, -0.0536</point>
+</muscleTendonPath>
+<optFiberLength>0.0800</optFiberLength>
+<slackTendonLength>0.3590</slackTendonLength>
+<maxFiberVelocity>0.8000</maxFiberVelocity>
+<peakIsoForce>1030.0</peakIsoForce>
+<pennationAngle>15.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>semiten_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>122</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>-0.053, 0.1438, -0.0382</point>
+<linkName>left_lower_leg</linkName>
+<point>-0.0314, -0.0146, -0.0545</point>
+<linkName>left_lower_leg</linkName>
+<point>-0.0113, -0.0245, -0.0746</point>
+<linkName>left_lower_leg</linkName>
+<point>0.0027, -0.0193, -0.0956</point>
+</muscleTendonPath>
+<optFiberLength>0.2010</optFiberLength>
+<slackTendonLength>0.2620</slackTendonLength>
+<maxFiberVelocity>2.0100</maxFiberVelocity>
+<peakIsoForce>328.0</peakIsoForce>
+<pennationAngle>5.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>bi_fem_lh_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>123</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>pelvis</linkName>
+<point>-0.0537, 0.1501, -0.034</point>
+<linkName>left_lower_leg</linkName>
+<point>-0.0081, 0.0423, -0.0729</point>
+</muscleTendonPath>
+<optFiberLength>0.1090</optFiberLength>
+<slackTendonLength>0.3410</slackTendonLength>
+<maxFiberVelocity>1.0900</maxFiberVelocity>
+<peakIsoForce>717.0</peakIsoForce>
+<pennationAngle>0.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>bi_fem_sh_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>124</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>left_upper_leg</linkName>
+<point>0.005, 0.0234, -0.2111</point>
+<linkName>left_lower_leg</linkName>
+<point>-0.0101, 0.0406, -0.0725</point>
+</muscleTendonPath>
+<optFiberLength>0.1730</optFiberLength>
+<slackTendonLength>0.1000</slackTendonLength>
+<maxFiberVelocity>1.7300</maxFiberVelocity>
+<peakIsoForce>402.0</peakIsoForce>
+<pennationAngle>23.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>vas_med_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>125</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>left_upper_leg</linkName>
+<point>0.0140, 0.0188, -0.2099</point>
+<linkName>left_upper_leg</linkName>
+<point>0.0356, 0.0009, -0.2769</point>
+<linkName>left_upper_leg</linkName>
+<point>0.0370, -0.0125, -0.4048</point>
+<linkName>left_upper_leg</linkName>
+<point>0.0274, -0.0131, -0.4255</point>
+<linkName>left_lower_leg</linkName>
+<point>0.0559, -0.0146, 0.0218</point>
+</muscleTendonPath>
+<optFiberLength>0.0890</optFiberLength>
+<slackTendonLength>0.1260</slackTendonLength>
+<maxFiberVelocity>0.8900</maxFiberVelocity>
+<peakIsoForce>1294.0</peakIsoForce>
+<pennationAngle>5.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>vas_int_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>126</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>left_upper_leg</linkName>
+<point>0.0290, 0.0310, -0.1924</point>
+<linkName>left_upper_leg</linkName>
+<point>0.0335, 0.0285, -0.2084</point>
+<linkName>left_upper_leg</linkName>
+<point>0.0343, 0.0055, -0.4030</point>
+<linkName>left_lower_leg</linkName>
+<point>0.0554, 0.0018, 0.0253</point>
+</muscleTendonPath>
+<optFiberLength>0.0870</optFiberLength>
+<slackTendonLength>0.1360</slackTendonLength>
+<maxFiberVelocity>0.8700</maxFiberVelocity>
+<peakIsoForce>1365.0</peakIsoForce>
+<pennationAngle>3.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>vas_lat_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>127</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>left_upper_leg</linkName>
+<point>0.0048, 0.0349, -0.1854</point>
+<linkName>left_upper_leg</linkName>
+<point>0.0269, 0.0409, -0.2591</point>
+<linkName>left_upper_leg</linkName>
+<point>0.0361, 0.0205, -0.4030</point>
+<linkName>left_upper_leg</linkName>
+<point>0.0253, 0.0184, -0.4243</point>
+<linkName>left_lower_leg</linkName>
+<point>0.0599, 0.0165, 0.0196</point>
+</muscleTendonPath>
+<optFiberLength>0.0840</optFiberLength>
+<slackTendonLength>0.1570</slackTendonLength>
+<maxFiberVelocity>0.8400</maxFiberVelocity>
+<peakIsoForce>1871.0</peakIsoForce>
+<pennationAngle>5.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>gas_med_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>128</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>left_upper_leg</linkName>
+<point>-0.0127, -0.0235, -0.3929</point>
+<linkName>left_upper_leg</linkName>
+<point>-0.0239, -0.0258, -0.4022</point>
+<linkName>left_lower_leg</linkName>
+<point>-0.0217, -0.0295, -0.0487</point>
+<linkName>left_foot</linkName>
+<point>0.005, 0.0026, 0.0310</point>
+</muscleTendonPath>
+<optFiberLength>0.0450</optFiberLength>
+<slackTendonLength>0.4080</slackTendonLength>
+<maxFiberVelocity>0.4500</maxFiberVelocity>
+<peakIsoForce>1113.0</peakIsoForce>
+<pennationAngle>17.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>gas_lat_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>129</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>left_upper_leg</linkName>
+<point>-0.0155, 0.0272, -0.3946</point>
+<linkName>left_upper_leg</linkName>
+<point>-0.0254, 0.0274, -0.4018</point>
+<linkName>left_lower_leg</linkName>
+<point>-0.0242, 0.0235, -0.0481</point>
+<linkName>left_foot</linkName>
+<point>0.005, 0.0026, 0.0310</point>
+</muscleTendonPath>
+<optFiberLength>0.0640</optFiberLength>
+<slackTendonLength>0.3850</slackTendonLength>
+<maxFiberVelocity>0.6400</maxFiberVelocity>
+<peakIsoForce>488.0</peakIsoForce>
+<pennationAngle>8.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>soleus_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>130</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>left_lower_leg</linkName>
+<point>-0.0024, 0.0071, -0.1533</point>
+<linkName>left_foot</linkName>
+<point>0.005, 0.0026, 0.0310</point>
+</muscleTendonPath>
+<optFiberLength>0.0300</optFiberLength>
+<slackTendonLength>0.2680</slackTendonLength>
+<maxFiberVelocity>0.3000</maxFiberVelocity>
+<peakIsoForce>2839.0</peakIsoForce>
+<pennationAngle>25.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>tib_post_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>131</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>left_lower_leg</linkName>
+<point>-0.0094, 0.0019, -0.1348</point>
+<linkName>left_lower_leg</linkName>
+<point>-0.0144, -0.0229, -0.4051</point>
+<linkName>left_foot</linkName>
+<point>-0.0071, -0.0207, 0.0214</point>
+<linkName>left_foot</linkName>
+<point>0.0284, -0.0202, 0.0039</point>
+</muscleTendonPath>
+<optFiberLength>0.0310</optFiberLength>
+<slackTendonLength>0.3100</slackTendonLength>
+<maxFiberVelocity>0.3100</maxFiberVelocity>
+<peakIsoForce>1270.0</peakIsoForce>
+<pennationAngle>12.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>tib_ant_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>132</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>left_lower_leg</linkName>
+<point>0.0179, 0.0115, -0.1624</point>
+<linkName>left_lower_leg</linkName>
+<point>-0.0159, -0.0098, -0.4370</point>
+<linkName>left_foot</linkName>
+<point>0.0678, -0.0226, 0.0058</point>
+</muscleTendonPath>
+<optFiberLength>0.0980</optFiberLength>
+<slackTendonLength>0.2230</slackTendonLength>
+<maxFiberVelocity>0.9800</maxFiberVelocity>
+<peakIsoForce>603.0</peakIsoForce>
+<pennationAngle>5.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>per_brev_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>133</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>left_lower_leg</linkName>
+<point>-0.0070, 0.0325, -0.2646</point>
+<linkName>left_lower_leg</linkName>
+<point>-0.0198, 0.0283, -0.4184</point>
+<linkName>left_lower_leg</linkName>
+<point>-0.0144 , 0.0289, -0.4295</point>
+<linkName>left_foot</linkName>
+<point>-0.0017, 0.0312, 0.0150</point>
+<linkName>left_foot</linkName>
+<point>0.0189, 0.0422, 0.0099</point>
+</muscleTendonPath>
+<optFiberLength>0.0500</optFiberLength>
+<slackTendonLength>0.3450</slackTendonLength>
+<maxFiberVelocity>0.1610</maxFiberVelocity>
+<peakIsoForce>348.0</peakIsoForce>
+<pennationAngle>5.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>per_long_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>134</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>left_lower_leg</linkName>
+<point>0.0005, 0.0362, -0.1568</point>
+<linkName>left_lower_leg</linkName>
+<point>-0.0207, 0.0286, -0.4205</point>
+<linkName>left_lower_leg</linkName>
+<point>-0.0162, 0.0289, -0.4319 </point>
+<linkName>left_foot</linkName>
+<point>-0.0050, 0.0300, 0.0110</point>
+<linkName>left_foot</linkName>
+<point>0.0193, 0.0363, -0.0014</point>
+<linkName>left_foot</linkName>
+<point>0.0364, 0.0197, -0.0050</point>
+<linkName>left_foot</linkName>
+<point>0.0715, -0.0105, -0.0035</point>
+</muscleTendonPath>
+<optFiberLength>0.0490</optFiberLength>
+<slackTendonLength>0.3450</slackTendonLength>
+<maxFiberVelocity>0.4900</maxFiberVelocity>
+<peakIsoForce>754.0</peakIsoForce>
+<pennationAngle>10.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+<muscleNode>
+<muscleName>per_tert_l</muscleName>
+<comments>Muscle data from Delp and Murray.</comments>
+<ID>135</ID>
+<activatorNode>
+<actTimeConstant>0.010</actTimeConstant>
+<deactTimeConstant>0.050</deactTimeConstant>
+</activatorNode>
+<contractorNode>
+<muscleTendonPath>
+<linkName>left_lower_leg</linkName>
+<point>0.0010, 0.0231, -0.2804</point>
+<linkName>left_lower_leg</linkName>
+<point>0.0229, 0.0159, -0.4069</point>
+<linkName>left_foot</linkName>
+<point>0.0369, 0.0378, 0.0108</point>
+</muscleTendonPath>
+<optFiberLength>0.0790</optFiberLength>
+<slackTendonLength>0.1000</slackTendonLength>
+<maxFiberVelocity>0.7900</maxFiberVelocity>
+<peakIsoForce>90.0</peakIsoForce>
+<pennationAngle>13.0</pennationAngle>
+<forceVelCurvature>0.25</forceVelCurvature>
+<passiveDamping>0.10</passiveDamping>
+</contractorNode>
+</muscleNode>
+
+</muscleSystemNode>
