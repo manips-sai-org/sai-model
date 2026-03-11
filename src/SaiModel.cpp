@@ -1768,10 +1768,13 @@ Vector3d SaiModel::comAcceleration() {
 
 void SaiModel::addMuscleSystem(const std::string& muscle_xml, const std::string& name) {
 	if (_muscle_system.find(name) != _muscle_system.end()) {
-		std:cout << "Muscle group already exists; skipping\n";
+		std::cout << "Muscle group already exists; skipping\n";
 		return;
 	}
-	_muscle_system[name] = parseMuscleXML(muscle_xml);
+	_muscle_system[name] = parseMuscleXML(
+		muscle_xml, [this](const std::string& link_name) {
+			return this->isLinkInRobot(link_name);
+		});
 }
 
 // original function
@@ -1858,6 +1861,87 @@ MatrixXd SaiModel::computeMuscleJacobian() {
         }
     }
     return L;
+}
+
+// Assuming Hv(link_name, point) returns std::vector<MatrixXd> of size _dof, 
+// where each MatrixXd is 3 x _dof.
+
+// each muscle tendon contributes (1 / norm(d)) d^{T} (J_{v2} - J_{v1})
+// derivative contribution is:
+// ((1 / norm(d)) * (I - \hat{d} \hat{d}^{T}) \nabla_{q} d) * (J_{v2} - J_{v1})
+// + (1 / norm(d)) d^{T} * (dJdq_{v2} - dJdq_{v1})
+// where \hat{d} = (1 / norm(d)) d and \nabla_{q} d = J_{v2} - J_{v1}
+// each muscle forms one row of the L matrix
+
+std::vector<MatrixXd> SaiModel::computeMuscleJacobianDerivative() {
+    int n_muscles = 0;
+    for (auto& [_, system] : _muscle_system) {
+        n_muscles += system.muscles.size();
+    }
+    
+    // Output: vector of size _dof, where each element is an (n_muscles x _dof) matrix
+    std::vector<MatrixXd> dL_dq(_dof, MatrixXd::Zero(n_muscles, _dof));
+    
+    Matrix3d I3 = Matrix3d::Identity();
+    int i = 0; // Muscle row index
+    
+    for (auto& [name, system] : _muscle_system) {
+        for (auto& node : system.muscles) {
+            auto& waypoints = node.contractor.muscle_tendon_path;
+            
+            for (int j = 0; j < waypoints.size() - 1; ++j) {
+                if (waypoints[j].link_name != waypoints[j + 1].link_name) {
+                    
+                    // 1. Evaluate d(q) and its unit vector
+                    Vector3d p_curr = positionInWorld(waypoints[j].link_name);
+                    Vector3d p_next = positionInWorld(waypoints[j + 1].link_name);
+                    Vector3d d = p_next - p_curr;
+                    double length = d.norm();
+                    
+                    if (length < 1e-6) continue;
+                    Vector3d d_hat = d / length;
+                    
+                    // 2. Evaluate J_d = partial d(q) / partial q  (Size: 3 x _dof)
+                    MatrixXd J_curr = Jv(waypoints[j].link_name, waypoints[j].point);
+                    MatrixXd J_next = Jv(waypoints[j + 1].link_name, waypoints[j + 1].point);
+                    MatrixXd J_d = J_next - J_curr; 
+                    
+                    // Precompute the projection matrix scaled by length
+                    MatrixXd scaled_proj = (1.0 / length) * (I3 - d_hat * d_hat.transpose());
+                    
+                    // 3. Evaluate Kinematic Hessian (Size: _dof vector of 3 x _dof matrices)
+                    std::vector<MatrixXd> H_curr = getJacobianDerivative(waypoints[j].link_name, waypoints[j].point);
+                    std::vector<MatrixXd> H_next = getJacobianDerivative(waypoints[j+1].link_name, waypoints[j+1].point);
+                    
+                    // 4. Populate the k-th slice of the tensor
+                    for (int k = 0; k < _dof; ++k) {
+                        
+                        // Geometric Term:
+                        // partial d / partial q_k is the k-th column of J_d
+                        Vector3d d_dq_k = J_d.col(k);
+                        // partial d_hat / partial q_k (Size: 3 x 1)
+                        Vector3d d_hat_dq_k = scaled_proj * d_dq_k;
+                        
+                        // row contribution: (partial d_hat / partial q_k)^T * J_d  (Size: 1 x _dof)
+                        RowVectorXd geo_term = d_hat_dq_k.transpose() * J_d;
+                        
+                        // Kinematic Term:
+                        // H_d_k is partial J_d / partial q_k (Size: 3 x _dof)
+                        MatrixXd H_d_k = H_next[k].topRows(3) - H_curr[k].topRows(3);
+                        
+                        // row contribution: d_hat^T * H_d_k (Size: 1 x _dof)
+                        RowVectorXd kin_term = d_hat.transpose() * H_d_k;
+                        
+                        // Add both terms to the i-th row of the k-th output matrix
+                        dL_dq[k].row(i) += (geo_term + kin_term);
+                    }
+                }
+            }
+            ++i; // Move to the next muscle row
+        }
+    }
+    
+    return dL_dq;
 }
 
 }  // namespace SaiModel

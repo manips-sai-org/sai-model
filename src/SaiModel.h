@@ -1150,6 +1150,13 @@ public:
 	 */
 	MatrixXd computeMuscleJacobian();
 
+	/**
+	 * @brief Computes the derivative of the L matrix
+	 * 
+	 * @return std::vector<MatrixXd>
+	 */
+	std::vector<MatrixXd> computeMuscleJacobianDerivative();
+
 private:
 	/**
 	 * @brief      update the dynamics (mass matrix and its inverse) for the

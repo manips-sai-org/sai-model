@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<robot name="human">
+<robot name="humanoid_clean">
 
   <mujoco>
      <compiler meshdir="../bones/" balanceinertia="true" discardvisual="false" fusestatic="true"/>
@@ -18,7 +18,7 @@
       <parent link="ground_link"/>
       <child link="root_trans_x_link"/>
       <axis xyz="1 0 0"/>
-      <limit effort="39" velocity="1.3963" lower="-100" upper="100"/>
+      <limit effort="1000" velocity="1.3963" lower="-100" upper="100"/>
   </joint>
   <link name="root_trans_x_link">
       <inertial>
@@ -33,7 +33,7 @@
       <parent link="root_trans_x_link"/>
       <child link="root_trans_y_link"/>
       <axis xyz="0 1 0"/>
-      <limit effort="39" velocity="1.3963" lower="-100" upper="100"/>
+      <limit effort="1000" velocity="1.3963" lower="-100" upper="100"/>
   </joint>
   <link name="root_trans_y_link">
       <inertial>
@@ -48,7 +48,7 @@
       <parent link="root_trans_y_link"/>
       <child link="root_trans_z_link"/>
       <axis xyz="0 0 1"/>
-      <limit effort="39" velocity="1.3963" lower="-100" upper="100"/>
+      <limit effort="1000" velocity="1.3963" lower="-100" upper="100"/>
   </joint>
   <link name="root_trans_z_link">
       <inertial>
@@ -63,7 +63,7 @@
       <parent link="root_trans_z_link"/>
       <child link="root_rot_x_link"/>
       <axis xyz="1 0 0"/>
-      <limit effort="39" velocity="1.3963" lower="-100" upper="100"/>
+      <limit effort="1000" velocity="1.3963" lower="-100" upper="100"/>
   </joint>
   <link name="root_rot_x_link">
       <inertial>
@@ -78,7 +78,7 @@
       <parent link="root_rot_x_link"/>
       <child link="root_rot_y_link"/>
       <axis xyz="0 1 0"/>
-      <limit effort="39" velocity="1.3963" lower="-100" upper="100"/>
+      <limit effort="1000" velocity="1.3963" lower="-100" upper="100"/>
   </joint>
   <link name="root_rot_y_link">
       <inertial>
@@ -93,13 +93,13 @@
       <parent link="root_rot_y_link"/>
       <child link="pelvis"/>
       <axis xyz="0 0 1"/>
-      <limit effort="39" velocity="1.3963" lower="-100" upper="100"/>
+      <limit effort="1000" velocity="1.3963" lower="-100" upper="100"/>
   </joint>
 
   <link name="pelvis">
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
-      <mass value="50.0"/>
+      <mass value="20.0"/>
       <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1"/>
     </inertial>
     <visual>
@@ -121,7 +121,7 @@
     <child link="lumbar_link"/>
     <origin rpy="0 0 0" xyz="-0.0165 0.0 0.0992"/>
     <axis xyz="1 0 0"/>
-    <limit effort="100" lower="-1.1" upper="1.1" velocity="10"/>
+    <limit effort="200" lower="-1.1" upper="1.1" velocity="10"/>
   </joint>
   <link name="lumbar_link">
     <inertial>
@@ -136,7 +136,7 @@
     <child link="thoracic_link"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="0 1 0"/>
-    <limit effort="100" lower="-0.83" upper="0.83" velocity="10"/>
+    <limit effort="200" lower="-0.83" upper="0.83" velocity="10"/>
   </joint>
   <link name="thoracic_link">
     <inertial>
@@ -151,7 +151,7 @@
     <child link="torso"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="0 0 1"/>
-    <limit effort="100" lower="-0.83" upper="0.83" velocity="10"/>
+    <limit effort="200" lower="-0.83" upper="0.83" velocity="10"/>
   </joint>
   <link name="torso">
     <inertial>
@@ -176,7 +176,7 @@
     <child link="neck_link"/>
     <origin rpy="0 0 0" xyz="-0.0253 0.0 0.4782"/>
     <axis xyz="0 1 0"/>
-    <limit effort="100" lower="-0.4" upper="0.79" velocity="10"/>
+    <limit effort="200" lower="-0.4" upper="0.79" velocity="10"/>
   </joint>
   <link name="neck_link">
     <inertial>
@@ -191,7 +191,7 @@
     <child link="head"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="0 0 1"/>
-    <limit effort="100" lower="-1.7" upper="1.7" velocity="10"/>
+    <limit effort="200" lower="-1.7" upper="1.7" velocity="10"/>
   </joint>
   <link name="head">
     <inertial>
@@ -214,7 +214,7 @@
     <child link="left_shoulder_pitch_link"/>
     <origin rpy="0 0 0" xyz="0.0249 0.2074 0.4186"/>
     <axis xyz="0 1 0"/>
-    <limit effort="100" lower="-1.8" upper="1.2" velocity="10"/>
+    <limit effort="200" lower="-1.8" upper="1.2" velocity="10"/>
   </joint>
   <link name="left_shoulder_pitch_link">
     <inertial>
@@ -229,7 +229,7 @@
     <child link="left_shoulder_roll_link"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="1 0 0"/>
-    <limit effort="100" lower="-0.79" upper="0" velocity="10"/>
+    <limit effort="200" lower="-0.79" upper="0" velocity="10"/>
   </joint>
   <link name="left_shoulder_roll_link">
     <inertial>
@@ -244,7 +244,7 @@
     <child link="left_upper_arm"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="0 0 1"/>
-    <limit effort="100" lower="-1.3" upper="0.2" velocity="10"/>
+    <limit effort="200" lower="-1.3" upper="0.2" velocity="10"/>
   </joint>
   <link name="left_upper_arm">
     <inertial>
@@ -263,7 +263,7 @@
     <child link="left_lower_arm"/>
     <origin rpy="0 0 0" xyz="0.013144 -0.009595 -0.286273"/>
     <axis xyz="0 1 0"/>
-    <limit effort="100" lower="-2.4" upper="-0.6" velocity="10"/>
+    <limit effort="200" lower="-2.4" upper="0" velocity="10"/>
   </joint>
   <link name="left_lower_arm">
     <inertial>
@@ -286,7 +286,7 @@
     <child link="left_wrist_yaw_link"/>
     <origin rpy="0 0 3.14" xyz="-0.016432 0.040969 -0.250781"/>
     <axis xyz="0 0 1"/>
-    <limit effort="100" lower="-0.9" upper="1.1" velocity="10"/>
+    <limit effort="200" lower="-0.9" upper="1.1" velocity="10"/>
   </joint>
    <link name="left_wrist_yaw_link">
     <inertial>
@@ -301,7 +301,7 @@
     <child link="left_wrist_pitch_link"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="0 1 0"/>
-    <limit effort="100" lower="-0.9" upper="1.1" velocity="10"/>
+    <limit effort="200" lower="-0.9" upper="1.1" velocity="10"/>
   </joint>
    <link name="left_wrist_pitch_link">
     <inertial>
@@ -316,7 +316,7 @@
     <child link="left_hand"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="1 0 0"/>
-    <limit effort="100" lower="-0.9" upper="1.1" velocity="10"/>
+    <limit effort="200" lower="-0.9" upper="1.1" velocity="10"/>
   </joint>
   <link name="left_hand">
     <inertial>
@@ -335,7 +335,7 @@
     <child link="right_shoulder_pitch_link"/>
     <origin rpy="0 0 0" xyz="0.0249 -0.2074 0.4186"/>
     <axis xyz="0 1 0"/>
-    <limit effort="100" lower="-1.8" upper="1.2" velocity="10"/>
+    <limit effort="200" lower="-1.8" upper="1.2" velocity="10"/>
   </joint>
   <link name="right_shoulder_pitch_link">
     <inertial>
@@ -350,7 +350,7 @@
     <child link="right_shoulder_roll_link"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="1 0 0"/>
-    <limit effort="100" lower="-0.79" upper="0" velocity="10"/>
+    <limit effort="200" lower="-0.79" upper="0" velocity="10"/>
   </joint>
   <link name="right_shoulder_roll_link">
     <inertial>
@@ -365,7 +365,7 @@
     <child link="right_upper_arm"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="0 0 1"/>
-    <limit effort="100" lower="-1.3" upper="0.2" velocity="10"/>
+    <limit effort="200" lower="-1.3" upper="0.2" velocity="10"/>
   </joint>
   <link name="right_upper_arm">
     <inertial>
@@ -384,7 +384,7 @@
     <child link="right_lower_arm"/>
     <origin rpy="0 0 0" xyz="0.013144 0.009595 -0.286273"/>
     <axis xyz="0 1 0"/>
-    <limit effort="100" lower="-2.4" upper="-0.6" velocity="10"/>
+    <limit effort="200" lower="-2.4" upper="0" velocity="10"/>
   </joint>
   <link name="right_lower_arm">
     <inertial>
@@ -407,7 +407,7 @@
     <child link="right_wrist_yaw_link"/>
     <origin rpy="0 0 3.14" xyz="-0.016432 -0.040969 -0.250781"/>
     <axis xyz="0 0 1"/>
-    <limit effort="100" lower="-0.9" upper="1.1" velocity="10"/>
+    <limit effort="200" lower="-0.9" upper="1.1" velocity="10"/>
   </joint>
   <link name="right_wrist_yaw_link">
     <inertial>
@@ -422,7 +422,7 @@
     <child link="right_wrist_pitch_link"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="0 1 0"/>
-    <limit effort="100" lower="-0.9" upper="1.1" velocity="10"/>
+    <limit effort="200" lower="-0.9" upper="1.1" velocity="10"/>
   </joint>
   <link name="right_wrist_pitch_link">
     <inertial>
@@ -437,7 +437,7 @@
     <child link="right_hand"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="1 0 0"/>
-    <limit effort="100" lower="-0.9" upper="1.1" velocity="10"/>
+    <limit effort="200" lower="-0.9" upper="1.1" velocity="10"/>
   </joint>
   <link name="right_hand">
     <inertial>
@@ -457,7 +457,7 @@
     <origin rpy="0 0 0" xyz="0.0 0.0835 0.0"/>
     <!-- <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/> -->
     <axis xyz="1 0 0"/>
-    <limit effort="100" lower="-0.4" upper="0.4" velocity="10"/>
+    <limit effort="200" lower="-0.4" upper="0.4" velocity="10"/>
   </joint>
   <link name="left_hip_roll_link">
     <inertial>
@@ -472,7 +472,7 @@
     <child link="left_hip_yaw_link"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="0 0 1"/>
-    <limit effort="100" lower="-0.4" upper="2.3" velocity="10"/>
+    <limit effort="200" lower="-0.4" upper="2.3" velocity="10"/>
   </joint>
   <link name="left_hip_yaw_link">
     <inertial>
@@ -487,7 +487,8 @@
     <child link="left_upper_leg"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="0 1 0"/>
-    <limit effort="100" lower="-0.4" upper="2.3" velocity="10"/>
+    <!-- <limit effort="200" lower="-0.4" upper="2.3" velocity="10"/> -->
+    <limit effort="200" lower="-2.3" upper="2.3" velocity="10"/>
   </joint>
   <link name="left_upper_leg">
     <inertial>
@@ -506,7 +507,7 @@
     <child link="left_lower_leg"/>
     <origin rpy="0 0 0" xyz="0 0 -0.4"/>
     <axis xyz="0 1 0"/>
-    <limit effort="100" lower="-0.6" upper="2.5" velocity="10"/>
+    <limit effort="200" lower="0" upper="2.5" velocity="10"/>
   </joint>
   <link name="left_lower_leg">
      <inertial>
@@ -533,7 +534,7 @@
     <child link="left_ankle_pitch_link"/>
     <origin rpy="0 0 0" xyz="0 0 -0.43"/>
     <axis xyz="0 1 0"/>
-    <limit effort="100" lower="-0.65" upper="0.65" velocity="10"/>
+    <limit effort="200" lower="-0.65" upper="0.65" velocity="10"/>
   </joint>
   <link name="left_ankle_pitch_link">
     <inertial>
@@ -549,7 +550,7 @@
     <!-- <origin rpy="0 0 0" xyz="-0.04877 0.00792 -0.04195"/> -->
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="1 0 0"/>
-    <limit effort="100" lower="-0.65" upper="0.65" velocity="10"/>
+    <limit effort="200" lower="-0.65" upper="0.65" velocity="10"/>
   </joint>
   <link name="left_ankle_roll_link">
     <inertial>
@@ -564,7 +565,7 @@
     <child link="left_foot"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="0 0 1"/>
-    <limit effort="100" lower="-0.65" upper="0.65" velocity="10"/>
+    <limit effort="200" lower="-0.65" upper="0.65" velocity="10"/>
   </joint>
   <link name="left_foot">
     <inertial>
@@ -580,6 +581,12 @@
       <origin rpy="0 0 0" xyz="0.1788 -0.00108 0.002"/>
       <geometry> <mesh filename="toes_l_1f.obj"/> </geometry>
     </visual>
+    <visual>
+      <origin xyz="0.12 0 0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <sphere radius="0.01"/>
+      </geometry>
+    </visual>
   </link>
 
   <joint name="right_hip_roll" type="revolute">
@@ -587,7 +594,7 @@
     <child link="right_hip_roll_link"/>
     <origin rpy="0 0 0" xyz="0 -0.0835 0"/>
     <axis xyz="1 0 0"/>
-    <limit effort="100" lower="-0.4" upper="0.4" velocity="10"/>
+    <limit effort="200" lower="-0.4" upper="0.4" velocity="10"/>
   </joint>
   <link name="right_hip_roll_link">
     <inertial>
@@ -602,7 +609,7 @@
     <child link="right_hip_yaw_link"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="0 0 1"/>
-    <limit effort="100" lower="-0.4" upper="0.4" velocity="10"/>
+    <limit effort="200" lower="-0.4" upper="0.4" velocity="10"/>
   </joint>
   <link name="right_hip_yaw_link">
     <inertial>
@@ -617,7 +624,8 @@
     <child link="right_upper_leg"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="0 1 0"/>
-    <limit effort="100" lower="-2.3" upper="0.4" velocity="10"/>
+    <!-- <limit effort="200" lower="-2.3" upper="0.4" velocity="10"/> -->
+    <limit effort="200" lower="-2.3" upper="2.3" velocity="10"/>
   </joint>
   <link name="right_upper_leg">
     <inertial>
@@ -636,7 +644,7 @@
     <child link="right_lower_leg"/>
     <origin rpy="0 0 0" xyz="0 0 -0.396"/>
     <axis xyz="0 1 0"/>
-    <limit effort="100" lower="0.6" upper="2.5" velocity="10"/>
+    <limit effort="200" lower="0" upper="2.5" velocity="10"/>
   </joint>
   <link name="right_lower_leg">
     <inertial>
@@ -663,7 +671,7 @@
     <child link="right_ankle_pitch_link"/>
     <origin rpy="0 0 0" xyz="0 0 -0.43"/>
     <axis xyz="0 1 0"/>
-    <limit effort="100" lower="-0.65" upper="0.65" velocity="10"/>
+    <limit effort="200" lower="-0.65" upper="0.65" velocity="10"/>
   </joint>
   <link name="right_ankle_pitch_link">
     <inertial>
@@ -678,7 +686,7 @@
     <child link="right_ankle_roll_link"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="1 0 0"/>
-    <limit effort="100" lower="-0.65" upper="0.65" velocity="10"/>
+    <limit effort="200" lower="-0.65" upper="0.65" velocity="10"/>
   </joint>
   <link name="right_ankle_roll_link">
     <inertial>
@@ -693,7 +701,7 @@
     <child link="right_foot"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="0 0 1"/>
-    <limit effort="100" lower="-0.65" upper="0.65" velocity="10"/>
+    <limit effort="200" lower="-0.65" upper="0.65" velocity="10"/>
   </joint>
   
   <link name="right_foot">
@@ -702,13 +710,27 @@
       <mass value="1.0"/>
       <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
     </inertial>
-    <visual>
+    <!-- <visual>
       <origin rpy="0 0 0" xyz="-0.04877 -0.00792 -0.04195"/>
       <geometry> <mesh filename="foot_r_1f.obj"/> </geometry>
     </visual>
     <visual>
       <origin rpy="0 0 0" xyz="0.13003 -0.009 -0.03995"/>
       <geometry> <mesh filename="toes_r_1f.obj"/> </geometry>
+    </visual> -->
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry> <mesh filename="foot_r_1f.obj"/> </geometry>
+    </visual>
+    <visual>
+      <origin rpy="0 0 0" xyz="0.1788 -0.00108 0.002"/>
+      <geometry> <mesh filename="toes_r_1f.obj"/> </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.12 0 0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <sphere radius="0.01"/>
+      </geometry>
     </visual>
   </link>
 

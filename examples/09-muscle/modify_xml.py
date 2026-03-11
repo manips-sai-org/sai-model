@@ -18,8 +18,8 @@ def update_link_names(match):
     if link_name == 'hip':
         link_name = 'pelvis'
         
-    if link_name == 'base':
-        link_name = 'pelvis'
+    # if link_name == 'base':
+    #     link_name = 'pelvis'
         
     if link_name == 'chest':
         link_name = 'torso'
