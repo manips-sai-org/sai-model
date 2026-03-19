@@ -11,4 +11,4 @@ TARGET_LINK_LIBRARIES (${EXAMPLE_NAME}
 # NOTE: this requires an install build
 SET(RESOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR}/resources)
 FILE(MAKE_DIRECTORY ${RESOURCE_DIR})
-FILE(COPY human.urdf muscles_modified.xml DESTINATION ${RESOURCE_DIR})
+FILE(COPY human.urdf muscles_modified.xml muscles_fixed.xml DESTINATION ${RESOURCE_DIR})

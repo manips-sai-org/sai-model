@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <functional>
 #include <Eigen/Dense>
 #include "tinyxml2.h"
 
@@ -76,7 +77,9 @@ struct MuscleSystemNode {
     std::vector<MuscleNode> muscles;
 };
 
-inline MuscleSystemNode parseMuscleXML(const std::string& filename) {
+inline MuscleSystemNode parseMuscleXML(
+    const std::string& filename,
+    const std::function<bool(const std::string&)>& link_exists = nullptr) {
     MuscleSystemNode system;
     tinyxml2::XMLDocument doc;
     
@@ -120,15 +123,26 @@ inline MuscleSystemNode parseMuscleXML(const std::string& filename) {
         if (tinyxml2::XMLElement* cElem = mElem->FirstChildElement("contractorNode")) {
             // Path Parsing
             if (tinyxml2::XMLElement* pathElem = cElem->FirstChildElement("muscleTendonPath")) {
+                std::vector<Waypoint> parsed_path;
+                bool invalid_path = false;
+                std::string invalid_link_name = "";
+
                 for (tinyxml2::XMLElement* child = pathElem->FirstChildElement(); child != nullptr; ) {
                     if (std::string(child->Name()) == "linkName") {
                         Waypoint wp;
                         wp.link_name = child->GetText() ? child->GetText() : "";
+
+                        if (link_exists && !link_exists(wp.link_name)) {
+                            invalid_path = true;
+                            if (invalid_link_name.empty()) {
+                                invalid_link_name = wp.link_name;
+                            }
+                        }
                         
                         tinyxml2::XMLElement* next = child->NextSiblingElement();
                         if (next && std::string(next->Name()) == "point") {
                             wp.point = parseVector3d(next->GetText());
-                            m.contractor.muscle_tendon_path.push_back(wp);
+                            parsed_path.push_back(wp);
                             child = next->NextSiblingElement();
                         } else {
                             child = next;
@@ -136,6 +150,18 @@ inline MuscleSystemNode parseMuscleXML(const std::string& filename) {
                     } else {
                         child = child->NextSiblingElement();
                     }
+                }
+
+                if (invalid_path) {
+                    parsed_path.clear();
+                    m.contractor.muscle_tendon_path.clear();
+                    std::cerr
+                        << "Warning: Ignoring muscle tendon path for muscle '"
+                        << m.muscle_name
+                        << "' because link '" << invalid_link_name
+                        << "' was not found in the robot model." << std::endl;
+                } else {
+                    m.contractor.muscle_tendon_path = std::move(parsed_path);
                 }
             }
 

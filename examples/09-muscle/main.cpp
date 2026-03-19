@@ -15,7 +15,7 @@ using std::chrono::milliseconds;
 using namespace std;
 
 const string robot_fname = "resources/human.urdf";
-const string muscle_fname = "resources/muscles_modified.xml";
+const string muscle_fname = "resources/muscles_fixed.xml";
 
 int main(int argc, char** argv) {
 	cout << "Loading robot file: " << robot_fname << endl;
@@ -27,12 +27,23 @@ int main(int argc, char** argv) {
     robot->addMuscleSystem(muscle_fname, "main");
 
     // compute muscle jacobian
-    auto t1 = high_resolution_clock::now();
-    auto L = robot->computeMuscleJacobian();
-    auto t2 = high_resolution_clock::now();
-    duration<double, std::milli> ms_double = t2 - t1;
-    std::cout <<  ms_double.count() << " ms\n";
+    {
+        auto t1 = high_resolution_clock::now();
+        auto L = robot->computeMuscleJacobian();
+        auto t2 = high_resolution_clock::now();
+        duration<double, std::milli> ms_double = t2 - t1;
+        std::cout <<  ms_double.count() << " ms\n";
 
-    std::cout << "L matrix size: " << L.rows() << ", " << L.cols() << "\n";
-    std::cout << "L norm: " << L.norm() << "\n";
+        std::cout << "L matrix size: " << L.rows() << ", " << L.cols() << "\n";
+        std::cout << "L norm: " << L.norm() << "\n";
+    }
+
+    // compute muscle jacobian derivative
+    {
+        auto t1 = high_resolution_clock::now();
+        auto dLdq = robot->computeMuscleJacobianDerivative();
+        auto t2 = high_resolution_clock::now();
+        duration<double, std::milli> ms_double = t2 - t1;
+        std::cout <<  ms_double.count() << " ms\n";
+    }
 }

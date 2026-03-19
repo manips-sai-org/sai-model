@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE SAImuscle SYSTEM "msc.dtd">
-
-<muscleSystemNode>
+<!--dynamics: full = full dynamics, stiff = stiff tendons, stnl - stiff tendons and no activator dynamics -->
+<muscleSystemNode dynamics="stnl">
 <muscleSystemName>my_system</muscleSystemName>
 <comments>This is a sample muscle system.</comments>
 <robotName>human</robotName>
@@ -296,7 +296,7 @@
 </activatorNode>
 <contractorNode>
 <muscleTendonPath>
-<linkName>right-upper-leg</linkName>
+<linkName>right-upper-leg</linkName>-0.0444, -0.0026, -0.0110
 <point>-0.0155, -0.0272, 0.0014</point>
 <linkName>right-upper-leg</linkName>
 <point>-0.0254, -0.0274, -0.0058</point>
@@ -552,7 +552,7 @@
 <linkName>hip</linkName>
 <point>0.0144, 0.0756, -0.0377</point>
 <linkName>right-lower-leg</linkName>
-<point>-0.0154,	0.0358, 0.3825</point>
+<point>-0.0154, 0.0358, 0.3825</point>
 <linkName>right-lower-leg</linkName>
 <point>0.006, 0.0228, 0.3464</point>
 </muscleTendonPath>
