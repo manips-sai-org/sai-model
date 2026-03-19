@@ -1,6 +1,7 @@
 #include "UrdfToSaiModel.h"
 
 #include <assert.h>
+#include <Eigen/Geometry>
 #include <rbdl/rbdl.h>
 #include <urdf/urdfdom/urdf_parser/include/urdf_parser/urdf_parser.h>
 #include <urdf/urdfdom_headers/urdf_model/include/urdf_model/model.h>
@@ -258,11 +259,17 @@ bool construct_model(
 			link_inertial_inertia(2, 2) = urdf_child->inertial->izz;
 
 			if (link_inertial_rpy != Vector3d(0., 0., 0.)) {
-				cerr << "Error while processing body '" << urdf_child->name
-					 << "': rotation of body frames not yet supported. Please "
-						"rotate the joint frame instead."
-					 << endl;
-				return false;
+				const Matrix3d rotation =
+					(Eigen::AngleAxisd(link_inertial_rpy[2],
+									   Eigen::Vector3d::UnitZ()) *
+					 Eigen::AngleAxisd(link_inertial_rpy[1],
+									   Eigen::Vector3d::UnitY()) *
+					 Eigen::AngleAxisd(link_inertial_rpy[0],
+									   Eigen::Vector3d::UnitX()))
+						.toRotationMatrix();
+
+				link_inertial_inertia =
+					rotation * link_inertial_inertia * rotation.transpose();
 			}
 		}
 
