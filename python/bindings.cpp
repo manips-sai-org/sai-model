@@ -331,15 +331,29 @@ PYBIND11_MODULE(sai_model_py, m) {
 			 py::arg("body_name") = "")
 		.def("remove_load", &SaiModel::SaiModel::removeLoad,
 			 py::arg("body_name"))
-		.def("com_acceleration", &SaiModel::SaiModel::comAcceleration)
-		.def("add_muscle_system", &SaiModel::SaiModel::addMuscleSystem,
-			 py::arg("muscle_xml"), py::arg("name"))
-		.def("compute_muscle_jacobian", &SaiModel::SaiModel::computeMuscleJacobian);
-
-	m.def("compute_pseudo_inverse", &SaiModel::computePseudoInverse,
-		  py::arg("matrix"), py::arg("svd_epsilon") = 0.0);
-	m.def("matrix_range_basis", &SaiModel::matrixRangeBasis, py::arg("matrix"),
-		  py::arg("svd_epsilon") = 0.0);
+			.def("com_acceleration", &SaiModel::SaiModel::comAcceleration)
+			.def("add_muscle_system", &SaiModel::SaiModel::addMuscleSystem,
+				 py::arg("muscle_xml"), py::arg("name"))
+			.def("get_num_muscles", &SaiModel::SaiModel::getNumMuscles)
+			.def("compute_muscle_capacity_matrix",
+				 &SaiModel::SaiModel::computeMuscleCapacityMatrix)
+			.def("compute_muscle_jacobian",
+				 &SaiModel::SaiModel::computeMuscleJacobian,
+				 py::arg("floating") = true)
+			.def("compute_muscle_jacobian_derivative",
+				 &SaiModel::SaiModel::computeMuscleJacobianDerivative,
+				 py::arg("floating") = true)
+			.def("compute_muscle_jacobian_inverse",
+				 &SaiModel::SaiModel::computeMuscleJacobianInverse,
+				 py::arg("W"))
+			.def("compute_muscle_jacobian_inverse_derivative",
+				 &SaiModel::SaiModel::computeMuscleJacobianInverseDerivative,
+				 py::arg("W"));
+	
+		m.def("compute_pseudo_inverse", &SaiModel::computePseudoInverse,
+			  py::arg("matrix"), py::arg("svd_epsilon") = 1e-6);
+		m.def("matrix_range_basis", &SaiModel::matrixRangeBasis, py::arg("matrix"),
+			  py::arg("svd_epsilon") = 1e-6);
 	m.def("orientation_error", py::overload_cast<const Eigen::Matrix3d&,
 												 const Eigen::Matrix3d&>(
 								 &SaiModel::orientationError),

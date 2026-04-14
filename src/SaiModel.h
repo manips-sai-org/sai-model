@@ -1144,18 +1144,48 @@ public:
 	void addMuscleSystem(const std::string& muscle_xml, const std::string& name);
 
 	/**
+	 * @brief Get the Num Muscles object
+	 * 
+	 * @return int 
+	 */
+	int getNumMuscles();
+
+	/**
+	 * @brief Compute diagonal muscle capacity matrix
+	 * 
+	 * @return MatrixXd 
+	 */
+	MatrixXd computeMuscleCapacityMatrix();
+
+	/**
 	 * @brief L matrix in the muscle relationship dl = L dq, for l a vector of muscle fiber lengths
 	 * 
 	 * @return MatrixXd 
 	 */
-	MatrixXd computeMuscleJacobian();
+	MatrixXd computeMuscleJacobian(const bool floating = true);
 
 	/**
 	 * @brief Computes the derivative of the L matrix
 	 * 
 	 * @return std::vector<MatrixXd>
 	 */
-	std::vector<MatrixXd> computeMuscleJacobianDerivative();
+	std::vector<MatrixXd> computeMuscleJacobianDerivative(const bool floating = true);
+
+	/**
+	 * @brief Computes the weighted inverse of the muscle jacobian
+	 * 
+	 * @param W 
+	 * @return MatrixXd 
+	 */
+	MatrixXd computeMuscleJacobianInverse(const MatrixXd& W);
+
+	/**
+	 * @brief Computes the tensor of the weighted inverse of the muscle jacobian
+	 * 
+	 * @param W 
+	 * @return std::vector<MatrixXd> 
+	 */
+	std::vector<MatrixXd> computeMuscleJacobianInverseDerivative(const MatrixXd& W);
 
 private:
 	/**

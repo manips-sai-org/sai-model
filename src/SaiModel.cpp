@@ -47,6 +47,42 @@ bool isPositiveDefinite(const MatrixXd& matrix) {
 	return true;
 }
 
+std::vector<MatrixXd> computePseudoInverseGradient(
+	const MatrixXd& matrix, const std::vector<MatrixXd>& dmatrix_dq,
+	const double& tolerance = 1e-6) {
+	const int num_q = dmatrix_dq.size();
+	std::vector<MatrixXd> gradients(
+		num_q, MatrixXd::Zero(matrix.cols(), matrix.rows()));
+
+	const MatrixXd matrix_pinv = SaiModel::computePseudoInverse(matrix, tolerance);
+	const MatrixXd identity_rows =
+		MatrixXd::Identity(matrix.rows(), matrix.rows());
+	const MatrixXd identity_cols =
+		MatrixXd::Identity(matrix.cols(), matrix.cols());
+	const MatrixXd matrix_pinv_T = matrix_pinv.transpose();
+	const MatrixXd left_projector = identity_rows - matrix * matrix_pinv;
+	const MatrixXd right_projector = identity_cols - matrix_pinv * matrix;
+	const MatrixXd pinv_pinv_T = matrix_pinv * matrix_pinv_T;
+	const MatrixXd pinv_T_pinv = matrix_pinv_T * matrix_pinv;
+
+	for (int i = 0; i < num_q; ++i) {
+		const MatrixXd& dA = dmatrix_dq[i];
+		gradients[i] = -matrix_pinv * dA * matrix_pinv +
+					   pinv_pinv_T * dA.transpose() * left_projector +
+					   right_projector * dA.transpose() * pinv_T_pinv;
+	}
+
+	return gradients;
+}
+
+template <typename T>
+std::vector<T> subvector(const std::vector<T>& vec, size_t start, size_t end) {
+    if (start > end || end > vec.size()) {
+        throw std::out_of_range("Invalid subvector range");
+    }
+    return std::vector<T>(vec.begin() + start, vec.begin() + end);
+}
+
 }  // namespace
 
 namespace SaiModel {
@@ -1777,6 +1813,31 @@ void SaiModel::addMuscleSystem(const std::string& muscle_xml, const std::string&
 		});
 }
 
+int SaiModel::getNumMuscles() {
+    int n_muscles = 0;
+    for (const auto& [_, system] : _muscle_system) {
+        n_muscles += system.muscles.size();
+    }
+	return n_muscles;
+}
+
+MatrixXd SaiModel::computeMuscleCapacityMatrix() {
+    int n_muscles = 0;
+    for (const auto& [_, system] : _muscle_system) {
+        n_muscles += system.muscles.size();
+    }
+    
+    MatrixXd W = MatrixXd::Zero(n_muscles, n_muscles);
+	int i = 0;
+    for (const auto& [name, system] : _muscle_system) {
+		for (const auto& node : system.muscles) {
+			W(i, i) = node.contractor.peak_iso_force;
+			++i;
+		}
+	}
+	return W;
+}
+
 // original function
 // MatrixXd SaiModel::computeMuscleJacobian() {
 // 	int n_muscles = 0;
@@ -1790,7 +1851,7 @@ void SaiModel::addMuscleSystem(const std::string& muscle_xml, const std::string&
 // 			auto& waypoints = node.contractor.muscle_tendon_path;
 // 			for (int j = 0; j < waypoints.size() - 1; ++j) {
 // 				if (waypoints[j].link_name != waypoints[j + 1].link_name) {
-// 					Vector3d d = positionInWorld(waypoints[j + 1].link_name) - positionInWorld(waypoints[j].link_name);
+// 					Vector3d d = positionInWorld(waypoints[j + 1].link_name, waypoints[j + 1].point) - positionInWorld(waypoints[j].link_name, waypoints[j].point);
 // 					L.row(i) += (1. / d.norm()) * 
 // 						d.transpose() * (Jv(waypoints[j + 1].link_name, waypoints[j + 1].point) - Jv(waypoints[j].link_name, waypoints[j].point));
 // 				}
@@ -1801,7 +1862,7 @@ void SaiModel::addMuscleSystem(const std::string& muscle_xml, const std::string&
 // 	return L;
 // }
 
-MatrixXd SaiModel::computeMuscleJacobian() {
+MatrixXd SaiModel::computeMuscleJacobian(const bool floating) {
     // 1. Pre-calculate total number of muscles to allocate L once
     int n_muscles = 0;
     for (const auto& [_, system] : _muscle_system) {
@@ -1829,11 +1890,11 @@ MatrixXd SaiModel::computeMuscleJacobian() {
                 if (wp0.link_name != wp1.link_name) {
                     // 3. Lazy evaluation & caching of kinematic quantities
                     if (!has_cached) {
-                        pos_j = positionInWorld(wp0.link_name);
+                        pos_j = positionInWorld(wp0.link_name, wp0.point);
                         Jv_j = Jv(wp0.link_name, wp0.point);
                     }
 
-                    Vector3d pos_next = positionInWorld(wp1.link_name);
+                    Vector3d pos_next = positionInWorld(wp1.link_name, wp1.point);
                     auto Jv_next = Jv(wp1.link_name, wp1.point);
 
                     Vector3d d = pos_next - pos_j;
@@ -1843,8 +1904,8 @@ MatrixXd SaiModel::computeMuscleJacobian() {
                     if (d_norm > 1e-8) { 
                         // 5. Eliminate Eigen temporary matrices via math distribution
                         RowVector3d u = d.transpose() / d_norm;
-                        L.row(i).noalias() += u * Jv_next;
-                        L.row(i).noalias() -= u * Jv_j;
+                        L.row(i).noalias() -= u * Jv_next;
+                        L.row(i).noalias() += u * Jv_j;
                     }
 
                     // Cache the "next" values for the following segment
@@ -1860,6 +1921,11 @@ MatrixXd SaiModel::computeMuscleJacobian() {
             ++i;
         }
     }
+
+	if (floating) {
+		L = L.rightCols(L.cols() - 6);
+	}
+
     return L;
 }
 
@@ -1872,46 +1938,62 @@ MatrixXd SaiModel::computeMuscleJacobian() {
 // + (1 / norm(d)) d^{T} * (dJdq_{v2} - dJdq_{v1})
 // where \hat{d} = (1 / norm(d)) d and \nabla_{q} d = J_{v2} - J_{v1}
 // each muscle forms one row of the L matrix
-
-std::vector<MatrixXd> SaiModel::computeMuscleJacobianDerivative() {
+std::vector<MatrixXd> SaiModel::computeMuscleJacobianDerivative(const bool floating) {
     int n_muscles = 0;
-    for (auto& [_, system] : _muscle_system) {
+    for (const auto& [_, system] : _muscle_system) {
         n_muscles += system.muscles.size();
     }
     
     // Output: vector of size _dof, where each element is an (n_muscles x _dof) matrix
     std::vector<MatrixXd> dL_dq(_dof, MatrixXd::Zero(n_muscles, _dof));
     
-    Matrix3d I3 = Matrix3d::Identity();
+    const Matrix3d I3 = Matrix3d::Identity();
     int i = 0; // Muscle row index
     
-    for (auto& [name, system] : _muscle_system) {
-        for (auto& node : system.muscles) {
-            auto& waypoints = node.contractor.muscle_tendon_path;
+    for (const auto& [name, system] : _muscle_system) {
+        for (const auto& node : system.muscles) {
+            const auto& waypoints = node.contractor.muscle_tendon_path;
             
-            for (int j = 0; j < waypoints.size() - 1; ++j) {
-                if (waypoints[j].link_name != waypoints[j + 1].link_name) {
+            bool has_cached = false;
+            Vector3d p_curr;
+            MatrixXd J_curr;
+            std::vector<MatrixXd> H_curr;
+
+            for (size_t j = 0; j + 1 < waypoints.size(); ++j) {
+                const auto& wp_curr = waypoints[j];
+                const auto& wp_next = waypoints[j + 1];
+
+                if (wp_curr.link_name != wp_next.link_name) {
                     
+                    if (!has_cached) {
+                        p_curr = positionInWorld(wp_curr.link_name, wp_curr.point);
+                        J_curr = Jv(wp_curr.link_name, wp_curr.point);
+                        H_curr = getJacobianDerivative(wp_curr.link_name, wp_curr.point);
+                    }
+
                     // 1. Evaluate d(q) and its unit vector
-                    Vector3d p_curr = positionInWorld(waypoints[j].link_name);
-                    Vector3d p_next = positionInWorld(waypoints[j + 1].link_name);
+                    Vector3d p_next = positionInWorld(wp_next.link_name, wp_next.point);
+                    MatrixXd J_next = Jv(wp_next.link_name, wp_next.point);
+                    std::vector<MatrixXd> H_next =
+                        getJacobianDerivative(wp_next.link_name, wp_next.point);
                     Vector3d d = p_next - p_curr;
                     double length = d.norm();
                     
-                    if (length < 1e-6) continue;
+                    if (length < 1e-6) {
+                        p_curr = p_next;
+                        J_curr = std::move(J_next);
+                        H_curr = std::move(H_next);
+                        has_cached = true;
+                        continue;
+                    }
                     Vector3d d_hat = d / length;
                     
                     // 2. Evaluate J_d = partial d(q) / partial q  (Size: 3 x _dof)
-                    MatrixXd J_curr = Jv(waypoints[j].link_name, waypoints[j].point);
-                    MatrixXd J_next = Jv(waypoints[j + 1].link_name, waypoints[j + 1].point);
                     MatrixXd J_d = J_next - J_curr; 
                     
                     // Precompute the projection matrix scaled by length
-                    MatrixXd scaled_proj = (1.0 / length) * (I3 - d_hat * d_hat.transpose());
-                    
-                    // 3. Evaluate Kinematic Hessian (Size: _dof vector of 3 x _dof matrices)
-                    std::vector<MatrixXd> H_curr = getJacobianDerivative(waypoints[j].link_name, waypoints[j].point);
-                    std::vector<MatrixXd> H_next = getJacobianDerivative(waypoints[j+1].link_name, waypoints[j+1].point);
+                    Matrix3d scaled_proj =
+                        (1.0 / length) * (I3 - d_hat * d_hat.transpose());
                     
                     // 4. Populate the k-th slice of the tensor
                     for (int k = 0; k < _dof; ++k) {
@@ -1922,26 +2004,70 @@ std::vector<MatrixXd> SaiModel::computeMuscleJacobianDerivative() {
                         // partial d_hat / partial q_k (Size: 3 x 1)
                         Vector3d d_hat_dq_k = scaled_proj * d_dq_k;
                         
-                        // row contribution: (partial d_hat / partial q_k)^T * J_d  (Size: 1 x _dof)
-                        RowVectorXd geo_term = d_hat_dq_k.transpose() * J_d;
-                        
                         // Kinematic Term:
                         // H_d_k is partial J_d / partial q_k (Size: 3 x _dof)
                         MatrixXd H_d_k = H_next[k].topRows(3) - H_curr[k].topRows(3);
                         
-                        // row contribution: d_hat^T * H_d_k (Size: 1 x _dof)
-                        RowVectorXd kin_term = d_hat.transpose() * H_d_k;
+                        // L row contribution is d_hat^T * (J_curr - J_next) = -d_hat^T * J_d
+                        RowVectorXd geo_term = -d_hat_dq_k.transpose() * J_d;
+                        RowVectorXd kin_term = -d_hat.transpose() * H_d_k;
                         
                         // Add both terms to the i-th row of the k-th output matrix
                         dL_dq[k].row(i) += (geo_term + kin_term);
                     }
+
+                    p_curr = p_next;
+                    J_curr = std::move(J_next);
+                    H_curr = std::move(H_next);
+                    has_cached = true;
+                } else {
+                    has_cached = false;
                 }
             }
             ++i; // Move to the next muscle row
         }
     }
+
+	if (floating) {
+		for (auto& dL : dL_dq) {
+			dL = dL.rightCols(dL.cols() - 6);
+		}
+		dL_dq = subvector(dL_dq, 6, dL_dq.size());
+	}
     
     return dL_dq;
+}
+
+// Weighted right inverse of L^T from the primal problem
+// min_{Fm} 0.5 Fm^{T} W Fm s.t. L^{T} Fm = tau.
+MatrixXd SaiModel::computeMuscleJacobianInverse(const MatrixXd& W) {
+	const MatrixXd L = computeMuscleJacobian();
+	const MatrixXd W_inv = W.inverse();
+	const MatrixXd S = L.transpose() * W_inv * L;
+	return W_inv * L * computePseudoInverse(S);
+}
+
+std::vector<MatrixXd> SaiModel::computeMuscleJacobianInverseDerivative(const MatrixXd& W) {
+	const MatrixXd L = computeMuscleJacobian();
+	const MatrixXd W_inv = W.inverse();
+	const MatrixXd S = L.transpose() * W_inv * L;
+	const MatrixXd S_pinv = computePseudoInverse(S);
+	const auto dLdq = computeMuscleJacobianDerivative();
+
+	std::vector<MatrixXd> dS_dq;
+	dS_dq.reserve(dLdq.size());
+	for (const auto& dL : dLdq) {
+		dS_dq.push_back(dL.transpose() * W_inv * L + L.transpose() * W_inv * dL);
+	}
+	const auto dS_pinv_dq = computePseudoInverseGradient(S, dS_dq);
+
+	std::vector<MatrixXd> gradients(
+		dLdq.size(), MatrixXd::Zero(L.rows(), L.cols()));
+	for (size_t i = 0; i < dLdq.size(); ++i) {
+		gradients[i] =
+			W_inv * dLdq[i] * S_pinv + W_inv * L * dS_pinv_dq[i];
+	}
+	return gradients;
 }
 
 }  // namespace SaiModel
