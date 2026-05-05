@@ -1838,6 +1838,23 @@ MatrixXd SaiModel::computeMuscleCapacityMatrix() {
 	return W;
 }
 
+VectorXd SaiModel::computeMuscleCapacityVector() {
+	int n_muscles = 0;
+    for (const auto& [_, system] : _muscle_system) {
+        n_muscles += system.muscles.size();
+    }
+    
+    VectorXd W = VectorXd::Zero(n_muscles);
+	int i = 0;
+    for (const auto& [name, system] : _muscle_system) {
+		for (const auto& node : system.muscles) {
+			W(i) = node.contractor.peak_iso_force;
+			++i;
+		}
+	}
+	return W;
+}
+
 // original function
 // MatrixXd SaiModel::computeMuscleJacobian() {
 // 	int n_muscles = 0;
@@ -2068,6 +2085,58 @@ std::vector<MatrixXd> SaiModel::computeMuscleJacobianInverseDerivative(const Mat
 			W_inv * dLdq[i] * S_pinv + W_inv * L * dS_pinv_dq[i];
 	}
 	return gradients;
+}
+
+double SaiModel::computeEffort(const VectorXd& tau) {
+	// compute effort cost
+	const MatrixXd L = computeMuscleJacobian();
+	const MatrixXd Nc = computeMuscleCapacityMatrix();
+	return 0.5 * tau.transpose() * (L.transpose() * Nc * Nc * L).inverse() * tau;
+}
+
+// Returns gradient vector: grad(i) = df/dq_i
+VectorXd computeEffortGradientWrtQ(
+    const MatrixXd& L,
+    const VectorXd& w,
+    const VectorXd& tau,
+    const std::vector<MatrixXd>& dL_dq) {
+
+  const int m = L.rows();
+  const int n = L.cols();
+
+  if (w.size() != m) {
+    throw std::invalid_argument("w.size() must equal L.rows()");
+  }
+  if (tau.size() != n) {
+    throw std::invalid_argument("tau.size() must equal L.cols()");
+  }
+
+  const int nq = static_cast<int>(dL_dq.size());
+
+  for (int i = 0; i < nq; ++i) {
+    if (dL_dq[i].rows() != m || dL_dq[i].cols() != n) {
+      throw std::invalid_argument("Each dL_dq[i] must match L dimensions");
+    }
+  }
+
+  // A = L^T diag(w) L
+  const MatrixXd WL = w.asDiagonal() * L;
+  const MatrixXd A  = L.transpose() * WL;
+
+  // Solve A x = tau
+  const VectorXd x = A.ldlt().solve(tau);
+
+  // Precompute
+  const VectorXd Lx  = L * x;
+  const VectorXd WLx = w.array() * Lx.array();
+
+  VectorXd grad(nq);
+
+  for (int i = 0; i < nq; ++i) {
+    grad(i) = -WLx.dot(dL_dq[i] * x);
+  }
+
+  return grad;
 }
 
 }  // namespace SaiModel

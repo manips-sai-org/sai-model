@@ -1157,6 +1157,8 @@ public:
 	 */
 	MatrixXd computeMuscleCapacityMatrix();
 
+	VectorXd computeMuscleCapacityVector();
+
 	/**
 	 * @brief L matrix in the muscle relationship dl = L dq, for l a vector of muscle fiber lengths
 	 * 
@@ -1186,6 +1188,14 @@ public:
 	 * @return std::vector<MatrixXd> 
 	 */
 	std::vector<MatrixXd> computeMuscleJacobianInverseDerivative(const MatrixXd& W);
+
+	double computeEffort(const VectorXd& tau);
+
+	VectorXd computeEffortGradientWrtQ(
+		const MatrixXd& L,
+		const VectorXd& w,
+		const VectorXd& tau,
+		const std::vector<MatrixXd>& dL_dq);
 
 private:
 	/**
