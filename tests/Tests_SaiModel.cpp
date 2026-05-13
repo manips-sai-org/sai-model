@@ -179,6 +179,26 @@ TEST(SaiModelCentroidalTest, AngularCentroidalJacobianMatchesBasisColumnsHRP4C) 
 	EXPECT_TRUE(checkEigenMatricesEqual(basis, direct, 1e-8));
 }
 
+TEST(SaiModelCentroidalTest, AngularCentroidalJacobianAnalyticMatchesBasisColumnsHRP4C) {
+	SaiModel model_hrp4c(makeSanitizedHrp4cMainUrdf());
+
+	const VectorXd q = makeInteriorJointConfiguration(model_hrp4c);
+	const VectorXd dq = makeTestVelocity(model_hrp4c);
+	model_hrp4c.setQ(q);
+	model_hrp4c.setDq(dq);
+
+	const MatrixXd analytic =
+		model_hrp4c.getAngularCentroidalJacobianAnalytic();
+	const MatrixXd basis =
+		computeAngularCentroidalJacobianByBasisColumns(model_hrp4c);
+	const MatrixXd direct = model_hrp4c.getAngularCentroidalJacobian();
+
+	EXPECT_EQ(analytic.rows(), 3);
+	EXPECT_EQ(analytic.cols(), model_hrp4c.dof());
+	EXPECT_TRUE(checkEigenMatricesEqual(basis, analytic, 1e-8));
+	EXPECT_TRUE(checkEigenMatricesEqual(direct, analytic, 1e-8));
+}
+
 TEST_F(SaiModelTest, DofAndQsize) {
 	EXPECT_EQ(model_rrpbot->dof(), 3);
 	EXPECT_EQ(model_rrpbot->qSize(), 3);

@@ -1055,6 +1055,14 @@ public:
 	MatrixXd getAngularCentroidalJacobian();
 
 	/**
+	 * @brief Computes the task Jacobian for the centroidal angular momentum
+	 * using the link-wise analytic expression.
+	 *
+	 * @return MatrixXd 		3 x dof angular centroidal Jacobian
+	 */
+	MatrixXd getAngularCentroidalJacobianAnalytic();
+
+	/**
 	 * @brief Computes the centroidal inertia matrix 
 	 * 
 	 * @return MatrixXd 		centroidal inertia matrix
