@@ -1,5 +1,6 @@
 #include <SaiModel.h>
 #include <gtest/gtest.h>
+#include <fstream>
 
 namespace SaiModel {
 
@@ -8,6 +9,7 @@ using namespace Eigen;
 const std::string rr_urdf = "./urdf/rrbot.urdf";
 const std::string rrp_urdf = "./urdf/rrpbot.urdf";
 const std::string rpspr_urdf = "./urdf/rpsprbot.urdf";
+const std::string hrp4c_urdf = "./HRP4C/HRP4Cmain.urdf";
 
 class SaiModelTest : public ::testing::Test {
 protected:
@@ -81,7 +83,101 @@ bool checkEigenMatricesEqual(const Eigen::MatrixBase<DerivedA>& expected,
 	return equal;
 }
 
+MatrixXd computeAngularCentroidalJacobianByBasisColumns(SaiModel& model) {
+	MatrixXd angular_centroidal_jacobian = MatrixXd::Zero(3, model.dof());
+	VectorXd qdot_basis = VectorXd::Zero(model.dof());
+	VectorXd q = model.q();
+
+	for (int i = 0; i < model.dof(); ++i) {
+		RigidBodyDynamics::Math::SpatialRigidBodyInertia inertia_matrix;
+		RigidBodyDynamics::Math::Vector3d angular_momentum;
+
+		qdot_basis.setZero();
+		qdot_basis(i) = 1.0;
+		RigidBodyDynamics::CalcCentroidalInertiaMatrix(
+			*model.rbdlModel(), q, qdot_basis, inertia_matrix,
+			angular_momentum, true);
+		angular_centroidal_jacobian.col(i) = angular_momentum;
+	}
+
+	model.updateKinematics();
+	return angular_centroidal_jacobian;
+}
+
+VectorXd makeInteriorJointConfiguration(const SaiModel& model) {
+	VectorXd q = VectorXd::Zero(model.qSize());
+	const auto joint_limits = model.jointLimits();
+
+	for (const auto& limit : joint_limits) {
+		const double lower = limit.position_lower;
+		const double upper = limit.position_upper;
+		double value = 0.0;
+
+		if (std::isfinite(lower) && std::isfinite(upper) && upper > lower) {
+			const double span = upper - lower;
+			value = lower + 0.37 * span;
+		} else if (std::isfinite(lower) && lower < 0.0) {
+			value = 0.25 * std::abs(lower);
+		} else if (std::isfinite(upper) && upper > 0.0) {
+			value = -0.25 * std::abs(upper);
+		}
+
+		q(limit.joint_index) = value;
+	}
+
+	return q;
+}
+
+VectorXd makeTestVelocity(const SaiModel& model) {
+	VectorXd dq(model.dof());
+	for (int i = 0; i < model.dof(); ++i) {
+		dq(i) = 0.05 * std::sin(0.3 * static_cast<double>(i + 1));
+	}
+	return dq;
+}
+
+std::string makeSanitizedHrp4cMainUrdf() {
+	std::ifstream input(hrp4c_urdf);
+	if (!input) {
+		throw std::runtime_error("Failed to open HRP4Cmain.urdf for testing");
+	}
+
+	std::string content(
+		(std::istreambuf_iterator<char>(input)),
+		std::istreambuf_iterator<char>());
+	const std::string xml_decl = "<?xml";
+	const size_t xml_pos = content.find(xml_decl);
+	if (xml_pos == std::string::npos) {
+		throw std::runtime_error("Failed to find XML declaration in HRP4Cmain.urdf");
+	}
+
+	const std::string sanitized_path = "./HRP4C/HRP4Cmain_sanitized_for_tests.urdf";
+	std::ofstream output(sanitized_path);
+	if (!output) {
+		throw std::runtime_error("Failed to create sanitized HRP4C URDF for testing");
+	}
+	output << content.substr(xml_pos);
+	return sanitized_path;
+}
+
 TEST_F(SaiModelTest, ConstructDescruct) {}
+
+TEST(SaiModelCentroidalTest, AngularCentroidalJacobianMatchesBasisColumnsHRP4C) {
+	SaiModel model_hrp4c(makeSanitizedHrp4cMainUrdf());
+
+	const VectorXd q = makeInteriorJointConfiguration(model_hrp4c);
+	const VectorXd dq = makeTestVelocity(model_hrp4c);
+	model_hrp4c.setQ(q);
+	model_hrp4c.setDq(dq);
+
+	const MatrixXd direct = model_hrp4c.getAngularCentroidalJacobian();
+	const MatrixXd basis =
+		computeAngularCentroidalJacobianByBasisColumns(model_hrp4c);
+
+	EXPECT_EQ(direct.rows(), 3);
+	EXPECT_EQ(direct.cols(), model_hrp4c.dof());
+	EXPECT_TRUE(checkEigenMatricesEqual(basis, direct, 1e-8));
+}
 
 TEST_F(SaiModelTest, DofAndQsize) {
 	EXPECT_EQ(model_rrpbot->dof(), 3);

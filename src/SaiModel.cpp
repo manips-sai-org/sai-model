@@ -1705,6 +1705,25 @@ VectorXd SaiModel::jDotQDot(const string& link_name, const Vector3d& pos_in_link
 	return acc6d;
 }
 
+MatrixXd SaiModel::getAngularCentroidalJacobian() {
+	MatrixXd angular_centroidal_jacobian = MatrixXd::Zero(3, _dof);
+	VectorXd qdot_basis = VectorXd::Zero(_dof);
+
+	for (int i = 0; i < _dof; ++i) {
+		RigidBodyDynamics::Math::SpatialRigidBodyInertia inertia_matrix;
+		Math::Vector3d angular_momentum;
+
+		qdot_basis.setZero();
+		qdot_basis(i) = 1.0;
+		RigidBodyDynamics::CalcCentroidalInertiaMatrix(
+			*_rbdl_model, _q, qdot_basis, inertia_matrix, angular_momentum, true);
+		angular_centroidal_jacobian.col(i) = angular_momentum;
+	}
+
+	updateKinematics();
+	return angular_centroidal_jacobian;
+}
+
 MatrixXd SaiModel::getCentroidalInertiaMatrix() {
 	RigidBodyDynamics::Math::SpatialRigidBodyInertia inertia_matrix;
 	Math::Vector3d angular_momentum;
@@ -2059,14 +2078,16 @@ std::vector<MatrixXd> SaiModel::computeMuscleJacobianDerivative(const bool float
 // min_{Fm} 0.5 Fm^{T} W Fm s.t. L^{T} Fm = tau.
 MatrixXd SaiModel::computeMuscleJacobianInverse(const MatrixXd& W) {
 	const MatrixXd L = computeMuscleJacobian();
-	const MatrixXd W_inv = W.inverse();
+	// const MatrixXd W_inv = W.inverse();
+	const MatrixXd W_inv = computePseudoInverse(W);
 	const MatrixXd S = L.transpose() * W_inv * L;
 	return W_inv * L * computePseudoInverse(S);
 }
 
 std::vector<MatrixXd> SaiModel::computeMuscleJacobianInverseDerivative(const MatrixXd& W) {
 	const MatrixXd L = computeMuscleJacobian();
-	const MatrixXd W_inv = W.inverse();
+	// const MatrixXd W_inv = W.inverse();
+	const MatrixXd W_inv = computePseudoInverse(W);
 	const MatrixXd S = L.transpose() * W_inv * L;
 	const MatrixXd S_pinv = computePseudoInverse(S);
 	const auto dLdq = computeMuscleJacobianDerivative();
@@ -2095,17 +2116,18 @@ double SaiModel::computeEffort(const VectorXd& tau) {
 }
 
 // Returns gradient vector: grad(i) = df/dq_i
-VectorXd computeEffortGradientWrtQ(
+VectorXd SaiModel::computeEffortGradientWrtQ(
     const MatrixXd& L,
-    const VectorXd& w,
+    const MatrixXd& W,
     const VectorXd& tau,
     const std::vector<MatrixXd>& dL_dq) {
+  constexpr double kPseudoInverseTolerance = 1e-8;
 
   const int m = L.rows();
   const int n = L.cols();
 
-  if (w.size() != m) {
-    throw std::invalid_argument("w.size() must equal L.rows()");
+  if (W.rows() != m || W.cols() != m) {
+    throw std::invalid_argument("W must be square with size L.rows() x L.rows()");
   }
   if (tau.size() != n) {
     throw std::invalid_argument("tau.size() must equal L.cols()");
@@ -2119,18 +2141,21 @@ VectorXd computeEffortGradientWrtQ(
     }
   }
 
-  // A = L^T diag(w) L
-  const MatrixXd WL = w.asDiagonal() * L;
+  // A = L^T W L
+  const MatrixXd WL = W * L;
   const MatrixXd A  = L.transpose() * WL;
 
-  // Solve A x = tau
-  const VectorXd x = A.ldlt().solve(tau);
+  // Use a pseudoinverse-based solve so rank-deficient muscle Jacobians do not
+  // make the gradient computation blow up.
+//   const MatrixXd A_pinv = computePseudoInverse(A, kPseudoInverseTolerance);
+  const MatrixXd A_pinv = A.completeOrthogonalDecomposition().pseudoInverse();
+  const VectorXd x = A_pinv * tau;
 
   // Precompute
   const VectorXd Lx  = L * x;
-  const VectorXd WLx = w.array() * Lx.array();
+  const VectorXd WLx = W * Lx;
 
-  VectorXd grad(nq);
+  VectorXd grad = VectorXd::Zero(nq);
 
   for (int i = 0; i < nq; ++i) {
     grad(i) = -WLx.dot(dL_dq[i] * x);

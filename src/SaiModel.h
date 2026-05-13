@@ -277,6 +277,8 @@ public:
 	 */
 	void updateKinematics();
 
+	RigidBodyDynamics::Model* rbdlModel() const { return _rbdl_model; }
+
 	/**
 	 * @brief      update the kinematics and dynamics (mass matrix and its
 	 *             inverse) for the current robot configuration.
@@ -1045,6 +1047,14 @@ public:
 		const bool update_kinematics = false);
 
 	/**
+	 * @brief Computes the task Jacobian for the angular part of the centroidal
+	 * momentum matrix
+	 * 
+	 * @return MatrixXd 		3 x dof angular centroidal Jacobian
+	 */
+	MatrixXd getAngularCentroidalJacobian();
+
+	/**
 	 * @brief Computes the centroidal inertia matrix 
 	 * 
 	 * @return MatrixXd 		centroidal inertia matrix
@@ -1193,7 +1203,7 @@ public:
 
 	VectorXd computeEffortGradientWrtQ(
 		const MatrixXd& L,
-		const VectorXd& w,
+		const MatrixXd& W,
 		const VectorXd& tau,
 		const std::vector<MatrixXd>& dL_dq);
 
