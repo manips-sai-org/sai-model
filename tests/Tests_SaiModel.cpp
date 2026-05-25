@@ -83,27 +83,6 @@ bool checkEigenMatricesEqual(const Eigen::MatrixBase<DerivedA>& expected,
 	return equal;
 }
 
-MatrixXd computeAngularCentroidalJacobianByBasisColumns(SaiModel& model) {
-	MatrixXd angular_centroidal_jacobian = MatrixXd::Zero(3, model.dof());
-	VectorXd qdot_basis = VectorXd::Zero(model.dof());
-	VectorXd q = model.q();
-
-	for (int i = 0; i < model.dof(); ++i) {
-		RigidBodyDynamics::Math::SpatialRigidBodyInertia inertia_matrix;
-		RigidBodyDynamics::Math::Vector3d angular_momentum;
-
-		qdot_basis.setZero();
-		qdot_basis(i) = 1.0;
-		RigidBodyDynamics::CalcCentroidalInertiaMatrix(
-			*model.rbdlModel(), q, qdot_basis, inertia_matrix,
-			angular_momentum, true);
-		angular_centroidal_jacobian.col(i) = angular_momentum;
-	}
-
-	model.updateKinematics();
-	return angular_centroidal_jacobian;
-}
-
 VectorXd makeInteriorJointConfiguration(const SaiModel& model) {
 	VectorXd q = VectorXd::Zero(model.qSize());
 	const auto joint_limits = model.jointLimits();
@@ -136,6 +115,25 @@ VectorXd makeTestVelocity(const SaiModel& model) {
 	return dq;
 }
 
+VectorXd computeCentroidalMomentumGroundTruth(
+	SaiModel& model, const VectorXd& dq) {
+	RigidBodyDynamics::Math::Scalar mass;
+	RigidBodyDynamics::Math::Vector3d com;
+	RigidBodyDynamics::Math::Vector3d com_velocity;
+	RigidBodyDynamics::Math::Vector3d angular_momentum;
+	VectorXd q = model.q();
+
+	RigidBodyDynamics::Utils::CalcCenterOfMass(
+		*model.rbdlModel(), q, dq, nullptr, mass, com, &com_velocity,
+		nullptr, &angular_momentum, nullptr, true);
+
+	VectorXd centroidal_momentum = VectorXd::Zero(6);
+	centroidal_momentum.head<3>() = angular_momentum;
+	centroidal_momentum.tail<3>() = mass * com_velocity;
+	model.updateKinematics();
+	return centroidal_momentum;
+}
+
 std::string makeSanitizedHrp4cMainUrdf() {
 	std::ifstream input(hrp4c_urdf);
 	if (!input) {
@@ -162,7 +160,7 @@ std::string makeSanitizedHrp4cMainUrdf() {
 
 TEST_F(SaiModelTest, ConstructDescruct) {}
 
-TEST(SaiModelCentroidalTest, AngularCentroidalJacobianMatchesBasisColumnsHRP4C) {
+TEST(SaiModelCentroidalTest, CentroidalMomentumMatrixMatchesRbdlMomentumHRP4C) {
 	SaiModel model_hrp4c(makeSanitizedHrp4cMainUrdf());
 
 	const VectorXd q = makeInteriorJointConfiguration(model_hrp4c);
@@ -170,33 +168,25 @@ TEST(SaiModelCentroidalTest, AngularCentroidalJacobianMatchesBasisColumnsHRP4C) 
 	model_hrp4c.setQ(q);
 	model_hrp4c.setDq(dq);
 
-	const MatrixXd direct = model_hrp4c.getAngularCentroidalJacobian();
-	const MatrixXd basis =
-		computeAngularCentroidalJacobianByBasisColumns(model_hrp4c);
+	const MatrixXd centroidal_momentum_matrix =
+		model_hrp4c.getCentroidalMomentumMatrix();
 
-	EXPECT_EQ(direct.rows(), 3);
-	EXPECT_EQ(direct.cols(), model_hrp4c.dof());
-	EXPECT_TRUE(checkEigenMatricesEqual(basis, direct, 1e-8));
-}
+	EXPECT_EQ(centroidal_momentum_matrix.rows(), 6);
+	EXPECT_EQ(centroidal_momentum_matrix.cols(), model_hrp4c.dof());
 
-TEST(SaiModelCentroidalTest, AngularCentroidalJacobianAnalyticMatchesBasisColumnsHRP4C) {
-	SaiModel model_hrp4c(makeSanitizedHrp4cMainUrdf());
+	for (int i = 0; i < model_hrp4c.dof(); ++i) {
+		VectorXd qdot_basis = VectorXd::Zero(model_hrp4c.dof());
+		qdot_basis(i) = 1.0;
+		const VectorXd expected =
+			computeCentroidalMomentumGroundTruth(model_hrp4c, qdot_basis);
+		EXPECT_TRUE(checkEigenMatricesEqual(
+			expected, centroidal_momentum_matrix.col(i), 1e-8));
+	}
 
-	const VectorXd q = makeInteriorJointConfiguration(model_hrp4c);
-	const VectorXd dq = makeTestVelocity(model_hrp4c);
-	model_hrp4c.setQ(q);
-	model_hrp4c.setDq(dq);
-
-	const MatrixXd analytic =
-		model_hrp4c.getAngularCentroidalJacobianAnalytic();
-	const MatrixXd basis =
-		computeAngularCentroidalJacobianByBasisColumns(model_hrp4c);
-	const MatrixXd direct = model_hrp4c.getAngularCentroidalJacobian();
-
-	EXPECT_EQ(analytic.rows(), 3);
-	EXPECT_EQ(analytic.cols(), model_hrp4c.dof());
-	EXPECT_TRUE(checkEigenMatricesEqual(basis, analytic, 1e-8));
-	EXPECT_TRUE(checkEigenMatricesEqual(direct, analytic, 1e-8));
+	const VectorXd expected =
+		computeCentroidalMomentumGroundTruth(model_hrp4c, dq);
+	EXPECT_TRUE(checkEigenMatricesEqual(
+		expected, centroidal_momentum_matrix * dq, 1e-8));
 }
 
 TEST_F(SaiModelTest, DofAndQsize) {

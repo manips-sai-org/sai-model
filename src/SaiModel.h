@@ -1057,27 +1057,19 @@ public:
 		const bool update_kinematics = false);
 
 	/**
-	 * @brief Computes the task Jacobian for the angular part of the centroidal
-	 * momentum matrix
-	 * 
-	 * @return MatrixXd 		3 x dof angular centroidal Jacobian
-	 */
-	MatrixXd getAngularCentroidalJacobian();
-
-	/**
-	 * @brief Computes the task Jacobian for the centroidal angular momentum
-	 * using the link-wise analytic expression.
-	 *
-	 * @return MatrixXd 		3 x dof angular centroidal Jacobian
-	 */
-	MatrixXd getAngularCentroidalJacobianAnalytic();
-
-	/**
 	 * @brief Computes the centroidal inertia matrix 
 	 * 
 	 * @return MatrixXd 		centroidal inertia matrix
 	 */
 	MatrixXd getCentroidalInertiaMatrix();
+
+	/**
+	 * @brief Computes the centroidal momentum matrix A(q), where
+	 * centroidal momentum h = A(q)\dot{q}.
+	 *
+	 * @return MatrixXd 		6 x dof centroidal momentum matrix
+	 */
+	MatrixXd getCentroidalMomentumMatrix();
 
 	/**
 	 * @brief Computes \dot{A}\dot{q}, where A is the centroidal momentum

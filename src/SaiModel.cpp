@@ -1796,107 +1796,19 @@ VectorXd SaiModel::jDotQDot(const string& link_name, const Vector3d& pos_in_link
 	return acc6d;
 }
 
-// MatrixXd SaiModel::getAngularCentroidalJacobian() {
-// 	MatrixXd angular_centroidal_jacobian = MatrixXd::Zero(3, _dof);
-// 	VectorXd qdot_basis = VectorXd::Zero(_dof);
-
-// 	for (int i = 0; i < _dof; ++i) {
-// 		RigidBodyDynamics::Math::SpatialRigidBodyInertia inertia_matrix;
-// 		Math::Vector3d angular_momentum;
-
-// 		qdot_basis.setZero();
-// 		qdot_basis(i) = 1.0;
-// 		RigidBodyDynamics::CalcCentroidalInertiaMatrix(
-// 			*_rbdl_model, _q, qdot_basis, inertia_matrix, angular_momentum, true);
-// 		angular_centroidal_jacobian.col(i) = angular_momentum;
-// 	}
-
-// 	updateKinematics();
-// 	return angular_centroidal_jacobian;
-// }
-
-// MatrixXd SaiModel::getAngularCentroidalJacobianAnalytic() {
-// 	MatrixXd angular_centroidal_jacobian = MatrixXd::Zero(3, _dof);
-// 	updateKinematics();
-// 	RigidBodyDynamics::Math::Scalar mass;
-// 	RigidBodyDynamics::Math::Vector3d com;
-// 	RigidBodyDynamics::Utils::CalcCenterOfMass(
-// 		*_rbdl_model, _q, _dq, nullptr, mass, com, nullptr, nullptr, nullptr,
-// 		nullptr, false);
-// 	// Build the link-wise momentum Jacobians in RBDL spatial coordinates, then
-// 	// shift the accumulated angular rows to the whole-body CoM.
-// 	std::vector<MatrixXd> link_velocity_jacobian(
-// 		_rbdl_model->mBodies.size(), MatrixXd::Zero(6, _dof));
-// 	std::vector<MatrixXd> link_momentum_jacobian(
-// 		_rbdl_model->mBodies.size(), MatrixXd::Zero(6, _dof));
-
-// 	for (int body_id = 1; body_id < _rbdl_model->mBodies.size(); ++body_id) {
-// 		const unsigned int parent_id = _rbdl_model->lambda[body_id];
-// 		link_velocity_jacobian[body_id] =
-// 			_rbdl_model->X_lambda[body_id].toMatrix() *
-// 			link_velocity_jacobian[parent_id];
-
-// 		const auto& joint = _rbdl_model->mJoints[body_id];
-// 		const unsigned int q_index = joint.q_index;
-// 		if (joint.mJointType != RigidBodyDynamics::JointTypeCustom) {
-// 			if (joint.mDoFCount == 1) {
-// 				link_velocity_jacobian[body_id].col(q_index) +=
-// 					_rbdl_model->S[body_id];
-// 			} else if (joint.mDoFCount == 3) {
-// 				link_velocity_jacobian[body_id].block(0, q_index, 6, 3) +=
-// 					_rbdl_model->multdof3_S[body_id];
-// 			}
-// 		} else {
-// 			const unsigned int custom_joint_index = joint.custom_joint_index;
-// 			const unsigned int dof_count =
-// 				_rbdl_model->mCustomJoints[custom_joint_index]->mDoFCount;
-// 			link_velocity_jacobian[body_id].block(0, q_index, 6, dof_count) +=
-// 				_rbdl_model->mCustomJoints[custom_joint_index]->S;
-// 		}
-
-// 		link_momentum_jacobian[body_id] =
-// 			_rbdl_model->I[body_id].toMatrix() *
-// 			link_velocity_jacobian[body_id];
-// 	}
-
-// 	for (int body_id = _rbdl_model->mBodies.size() - 1; body_id > 0;
-// 		 --body_id) {
-// 		const unsigned int parent_id = _rbdl_model->lambda[body_id];
-
-// 		if (parent_id != 0) {
-// 			link_momentum_jacobian[parent_id] +=
-// 				_rbdl_model->X_lambda[body_id].toMatrixTranspose() *
-// 				link_momentum_jacobian[body_id];
-// 		} else {
-// 			const auto com_X_body =
-// 				RigidBodyDynamics::Math::Xtrans(com).inverse() *
-// 				_rbdl_model->X_lambda[body_id];
-// 			angular_centroidal_jacobian +=
-// 				(com_X_body.toMatrixTranspose() *
-// 				 link_momentum_jacobian[body_id])
-// 					.topRows(3);
-// 		}
-// 	}
-// 	return angular_centroidal_jacobian;
-// }
-
-MatrixXd SaiModel::getAngularCentroidalJacobian() {
-	const MatrixXd centroidal_momentum_matrix =
-		computeCentroidalMomentumMatrix(*_rbdl_model, _q, _dof);
-	updateKinematics();
-	return centroidal_momentum_matrix.topRows(3);
-}
-
-MatrixXd SaiModel::getAngularCentroidalJacobianAnalytic() {
-	return getAngularCentroidalJacobian();
-}
-
 MatrixXd SaiModel::getCentroidalInertiaMatrix() {
 	RigidBodyDynamics::Math::SpatialRigidBodyInertia inertia_matrix;
 	Math::Vector3d angular_momentum;
 	RigidBodyDynamics::CalcCentroidalInertiaMatrix(*_rbdl_model, _q, _dq, inertia_matrix, angular_momentum, true);
 	// return inertia_matrix.toMatrix().block(0, 0, 3, 3);
 	return inertia_matrix.toMatrix();
+}
+
+MatrixXd SaiModel::getCentroidalMomentumMatrix() {
+	const MatrixXd centroidal_momentum_matrix =
+		computeCentroidalMomentumMatrix(*_rbdl_model, _q, _dof);
+	updateKinematics();
+	return centroidal_momentum_matrix;
 }
 
 VectorXd SaiModel::getCentroidalInertiaMatrixDotQDot() {

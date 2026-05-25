@@ -304,6 +304,8 @@ PYBIND11_MODULE(sai_model_py, m) {
 			 py::arg("update_kinematics") = false)
 		.def("get_centroidal_inertia_matrix",
 			 &SaiModel::SaiModel::getCentroidalInertiaMatrix)
+		.def("get_centroidal_momentum_matrix",
+			 &SaiModel::SaiModel::getCentroidalMomentumMatrix)
 		.def("get_point_inertia_matrix", &SaiModel::SaiModel::getPointInertiaMatrix,
 			 py::arg("link_name"), py::arg("pos_in_link"))
 		.def("get_jacobian_derivative", &SaiModel::SaiModel::getJacobianDerivative,
