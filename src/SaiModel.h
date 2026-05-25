@@ -813,6 +813,16 @@ public:
 	MatrixXd comJacobian() const;
 
 	/**
+	 * @brief      Computes the derivative of the center of mass velocity
+	 *             Jacobian with respect to joint positions
+	 *
+	 * @return     kinematic Hessian tensor, where each index of the vector
+	 *             (size dof) is the derivative of the COM Jacobian (3xdof)
+	 *             wrt the kth joint
+	 */
+	std::vector<MatrixXd> getComJacobianDerivative();
+
+	/**
 	 * @brief      Computes the operational space inertia matrix corresponding
 	 * to a given Jacobian
 	 *
@@ -1068,6 +1078,14 @@ public:
 	 * @return MatrixXd 		centroidal inertia matrix
 	 */
 	MatrixXd getCentroidalInertiaMatrix();
+
+	/**
+	 * @brief Computes \dot{A}\dot{q}, where A is the centroidal momentum
+	 * matrix that maps joint velocities to centroidal momentum.
+	 *
+	 * @return VectorXd 		6D centroidal momentum bias vector
+	 */
+	VectorXd getCentroidalInertiaMatrixDotQDot();
 
 	/**
 	 * @brief Computes the point inertia matrix
