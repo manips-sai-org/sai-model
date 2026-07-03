@@ -189,6 +189,36 @@ TEST(SaiModelCentroidalTest, CentroidalMomentumMatrixMatchesRbdlMomentumHRP4C) {
 		expected, centroidal_momentum_matrix * dq, 1e-8));
 }
 
+TEST_F(SaiModelTest, CentroidalMomentumMatrixGradientMatchesFiniteDifference) {
+	VectorXd q = VectorXd::Zero(model_rrpbot->qSize());
+	q << 0.15, -0.25, 0.2;
+	model_rrpbot->setQ(q);
+
+	const auto gradient =
+		model_rrpbot->getCentroidalMomentumMatrixGradient();
+
+	ASSERT_EQ(gradient.size(), model_rrpbot->dof());
+	for (int i = 0; i < model_rrpbot->dof(); ++i) {
+		ASSERT_EQ(gradient[i].rows(), 6);
+		ASSERT_EQ(gradient[i].cols(), model_rrpbot->dof());
+
+		VectorXd q_plus = q;
+		VectorXd q_minus = q;
+		const double step = 1e-6;
+		q_plus(i) += step;
+		q_minus(i) -= step;
+
+		model_rrpbot->setQ(q_plus);
+		const MatrixXd A_plus = model_rrpbot->getCentroidalMomentumMatrix();
+		model_rrpbot->setQ(q_minus);
+		const MatrixXd A_minus = model_rrpbot->getCentroidalMomentumMatrix();
+
+		const MatrixXd expected = (A_plus - A_minus) / (2.0 * step);
+		EXPECT_TRUE(checkEigenMatricesEqual(expected, gradient[i], 1e-8));
+	}
+	model_rrpbot->setQ(q);
+}
+
 TEST_F(SaiModelTest, DofAndQsize) {
 	EXPECT_EQ(model_rrpbot->dof(), 3);
 	EXPECT_EQ(model_rrpbot->qSize(), 3);

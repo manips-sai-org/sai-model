@@ -10,6 +10,7 @@
 
 #include "SaiModel.h"
 
+#include <SpatialAlgebraOperatorsED.h>
 #include <UrdfToSaiModel.h>
 
 #include "RBDLExtensions.h"
@@ -47,6 +48,49 @@ bool isPositiveDefinite(const MatrixXd& matrix) {
 	return true;
 }
 
+VectorXd closestConditionedEigenvalues(
+	const VectorXd& eigenvalues,
+	const double max_condition_number) {
+	constexpr int kMaxIterations = 40;
+	constexpr double kRelativeIntervalTolerance = 1e-10;
+	double lower = eigenvalues(0) / max_condition_number;
+	double upper = eigenvalues(eigenvalues.size() - 1);
+
+	auto objectiveDerivative = [&](const double interval_min) {
+		const double interval_max = max_condition_number * interval_min;
+		double derivative = 0.0;
+		for (int i = 0; i < eigenvalues.size(); ++i) {
+			if (eigenvalues(i) < interval_min) {
+				derivative += interval_min - eigenvalues(i);
+			} else if (eigenvalues(i) > interval_max) {
+				derivative += max_condition_number *
+							  (interval_max - eigenvalues(i));
+			}
+		}
+		return derivative;
+	};
+
+	for (int i = 0; i < kMaxIterations; ++i) {
+		const double mid = 0.5 * (lower + upper);
+		if (upper - lower <=
+			kRelativeIntervalTolerance * std::max(1.0, std::abs(mid))) {
+			break;
+		}
+
+		if (objectiveDerivative(mid) < 0.0) {
+			lower = mid;
+		} else {
+			upper = mid;
+		}
+	}
+
+	const double alpha = 0.5 * (lower + upper);
+	const double regularized_max_eigenvalue = max_condition_number * alpha;
+	return eigenvalues
+		.cwiseMax(alpha)
+		.cwiseMin(regularized_max_eigenvalue);
+}
+
 std::vector<MatrixXd> computePseudoInverseGradient(
 	const MatrixXd& matrix, const std::vector<MatrixXd>& dmatrix_dq,
 	const double& tolerance = 1e-6) {
@@ -81,6 +125,57 @@ std::vector<T> subvector(const std::vector<T>& vec, size_t start, size_t end) {
         throw std::out_of_range("Invalid subvector range");
     }
     return std::vector<T>(vec.begin() + start, vec.begin() + end);
+}
+
+struct MuscleWaypointKey {
+	string link_name;
+	Vector3d point;
+
+	MuscleWaypointKey(const string& link_name, const Vector3d& point)
+		: link_name(link_name), point(point) {}
+
+	bool operator<(const MuscleWaypointKey& other) const {
+		if (link_name != other.link_name) {
+			return link_name < other.link_name;
+		}
+		for (int i = 0; i < 3; ++i) {
+			if (point(i) != other.point(i)) {
+				return point(i) < other.point(i);
+			}
+		}
+		return false;
+	}
+};
+
+struct MuscleWaypointKinematics {
+	Vector3d position = Vector3d::Zero();
+	MatrixXd Jv;
+	std::vector<MatrixXd> dJv_dq;
+};
+
+std::vector<int> qIndexRange(const int start, const int end) {
+	std::vector<int> indices;
+	indices.reserve(std::max(0, end - start));
+	for (int i = start; i < end; ++i) {
+		indices.push_back(i);
+	}
+	return indices;
+}
+
+void validateSelectedQIndices(
+	const std::vector<int>& selected_q_indices, const int dof) {
+	std::vector<bool> seen(dof, false);
+	for (const int index : selected_q_indices) {
+		if (index < 0 || index >= dof) {
+			throw invalid_argument(
+				"selected_q_indices contains an out-of-range index");
+		}
+		if (seen[index]) {
+			throw invalid_argument(
+				"selected_q_indices contains a duplicate index");
+		}
+		seen[index] = true;
+	}
 }
 
 MatrixXd computeCentroidalMomentumMatrix(
@@ -236,6 +331,8 @@ SaiModel::SaiModel(const string path_to_model_file, bool verbose) {
 	_ddq.setZero(_dof);
 	_M.setIdentity(_dof, _dof);
 	_M_inv.setIdentity(_dof, _dof);
+	_M_reg.setIdentity(_dof, _dof);
+	_M_reg_inv.setIdentity(_dof, _dof);
 
 	updateModel();
 
@@ -364,12 +461,17 @@ void SaiModel::updateKinematics() {
 	UpdateKinematicsCustom(*_rbdl_model, &_q, &_dq, &_ddq);
 }
 
-void SaiModel::updateModel() {
+void SaiModel::updateModel(
+	const bool regularize_inertia,
+	const double max_condition_number) {
 	updateKinematics();
-	updateDynamics();
+	updateDynamics(regularize_inertia, max_condition_number);
 }
 
-void SaiModel::updateModel(const Eigen::MatrixXd& M) {
+void SaiModel::updateModel(
+	const Eigen::MatrixXd& M,
+	const bool regularize_inertia,
+	const double max_condition_number) {
 	updateKinematics();
 
 	if (!isPositiveDefinite(M)) {
@@ -381,7 +483,7 @@ void SaiModel::updateModel(const Eigen::MatrixXd& M) {
 			"M matrix dimensions inconsistent in SaiModel::updateModel");
 	}
 	_M = M;
-	updateInverseInertia();
+	updateInverseInertia(regularize_inertia, max_condition_number);
 }
 
 VectorXd SaiModel::jointGravityVector() {
@@ -1199,16 +1301,49 @@ void SaiModel::displayLinks() {
 	cout << endl;
 }
 
-void SaiModel::updateDynamics() {
+void SaiModel::updateDynamics(
+	const bool regularize_inertia,
+	const double max_condition_number) {
 	if (_M.rows() != _dof || _M.cols() != _dof) {
 		_M.setZero(_dof, _dof);
 	}
 
 	CompositeRigidBodyAlgorithm(*_rbdl_model, _q, _M, false);
-	updateInverseInertia();
+	updateInverseInertia(regularize_inertia, max_condition_number);
 }
 
-void SaiModel::updateInverseInertia() { _M_inv = _M.inverse(); }
+void SaiModel::updateInverseInertia(
+	const bool regularize_inertia,
+	const double max_condition_number) {
+	_M_eigensolver.compute(_M);
+	const VectorXd& eigenvalues = _M_eigensolver.eigenvalues();
+	const MatrixXd& eigenvectors = _M_eigensolver.eigenvectors();
+
+	_M_inv.noalias() = eigenvectors *
+					   eigenvalues.cwiseInverse().asDiagonal() *
+					   eigenvectors.transpose();
+
+	if (!regularize_inertia) {
+		return;
+	}
+
+	const double condition_number =
+		eigenvalues(eigenvalues.size() - 1) / eigenvalues(0);
+
+	if (condition_number > max_condition_number) {
+		const VectorXd clipped_eigenvalues = closestConditionedEigenvalues(
+			eigenvalues, max_condition_number);
+		_M_reg.noalias() = eigenvectors *
+						   clipped_eigenvalues.asDiagonal() *
+						   eigenvectors.transpose();
+		_M_reg_inv.noalias() = eigenvectors *
+							   clipped_eigenvalues.cwiseInverse().asDiagonal() *
+							   eigenvectors.transpose();
+	} else {
+		_M_reg = _M;
+		_M_reg_inv = _M_inv;
+	}
+}
 
 VectorXd SaiModel::modifiedNewtonEuler(const bool consider_gravity,
 										const VectorXd& q, const VectorXd& dq,
@@ -1811,6 +1946,210 @@ MatrixXd SaiModel::getCentroidalMomentumMatrix() {
 	return centroidal_momentum_matrix;
 }
 
+std::vector<MatrixXd> SaiModel::getCentroidalMomentumMatrixGradient() {
+	if (!_spherical_joints.empty()) {
+		throw runtime_error(
+			"analytic centroidal momentum matrix gradient is not supported "
+			"for spherical joints");
+	}
+
+	std::vector<MatrixXd> gradient(
+		_dof, MatrixXd::Zero(6, _dof));
+
+	for (int body_id = 1; body_id < _rbdl_model->mBodies.size();
+		 ++body_id) {
+		const auto& joint = _rbdl_model->mJoints[body_id];
+		if (joint.mJointType == RigidBodyDynamics::JointTypeCustom ||
+			joint.mDoFCount != 1) {
+			throw runtime_error(
+				"analytic centroidal momentum matrix gradient currently "
+				"supports only one-dof non-custom joints");
+		}
+	}
+
+	const int body_count = static_cast<int>(_rbdl_model->mBodies.size());
+	const MatrixXd q_dirs =
+		MatrixXd::Identity(_q_size, _dof);
+	RigidBodyDynamics::ED::UpdateKinematicsCustom(
+		*_rbdl_model, *_ed_rbdl_model, &_q, &q_dirs, nullptr, nullptr,
+		nullptr, nullptr);
+
+	const Vector3d com = comPosition();
+	const MatrixXd com_jacobian = comJacobian();
+
+	std::vector<MatrixXd> link_velocity_jacobian(
+		body_count, MatrixXd::Zero(6, _dof));
+	std::vector<std::vector<MatrixXd>> link_velocity_jacobian_dirs(
+		body_count,
+		std::vector<MatrixXd>(_dof, MatrixXd::Zero(6, _dof)));
+
+	auto packColumnDirections =
+		[this](const std::vector<MatrixXd>& matrix_dirs,
+			   const int col) {
+		RigidBodyDynamics::SpatialDirection directions =
+			RigidBodyDynamics::SpatialDirection::Zero(6, _dof);
+		for (int k = 0; k < _dof; ++k) {
+			directions.col(k) = matrix_dirs[k].col(col);
+		}
+		return directions;
+	};
+
+	auto unpackColumnDirections =
+		[this](std::vector<MatrixXd>& matrix_dirs, const int col,
+			   const RigidBodyDynamics::SpatialDirection& directions) {
+		for (int k = 0; k < _dof; ++k) {
+			matrix_dirs[k].col(col) = directions.col(k);
+		}
+	};
+
+	for (int body_id = 1; body_id < body_count; ++body_id) {
+		const unsigned int parent_id = _rbdl_model->lambda[body_id];
+
+		for (int col = 0; col < _dof; ++col) {
+			const RigidBodyDynamics::Math::SpatialVector parent_col =
+				link_velocity_jacobian[parent_id].col(col);
+			RigidBodyDynamics::Math::SpatialVector transformed_col =
+				RigidBodyDynamics::Math::SpatialVector::Zero();
+			RigidBodyDynamics::SpatialDirection transformed_col_dirs =
+				RigidBodyDynamics::SpatialDirection::Zero(6, _dof);
+			RigidBodyDynamics::Math::ED::X_apply_v(
+				transformed_col,
+				transformed_col_dirs,
+				_rbdl_model->X_lambda[body_id],
+				_ed_rbdl_model->X_lambda[body_id],
+				parent_col,
+				packColumnDirections(
+					link_velocity_jacobian_dirs[parent_id], col),
+				_dof);
+
+			link_velocity_jacobian[body_id].col(col) = transformed_col;
+			unpackColumnDirections(
+				link_velocity_jacobian_dirs[body_id],
+				col,
+				transformed_col_dirs);
+		}
+
+		const auto& joint = _rbdl_model->mJoints[body_id];
+		const unsigned int q_index = joint.q_index;
+		link_velocity_jacobian[body_id].col(q_index) +=
+			_rbdl_model->S[body_id];
+	}
+
+	std::vector<MatrixXd> link_momentum_jacobian(
+		body_count, MatrixXd::Zero(6, _dof));
+	std::vector<std::vector<MatrixXd>> link_momentum_jacobian_dirs(
+		body_count,
+		std::vector<MatrixXd>(_dof, MatrixXd::Zero(6, _dof)));
+
+	for (int body_id = 1; body_id < body_count; ++body_id) {
+		const RigidBodyDynamics::Math::SpatialMatrix spatial_inertia =
+			_rbdl_model->I[body_id].toMatrix();
+		link_momentum_jacobian[body_id].noalias() =
+			spatial_inertia * link_velocity_jacobian[body_id];
+		for (int k = 0; k < _dof; ++k) {
+			link_momentum_jacobian_dirs[body_id][k].noalias() =
+				spatial_inertia *
+				link_velocity_jacobian_dirs[body_id][k];
+		}
+	}
+
+	MatrixXd centroidal_momentum_matrix = MatrixXd::Zero(6, _dof);
+	std::vector<MatrixXd> centroidal_momentum_matrix_dirs(
+		_dof, MatrixXd::Zero(6, _dof));
+
+	for (int body_id = body_count - 1; body_id > 0; --body_id) {
+		const unsigned int parent_id = _rbdl_model->lambda[body_id];
+		if (parent_id != 0) {
+			for (int col = 0; col < _dof; ++col) {
+				const RigidBodyDynamics::Math::SpatialVector body_col =
+					link_momentum_jacobian[body_id].col(col);
+				RigidBodyDynamics::Math::SpatialVector transformed_col =
+					link_momentum_jacobian[parent_id].col(col);
+				RigidBodyDynamics::SpatialDirection transformed_col_dirs =
+					packColumnDirections(
+						link_momentum_jacobian_dirs[parent_id], col);
+
+				RigidBodyDynamics::Math::ED::inplace_X_applyTranspose_f(
+					transformed_col,
+					transformed_col_dirs,
+					_rbdl_model->X_lambda[body_id],
+					_ed_rbdl_model->X_lambda[body_id],
+					body_col,
+					packColumnDirections(
+						link_momentum_jacobian_dirs[body_id], col),
+					_dof);
+
+				link_momentum_jacobian[parent_id].col(col) =
+					transformed_col;
+				unpackColumnDirections(
+					link_momentum_jacobian_dirs[parent_id],
+					col,
+					transformed_col_dirs);
+			}
+		} else {
+			const auto com_X_base =
+				RigidBodyDynamics::Math::Xtrans(com).inverse();
+			const auto com_X_body =
+				com_X_base * _rbdl_model->X_lambda[body_id];
+			std::vector<RigidBodyDynamics::Math::SpatialTransform>
+				com_X_body_dirs(_dof);
+
+			for (int k = 0; k < _dof; ++k) {
+				const Vector3d com_dir = com_jacobian.col(k);
+				const RigidBodyDynamics::Math::SpatialTransform
+					com_X_base_dir(
+						Matrix3d::Zero(),
+						-com_dir);
+				const auto& body_X_parent =
+					_rbdl_model->X_lambda[body_id];
+				const auto& body_X_parent_dir =
+					_ed_rbdl_model->X_lambda[body_id][k];
+
+				com_X_body_dirs[k].E =
+					com_X_base_dir.E * body_X_parent.E +
+					com_X_base.E * body_X_parent_dir.E;
+				com_X_body_dirs[k].r =
+					body_X_parent_dir.r +
+					body_X_parent_dir.E.transpose() * com_X_base.r +
+					body_X_parent.E.transpose() * com_X_base_dir.r;
+			}
+
+			for (int col = 0; col < _dof; ++col) {
+				const RigidBodyDynamics::Math::SpatialVector body_col =
+					link_momentum_jacobian[body_id].col(col);
+				RigidBodyDynamics::Math::SpatialVector transformed_col =
+					centroidal_momentum_matrix.col(col);
+				RigidBodyDynamics::SpatialDirection transformed_col_dirs =
+					packColumnDirections(
+						centroidal_momentum_matrix_dirs, col);
+
+				RigidBodyDynamics::Math::ED::inplace_X_applyTranspose_f(
+					transformed_col,
+					transformed_col_dirs,
+					com_X_body,
+					com_X_body_dirs,
+					body_col,
+					packColumnDirections(
+						link_momentum_jacobian_dirs[body_id], col),
+					_dof);
+
+				centroidal_momentum_matrix.col(col) = transformed_col;
+				unpackColumnDirections(
+					centroidal_momentum_matrix_dirs,
+					col,
+					transformed_col_dirs);
+			}
+		}
+	}
+
+	for (int k = 0; k < _dof; ++k) {
+		gradient[k] = centroidal_momentum_matrix_dirs[k];
+	}
+
+	updateKinematics();
+	return gradient;
+}
+
 VectorXd SaiModel::getCentroidalInertiaMatrixDotQDot() {
 	VectorXd qddot_zero = VectorXd::Zero(_dof);
 	RigidBodyDynamics::Math::Scalar mass;
@@ -1996,24 +2335,42 @@ VectorXd SaiModel::computeMuscleCapacityVector() {
 // }
 
 MatrixXd SaiModel::computeMuscleJacobian(const bool floating) {
+	return computeMuscleJacobian(
+		qIndexRange(floating ? 6 : 0, _dof));
+}
+
+MatrixXd SaiModel::computeMuscleJacobian(
+	const std::vector<int>& selected_q_indices) {
+	validateSelectedQIndices(selected_q_indices, _dof);
+
     // 1. Pre-calculate total number of muscles to allocate L once
     int n_muscles = 0;
     for (const auto& [_, system] : _muscle_system) {
         n_muscles += system.muscles.size();
     }
     
-    MatrixXd L = MatrixXd::Zero(n_muscles, _dof);
+    MatrixXd L = MatrixXd::Zero(n_muscles, selected_q_indices.size());
     if (n_muscles == 0 || _dof == 0) return L;
+
+	map<MuscleWaypointKey, MuscleWaypointKinematics> waypoint_cache;
+	auto getWaypointKinematics =
+		[this, &waypoint_cache](const Waypoint& waypoint)
+			-> const MuscleWaypointKinematics& {
+		const MuscleWaypointKey key(waypoint.link_name, waypoint.point);
+		auto [it, inserted] = waypoint_cache.try_emplace(key);
+		if (inserted) {
+			it->second.position =
+				positionInWorld(waypoint.link_name, waypoint.point);
+			it->second.Jv = Jv(waypoint.link_name, waypoint.point);
+		}
+		return it->second;
+	};
 
     int i = 0;
     // 2. Use const references to avoid accidental deep copies
     for (const auto& [name, system] : _muscle_system) {
         for (const auto& node : system.muscles) {
             const auto& waypoints = node.contractor.muscle_tendon_path;
-            
-            bool has_cached = false;
-            Vector3d pos_j;
-            MatrixXd Jv_j; // If Jv returns a specific fixed-size type, use that instead of MatrixXd
 
             // Safe loop condition avoiding size_t underflow if waypoints is empty
             for (size_t j = 0; j + 1 < waypoints.size(); ++j) {
@@ -2021,43 +2378,29 @@ MatrixXd SaiModel::computeMuscleJacobian(const bool floating) {
                 const auto& wp1 = waypoints[j + 1];
 
                 if (wp0.link_name != wp1.link_name) {
-                    // 3. Lazy evaluation & caching of kinematic quantities
-                    if (!has_cached) {
-                        pos_j = positionInWorld(wp0.link_name, wp0.point);
-                        Jv_j = Jv(wp0.link_name, wp0.point);
-                    }
+					const auto& kin0 = getWaypointKinematics(wp0);
+					const auto& kin1 = getWaypointKinematics(wp1);
 
-                    Vector3d pos_next = positionInWorld(wp1.link_name, wp1.point);
-                    auto Jv_next = Jv(wp1.link_name, wp1.point);
-
-                    Vector3d d = pos_next - pos_j;
+                    Vector3d d = kin1.position - kin0.position;
                     double d_norm = d.norm();
 
                     // 4. Safety check to prevent division by zero or NaN propagation
                     if (d_norm > 1e-8) { 
                         // 5. Eliminate Eigen temporary matrices via math distribution
                         RowVector3d u = d.transpose() / d_norm;
-                        L.row(i).noalias() -= u * Jv_next;
-                        L.row(i).noalias() += u * Jv_j;
+						for (int col = 0;
+							 col < selected_q_indices.size(); ++col) {
+							const int q_index = selected_q_indices[col];
+							L(i, col) +=
+								u.dot(kin0.Jv.col(q_index)) -
+								u.dot(kin1.Jv.col(q_index));
+						}
                     }
-
-                    // Cache the "next" values for the following segment
-                    pos_j = pos_next;
-                    Jv_j = std::move(Jv_next); // Move semantics to avoid copying
-                    has_cached = true;
-                } else {
-                    // If the segment stays on the same link, cache is broken because 
-                    // the subsequent joint crossing will originate from a different local point.
-                    has_cached = false;
                 }
             }
             ++i;
         }
     }
-
-	if (floating) {
-		L = L.rightCols(L.cols() - 6);
-	}
 
     return L;
 }
@@ -2072,64 +2415,83 @@ MatrixXd SaiModel::computeMuscleJacobian(const bool floating) {
 // where \hat{d} = (1 / norm(d)) d and \nabla_{q} d = J_{v2} - J_{v1}
 // each muscle forms one row of the L matrix
 std::vector<MatrixXd> SaiModel::computeMuscleJacobianDerivative(const bool floating) {
+	return computeMuscleJacobianDerivative(
+		qIndexRange(floating ? 6 : 0, _dof));
+}
+
+std::vector<MatrixXd> SaiModel::computeMuscleJacobianDerivative(
+	const std::vector<int>& selected_q_indices) {
+	validateSelectedQIndices(selected_q_indices, _dof);
+
     int n_muscles = 0;
     for (const auto& [_, system] : _muscle_system) {
         n_muscles += system.muscles.size();
     }
     
-    // Output: vector of size _dof, where each element is an (n_muscles x _dof) matrix
-    std::vector<MatrixXd> dL_dq(_dof, MatrixXd::Zero(n_muscles, _dof));
+    std::vector<MatrixXd> dL_dq(
+		selected_q_indices.size(),
+		MatrixXd::Zero(n_muscles, selected_q_indices.size()));
     
     const Matrix3d I3 = Matrix3d::Identity();
+	map<MuscleWaypointKey, MuscleWaypointKinematics> waypoint_cache;
+	auto getWaypointKinematics =
+		[this, &waypoint_cache](const Waypoint& waypoint)
+			-> const MuscleWaypointKinematics& {
+		const MuscleWaypointKey key(waypoint.link_name, waypoint.point);
+		auto [it, inserted] = waypoint_cache.try_emplace(key);
+		if (inserted) {
+			it->second.position =
+				positionInWorld(waypoint.link_name, waypoint.point);
+			it->second.Jv = Jv(waypoint.link_name, waypoint.point);
+		}
+
+		if (it->second.dJv_dq.empty()) {
+			const auto dJdq =
+				getJacobianDerivative(waypoint.link_name, waypoint.point);
+			it->second.dJv_dq.reserve(dJdq.size());
+			for (const auto& dJ : dJdq) {
+				it->second.dJv_dq.push_back(dJ.topRows(3));
+			}
+		}
+
+		return it->second;
+	};
+
     int i = 0; // Muscle row index
     
     for (const auto& [name, system] : _muscle_system) {
         for (const auto& node : system.muscles) {
             const auto& waypoints = node.contractor.muscle_tendon_path;
-            
-            bool has_cached = false;
-            Vector3d p_curr;
-            MatrixXd J_curr;
-            std::vector<MatrixXd> H_curr;
 
             for (size_t j = 0; j + 1 < waypoints.size(); ++j) {
                 const auto& wp_curr = waypoints[j];
                 const auto& wp_next = waypoints[j + 1];
 
                 if (wp_curr.link_name != wp_next.link_name) {
-                    
-                    if (!has_cached) {
-                        p_curr = positionInWorld(wp_curr.link_name, wp_curr.point);
-                        J_curr = Jv(wp_curr.link_name, wp_curr.point);
-                        H_curr = getJacobianDerivative(wp_curr.link_name, wp_curr.point);
-                    }
+					const auto& kin_curr = getWaypointKinematics(wp_curr);
+					const auto& kin_next = getWaypointKinematics(wp_next);
 
                     // 1. Evaluate d(q) and its unit vector
-                    Vector3d p_next = positionInWorld(wp_next.link_name, wp_next.point);
-                    MatrixXd J_next = Jv(wp_next.link_name, wp_next.point);
-                    std::vector<MatrixXd> H_next =
-                        getJacobianDerivative(wp_next.link_name, wp_next.point);
-                    Vector3d d = p_next - p_curr;
+                    Vector3d d = kin_next.position - kin_curr.position;
                     double length = d.norm();
                     
                     if (length < 1e-6) {
-                        p_curr = p_next;
-                        J_curr = std::move(J_next);
-                        H_curr = std::move(H_next);
-                        has_cached = true;
                         continue;
                     }
                     Vector3d d_hat = d / length;
                     
                     // 2. Evaluate J_d = partial d(q) / partial q  (Size: 3 x _dof)
-                    MatrixXd J_d = J_next - J_curr; 
+                    MatrixXd J_d = kin_next.Jv - kin_curr.Jv;
                     
                     // Precompute the projection matrix scaled by length
                     Matrix3d scaled_proj =
                         (1.0 / length) * (I3 - d_hat * d_hat.transpose());
                     
                     // 4. Populate the k-th slice of the tensor
-                    for (int k = 0; k < _dof; ++k) {
+                    for (int k_selected = 0;
+						 k_selected < selected_q_indices.size();
+						 ++k_selected) {
+						const int k = selected_q_indices[k_selected];
                         
                         // Geometric Term:
                         // partial d / partial q_k is the k-th column of J_d
@@ -2137,36 +2499,23 @@ std::vector<MatrixXd> SaiModel::computeMuscleJacobianDerivative(const bool float
                         // partial d_hat / partial q_k (Size: 3 x 1)
                         Vector3d d_hat_dq_k = scaled_proj * d_dq_k;
                         
-                        // Kinematic Term:
-                        // H_d_k is partial J_d / partial q_k (Size: 3 x _dof)
-                        MatrixXd H_d_k = H_next[k].topRows(3) - H_curr[k].topRows(3);
-                        
-                        // L row contribution is d_hat^T * (J_curr - J_next) = -d_hat^T * J_d
-                        RowVectorXd geo_term = -d_hat_dq_k.transpose() * J_d;
-                        RowVectorXd kin_term = -d_hat.transpose() * H_d_k;
-                        
-                        // Add both terms to the i-th row of the k-th output matrix
-                        dL_dq[k].row(i) += (geo_term + kin_term);
-                    }
+						for (int col = 0;
+							 col < selected_q_indices.size(); ++col) {
+							const int q_col = selected_q_indices[col];
+							const Vector3d H_d_k_col =
+								kin_next.dJv_dq[k].col(q_col) -
+								kin_curr.dJv_dq[k].col(q_col);
 
-                    p_curr = p_next;
-                    J_curr = std::move(J_next);
-                    H_curr = std::move(H_next);
-                    has_cached = true;
-                } else {
-                    has_cached = false;
+							dL_dq[k_selected](i, col) +=
+								-d_hat_dq_k.dot(J_d.col(q_col)) -
+								d_hat.dot(H_d_k_col);
+						}
+                    }
                 }
             }
             ++i; // Move to the next muscle row
         }
     }
-
-	if (floating) {
-		for (auto& dL : dL_dq) {
-			dL = dL.rightCols(dL.cols() - 6);
-		}
-		dL_dq = subvector(dL_dq, 6, dL_dq.size());
-	}
     
     return dL_dq;
 }

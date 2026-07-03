@@ -1,5 +1,6 @@
 from pathlib import Path
 import sys
+import time
 
 import numpy as np
 
@@ -17,7 +18,11 @@ robot.update_model()
 link_name = "right_hand"
 pos_in_link = np.array([0.1, 0.2, 0.3])
 
+start_time = time.perf_counter()
 dJdq = robot.get_jacobian_derivative(link_name, pos_in_link)
+elapsed_ms = (time.perf_counter() - start_time) * 1000.0
+print(f"Jacobian derivative computation time: {elapsed_ms:.6f} ms")
+
 dMdq = robot.get_mass_matrix_derivative()
 dbdq = robot.get_dynamic_bias_derivative_wrt_q(True)
 dbddq = robot.get_dynamic_bias_derivative_wrt_dq(True)

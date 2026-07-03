@@ -3,6 +3,7 @@
 
 #include <SaiModel.h>
 
+#include <chrono>
 #include <iostream>
 #include <random>
 
@@ -19,7 +20,13 @@ int main(int argc, char** argv) {
     // kinematic hessian
     string link_name = "right_hand";
     Vector3d pos_in_link = Vector3d(0.1, 0.2, 0.3);
+    const auto jacobian_derivative_start = chrono::steady_clock::now();
     std::vector<MatrixXd> dJdq = robot->getJacobianDerivative(link_name, pos_in_link);
+    const auto jacobian_derivative_end = chrono::steady_clock::now();
+    const chrono::duration<double, milli> jacobian_derivative_time =
+        jacobian_derivative_end - jacobian_derivative_start;
+    cout << "Jacobian derivative computation time: "
+         << jacobian_derivative_time.count() << " ms" << endl;
 
     // mass matrix derivative
     std::vector<MatrixXd> dMdq = robot->getMassMatrixDerivative();

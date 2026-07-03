@@ -89,6 +89,8 @@ PYBIND11_MODULE(sai_model_py, m) {
 		.def_property("ddq", &SaiModel::SaiModel::ddq, &SaiModel::SaiModel::setDdq)
 		.def_property_readonly("M", &SaiModel::SaiModel::M)
 		.def_property_readonly("M_inv", &SaiModel::SaiModel::MInv)
+		.def_property_readonly("M_reg", &SaiModel::SaiModel::MReg)
+		.def_property_readonly("M_reg_inv", &SaiModel::SaiModel::MRegInv)
 		.def_property_readonly("dof", &SaiModel::SaiModel::dof)
 		.def_property_readonly("q_size", &SaiModel::SaiModel::qSize)
 		.def_property(
@@ -102,11 +104,17 @@ PYBIND11_MODULE(sai_model_py, m) {
 		.def_property("world_gravity", &SaiModel::SaiModel::worldGravity,
 					  &SaiModel::SaiModel::setWorldGravity)
 		.def("update_kinematics", &SaiModel::SaiModel::updateKinematics)
-		.def("update_model", py::overload_cast<>(&SaiModel::SaiModel::updateModel))
-		.def("update_model_with_mass_matrix",
-			 py::overload_cast<const Eigen::MatrixXd&>(
+		.def("update_model",
+			 py::overload_cast<bool, double>(
 				 &SaiModel::SaiModel::updateModel),
-			 py::arg("M"))
+			 py::arg("regularize_inertia") = false,
+			 py::arg("max_condition_number") = 50.0)
+		.def("update_model_with_mass_matrix",
+			 py::overload_cast<const Eigen::MatrixXd&, bool, double>(
+				 &SaiModel::SaiModel::updateModel),
+			 py::arg("M"),
+			 py::arg("regularize_inertia") = false,
+			 py::arg("max_condition_number") = 50.0)
 		.def("joint_names", &SaiModel::SaiModel::jointNames)
 		.def("is_link_in_robot", &SaiModel::SaiModel::isLinkInRobot,
 			 py::arg("link_name"))
@@ -306,6 +314,8 @@ PYBIND11_MODULE(sai_model_py, m) {
 			 &SaiModel::SaiModel::getCentroidalInertiaMatrix)
 		.def("get_centroidal_momentum_matrix",
 			 &SaiModel::SaiModel::getCentroidalMomentumMatrix)
+		.def("get_centroidal_momentum_matrix_gradient",
+			 &SaiModel::SaiModel::getCentroidalMomentumMatrixGradient)
 		.def("get_point_inertia_matrix", &SaiModel::SaiModel::getPointInertiaMatrix,
 			 py::arg("link_name"), py::arg("pos_in_link"))
 		.def("get_jacobian_derivative", &SaiModel::SaiModel::getJacobianDerivative,
@@ -340,11 +350,21 @@ PYBIND11_MODULE(sai_model_py, m) {
 			.def("compute_muscle_capacity_matrix",
 				 &SaiModel::SaiModel::computeMuscleCapacityMatrix)
 			.def("compute_muscle_jacobian",
-				 &SaiModel::SaiModel::computeMuscleJacobian,
+				 py::overload_cast<bool>(
+					 &SaiModel::SaiModel::computeMuscleJacobian),
+				 py::arg("floating") = true)
+			.def("compute_muscle_jacobian",
+				 py::overload_cast<const std::vector<int>&>(
+					 &SaiModel::SaiModel::computeMuscleJacobian),
+				 py::arg("selected_q_indices"))
+			.def("compute_muscle_jacobian_derivative",
+				 py::overload_cast<bool>(
+					 &SaiModel::SaiModel::computeMuscleJacobianDerivative),
 				 py::arg("floating") = true)
 			.def("compute_muscle_jacobian_derivative",
-				 &SaiModel::SaiModel::computeMuscleJacobianDerivative,
-				 py::arg("floating") = true)
+				 py::overload_cast<const std::vector<int>&>(
+					 &SaiModel::SaiModel::computeMuscleJacobianDerivative),
+				 py::arg("selected_q_indices"))
 			.def("compute_muscle_jacobian_inverse",
 				 &SaiModel::SaiModel::computeMuscleJacobianInverse,
 				 py::arg("W"))

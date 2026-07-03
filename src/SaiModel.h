@@ -8,6 +8,8 @@
 #ifndef SaiModel_H_
 #define SaiModel_H_
 
+#include <Eigen/Eigenvalues>
+
 #include <rbdl/rbdl.h>
 #include <rbdl_ad.h>
 
@@ -226,6 +228,10 @@ public:
 	const Eigen::MatrixXd& M() const { return _M; }
 	/// @brief getter for the inverse of the joint space mass matrix
 	const Eigen::MatrixXd& MInv() const { return _M_inv; }
+	/// @brief getter for the regularized joint space mass matrix
+	const Eigen::MatrixXd& MReg() const { return _M_reg; }
+	/// @brief getter for the inverse of the regularized mass matrix
+	const Eigen::MatrixXd& MRegInv() const { return _M_reg_inv; }
 
 	/// @brief getter for the 3D world gravity vector
 	const Eigen::Vector3d worldGravity() const {
@@ -283,7 +289,9 @@ public:
 	 * @brief      update the kinematics and dynamics (mass matrix and its
 	 *             inverse) for the current robot configuration.
 	 */
-	void updateModel();
+	void updateModel(
+		bool regularize_inertia = false,
+		double max_condition_number = 50.0);
 
 	/**
 	 * @brief update the kinematics and the inverse of the mass matrix
@@ -293,7 +301,10 @@ public:
 	 *
 	 * @param M externally provided mass matrix
 	 */
-	void updateModel(const Eigen::MatrixXd& M);
+	void updateModel(
+		const Eigen::MatrixXd& M,
+		bool regularize_inertia = false,
+		double max_condition_number = 50.0);
 
 	/**
 	 * @brief      returns the number of degrees of freedom of the robot
@@ -1072,6 +1083,15 @@ public:
 	MatrixXd getCentroidalMomentumMatrix();
 
 	/**
+	 * @brief Computes the gradient of the centroidal momentum matrix A(q) with
+	 * respect to generalized coordinates.
+	 *
+	 * @return std::vector<MatrixXd> gradient tensor where index k is
+	 * dA / dq_k and each matrix is 6 x dof
+	 */
+	std::vector<MatrixXd> getCentroidalMomentumMatrixGradient();
+
+	/**
 	 * @brief Computes \dot{A}\dot{q}, where A is the centroidal momentum
 	 * matrix that maps joint velocities to centroidal momentum.
 	 *
@@ -1195,11 +1215,32 @@ public:
 	MatrixXd computeMuscleJacobian(const bool floating = true);
 
 	/**
+	 * @brief L matrix restricted to the selected q indices
+	 *
+	 * @param selected_q_indices columns of the full muscle jacobian to compute
+	 * @return MatrixXd n_muscles x selected_q_indices.size()
+	 */
+	MatrixXd computeMuscleJacobian(
+		const std::vector<int>& selected_q_indices);
+
+	/**
 	 * @brief Computes the derivative of the L matrix
 	 * 
 	 * @return std::vector<MatrixXd>
 	 */
 	std::vector<MatrixXd> computeMuscleJacobianDerivative(const bool floating = true);
+
+	/**
+	 * @brief Computes the derivative of the selected-column L matrix with
+	 * respect to selected q indices
+	 *
+	 * @param selected_q_indices q indices used for both derivative slices and
+	 * output columns
+	 * @return vector with selected_q_indices.size() matrices, each
+	 * n_muscles x selected_q_indices.size()
+	 */
+	std::vector<MatrixXd> computeMuscleJacobianDerivative(
+		const std::vector<int>& selected_q_indices);
 
 	/**
 	 * @brief Computes the weighted inverse of the muscle jacobian
@@ -1230,12 +1271,16 @@ private:
 	 * @brief      update the dynamics (mass matrix and its inverse) for the
 	 * current robot configuration.
 	 */
-	void updateDynamics();
+	void updateDynamics(
+		bool regularize_inertia = false,
+		double max_condition_number = 50.0);
 
 	/**
 	 * @brief      update the inverse inertia matrix.
 	 */
-	void updateInverseInertia();
+	void updateInverseInertia(
+		bool regularize_inertia = false,
+		double max_condition_number = 50.0);
 
 	/**
 	 * @brief Compute the inverse kinematics from the constraint set as defined
@@ -1304,6 +1349,15 @@ private:
 
 	/// @brief Inverse of the mass matrix
 	MatrixXd _M_inv;
+
+	/// @brief Eigendecomposition of the mass matrix
+	SelfAdjointEigenSolver<MatrixXd> _M_eigensolver;
+
+	/// @brief Regularized mass matrix
+	MatrixXd _M_reg;
+
+	/// @brief Inverse of the regularized mass matrix
+	MatrixXd _M_reg_inv;
 
 	/// @brief List of active contacts between robot and environment
 	vector<ContactModel> _environmental_contacts;
