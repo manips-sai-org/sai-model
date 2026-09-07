@@ -15,6 +15,8 @@
 
 #include "RBDLExtensions.h"
 
+#include <algorithm>
+
 using namespace std;
 using namespace Eigen;
 
@@ -150,7 +152,7 @@ struct MuscleWaypointKey {
 struct MuscleWaypointKinematics {
 	Vector3d position = Vector3d::Zero();
 	MatrixXd Jv;
-	std::vector<MatrixXd> dJv_dq;
+	std::vector<MatrixXd> selected_dJv_dq;
 };
 
 std::vector<int> qIndexRange(const int start, const int end) {
@@ -176,6 +178,132 @@ void validateSelectedQIndices(
 		}
 		seen[index] = true;
 	}
+}
+
+std::vector<MatrixXd> calcSelectedLinearJacobianDerivative(
+	RigidBodyDynamics::Model& model,
+	const VectorXd& q,
+	const unsigned int body_id,
+	const Vector3d& point_base,
+	const MatrixXd& point_jv,
+	const std::vector<int>& selected_q_indices) {
+	const int selected_count = static_cast<int>(selected_q_indices.size());
+	std::vector<MatrixXd> dJv_dq(
+		selected_count,
+		MatrixXd::Zero(3, selected_count));
+	if (selected_count == 0) {
+		return dJv_dq;
+	}
+
+	const int dof = static_cast<int>(model.qdot_size);
+	std::vector<int> joint_dependency;
+	std::vector<unsigned int> body_id_for_q_index(dof, 0);
+
+	unsigned int reference_body_id = body_id;
+	if (model.IsFixedBodyId(body_id)) {
+		const unsigned int fixed_body_id =
+			body_id - model.fixed_body_discriminator;
+		reference_body_id = model.mFixedBodies[fixed_body_id].mMovableParent;
+	}
+
+	for (unsigned int current_body_id = reference_body_id; current_body_id != 0;
+		 current_body_id = model.lambda[current_body_id]) {
+		const auto& joint = model.mJoints[current_body_id];
+		if (joint.mJointType == RigidBodyDynamics::JointTypeSpherical) {
+			throw runtime_error(
+				"Can't compute muscle jacobian derivative with spherical joint");
+		}
+
+		const int q_index = static_cast<int>(joint.q_index);
+		if (q_index >= 0 && q_index < dof) {
+			joint_dependency.push_back(q_index);
+			body_id_for_q_index[q_index] = current_body_id;
+		}
+	}
+
+	if (joint_dependency.empty()) {
+		return dJv_dq;
+	}
+
+	std::sort(joint_dependency.begin(), joint_dependency.end());
+
+	std::vector<bool> is_dependent(dof, false);
+	std::vector<int> joint_type(dof, -1);
+	std::vector<Vector3d> z_axes(dof, Vector3d::Zero());
+	std::vector<Vector3d> p_axes(dof, Vector3d::Zero());
+
+	for (const int joint_index : joint_dependency) {
+		const unsigned int joint_body_id = body_id_for_q_index[joint_index];
+		const auto& X_base_i = model.X_base[joint_body_id];
+
+		is_dependent[joint_index] = true;
+		p_axes[joint_index] =
+			point_base -
+			RigidBodyDynamics::CalcBodyToBaseCoordinates(
+				model, q, joint_body_id, Vector3d::Zero(), false);
+
+		const auto S = model.S[joint_body_id];
+		if (S.head<3>().squaredNorm() > 0.5) {
+			joint_type[joint_index] = 0;
+			z_axes[joint_index] =
+				(X_base_i.E.transpose() * S.head<3>()).normalized();
+		} else {
+			joint_type[joint_index] = 1;
+			z_axes[joint_index] =
+				(X_base_i.E.transpose() * S.tail<3>()).normalized();
+		}
+	}
+
+	for (int k_selected = 0; k_selected < selected_count; ++k_selected) {
+		const int k = selected_q_indices[k_selected];
+		if (k < 0 || k >= dof || !is_dependent[k]) {
+			continue;
+		}
+
+		const Vector3d& z_k = z_axes[k];
+		const Vector3d& p_k = p_axes[k];
+		const int type_k = joint_type[k];
+
+		Vector3d Jv_col_k = Vector3d::Zero();
+		if (type_k == 1) {
+			Jv_col_k = point_jv.col(k);
+		}
+
+		for (int col = 0; col < selected_count; ++col) {
+			const int i = selected_q_indices[col];
+			if (i < 0 || i >= dof || !is_dependent[i]) {
+				continue;
+			}
+
+			const Vector3d& z_i = z_axes[i];
+			const int type_i = joint_type[i];
+
+			if (type_i == 0 && type_k == 0) {
+				const double zi_dot_zk = z_i.dot(z_k);
+				if (k < i) {
+					dJv_dq[k_selected].col(col) =
+						z_i * z_k.dot(p_axes[i]) -
+						p_axes[i] * zi_dot_zk;
+				} else {
+					dJv_dq[k_selected].col(col) =
+						z_k * z_i.dot(p_k) -
+						p_k * zi_dot_zk;
+				}
+			} else if (type_i == 0 && type_k == 1) {
+				if (k >= i) {
+					dJv_dq[k_selected].col(col) =
+						z_i.cross(Jv_col_k);
+				}
+			} else if (type_i == 1 && type_k == 0) {
+				if (k < i) {
+					dJv_dq[k_selected].col(col) =
+						z_k.cross(z_i);
+				}
+			}
+		}
+	}
+
+	return dJv_dq;
 }
 
 MatrixXd computeCentroidalMomentumMatrix(
@@ -869,7 +997,7 @@ Vector3d SaiModel::comPosition() const {
 	double robot_mass = 0.0;
 	Vector3d center_of_mass_global_frame;
 	int n_bodies = _rbdl_model->mBodies.size();
-	for (int i = 0; i < n_bodies; i++) {
+	for (int i = 1; i < n_bodies; i++) {
 		RigidBodyDynamics::Body b = _rbdl_model->mBodies.at(i);
 
 		center_of_mass_global_frame = CalcBodyToBaseCoordinates(
@@ -886,7 +1014,7 @@ MatrixXd SaiModel::comJacobian() const {
 	MatrixXd link_Jv;
 	double robot_mass = 0.0;
 	int n_bodies = _rbdl_model->mBodies.size();
-	for (int i = 0; i < n_bodies; i++) {
+	for (int i = 1; i < n_bodies; i++) {
 		RigidBodyDynamics::Body b = _rbdl_model->mBodies[i];
 
 		link_Jv.setZero(3, _dof);
@@ -903,7 +1031,7 @@ std::vector<MatrixXd> SaiModel::getComJacobianDerivative() {
 	double robot_mass = 0.0;
 	int n_bodies = _rbdl_model->mBodies.size();
 
-	for (int i = 0; i < n_bodies; i++) {
+	for (int i = 1; i < n_bodies; i++) {
 		RigidBodyDynamics::Body b = _rbdl_model->mBodies[i];
 
 		std::vector<MatrixXd> link_dJdq(_dof, MatrixXd::Zero(6, _dof));
@@ -1324,6 +1452,8 @@ void SaiModel::updateInverseInertia(
 					   eigenvectors.transpose();
 
 	if (!regularize_inertia) {
+		_M_reg = _M;
+		_M_reg_inv = _M_inv;
 		return;
 	}
 
@@ -2360,7 +2490,7 @@ MatrixXd SaiModel::computeMuscleJacobian(
 		auto [it, inserted] = waypoint_cache.try_emplace(key);
 		if (inserted) {
 			it->second.position =
-				positionInWorld(waypoint.link_name, waypoint.point);
+				position(waypoint.link_name, waypoint.point);
 			it->second.Jv = Jv(waypoint.link_name, waypoint.point);
 		}
 		return it->second;
@@ -2405,15 +2535,12 @@ MatrixXd SaiModel::computeMuscleJacobian(
     return L;
 }
 
-// Assuming Hv(link_name, point) returns std::vector<MatrixXd> of size _dof, 
-// where each MatrixXd is 3 x _dof.
-
 // each muscle tendon contributes (1 / norm(d)) d^{T} (J_{v2} - J_{v1})
 // derivative contribution is:
 // ((1 / norm(d)) * (I - \hat{d} \hat{d}^{T}) \nabla_{q} d) * (J_{v2} - J_{v1})
 // + (1 / norm(d)) d^{T} * (dJdq_{v2} - dJdq_{v1})
 // where \hat{d} = (1 / norm(d)) d and \nabla_{q} d = J_{v2} - J_{v1}
-// each muscle forms one row of the L matrix
+// Only the selected derivative slices and output columns are computed.
 std::vector<MatrixXd> SaiModel::computeMuscleJacobianDerivative(const bool floating) {
 	return computeMuscleJacobianDerivative(
 		qIndexRange(floating ? 6 : 0, _dof));
@@ -2422,6 +2549,7 @@ std::vector<MatrixXd> SaiModel::computeMuscleJacobianDerivative(const bool float
 std::vector<MatrixXd> SaiModel::computeMuscleJacobianDerivative(
 	const std::vector<int>& selected_q_indices) {
 	validateSelectedQIndices(selected_q_indices, _dof);
+	const int selected_count = static_cast<int>(selected_q_indices.size());
 
     int n_muscles = 0;
     for (const auto& [_, system] : _muscle_system) {
@@ -2429,29 +2557,27 @@ std::vector<MatrixXd> SaiModel::computeMuscleJacobianDerivative(
     }
     
     std::vector<MatrixXd> dL_dq(
-		selected_q_indices.size(),
-		MatrixXd::Zero(n_muscles, selected_q_indices.size()));
+		selected_count,
+		MatrixXd::Zero(n_muscles, selected_count));
     
     const Matrix3d I3 = Matrix3d::Identity();
 	map<MuscleWaypointKey, MuscleWaypointKinematics> waypoint_cache;
 	auto getWaypointKinematics =
-		[this, &waypoint_cache](const Waypoint& waypoint)
+		[this, &selected_q_indices, &waypoint_cache](const Waypoint& waypoint)
 			-> const MuscleWaypointKinematics& {
 		const MuscleWaypointKey key(waypoint.link_name, waypoint.point);
 		auto [it, inserted] = waypoint_cache.try_emplace(key);
 		if (inserted) {
 			it->second.position =
-				positionInWorld(waypoint.link_name, waypoint.point);
+				position(waypoint.link_name, waypoint.point);
 			it->second.Jv = Jv(waypoint.link_name, waypoint.point);
 		}
 
-		if (it->second.dJv_dq.empty()) {
-			const auto dJdq =
-				getJacobianDerivative(waypoint.link_name, waypoint.point);
-			it->second.dJv_dq.reserve(dJdq.size());
-			for (const auto& dJ : dJdq) {
-				it->second.dJv_dq.push_back(dJ.topRows(3));
-			}
+		if (it->second.selected_dJv_dq.empty()) {
+			it->second.selected_dJv_dq =
+				calcSelectedLinearJacobianDerivative(
+					*_rbdl_model, _q, linkIdRbdl(waypoint.link_name),
+					it->second.position, it->second.Jv, selected_q_indices);
 		}
 
 		return it->second;
@@ -2480,34 +2606,35 @@ std::vector<MatrixXd> SaiModel::computeMuscleJacobianDerivative(
                     }
                     Vector3d d_hat = d / length;
                     
-                    // 2. Evaluate J_d = partial d(q) / partial q  (Size: 3 x _dof)
-                    MatrixXd J_d = kin_next.Jv - kin_curr.Jv;
+                    // 2. Evaluate selected columns of partial d(q) / partial q.
+                    MatrixXd J_d = MatrixXd::Zero(3, selected_count);
+					for (int col = 0; col < selected_count; ++col) {
+						const int q_col = selected_q_indices[col];
+						J_d.col(col) =
+							kin_next.Jv.col(q_col) -
+							kin_curr.Jv.col(q_col);
+					}
                     
                     // Precompute the projection matrix scaled by length
                     Matrix3d scaled_proj =
                         (1.0 / length) * (I3 - d_hat * d_hat.transpose());
                     
                     // 4. Populate the k-th slice of the tensor
-                    for (int k_selected = 0;
-						 k_selected < selected_q_indices.size();
+                    for (int k_selected = 0; k_selected < selected_count;
 						 ++k_selected) {
-						const int k = selected_q_indices[k_selected];
-                        
                         // Geometric Term:
                         // partial d / partial q_k is the k-th column of J_d
-                        Vector3d d_dq_k = J_d.col(k);
+                        Vector3d d_dq_k = J_d.col(k_selected);
                         // partial d_hat / partial q_k (Size: 3 x 1)
                         Vector3d d_hat_dq_k = scaled_proj * d_dq_k;
                         
-						for (int col = 0;
-							 col < selected_q_indices.size(); ++col) {
-							const int q_col = selected_q_indices[col];
+						for (int col = 0; col < selected_count; ++col) {
 							const Vector3d H_d_k_col =
-								kin_next.dJv_dq[k].col(q_col) -
-								kin_curr.dJv_dq[k].col(q_col);
+								kin_next.selected_dJv_dq[k_selected].col(col) -
+								kin_curr.selected_dJv_dq[k_selected].col(col);
 
 							dL_dq[k_selected](i, col) +=
-								-d_hat_dq_k.dot(J_d.col(q_col)) -
+								-d_hat_dq_k.dot(J_d.col(col)) -
 								d_hat.dot(H_d_k_col);
 						}
                     }

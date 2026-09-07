@@ -477,26 +477,26 @@ RBDL_DLLAPI void NonlinearEffects (
     
     const unsigned int lambda = model.lambda[i];
     const unsigned int q_idx = model.mJoints[i].q_index;
-    const unsigned int s1_idx = ed_model.bodyidx2s1idx[i];
+    const SpatialVector& S_i = model.S[i];
     SpatialTransform X_lam = model.X_lambda[i];
 
     if (lambda == 0) {
       model.v[i] = model.v_J[i];
-      ed_model.v[i].leftCols(ndirs).setZero();
-      ed_model.v[i].row(s1_idx).leftCols(ndirs) = qdot_dirs.row(q_idx);
+      ed_model.v[i].leftCols(ndirs) = S_i * qdot_dirs.row(q_idx);
 
       model.a[i] = X_lam.apply(spatial_gravity);
-      ed_model.a[i].leftCols(ndirs) = crossm(model.a[i]).col(s1_idx) * q_dirs.row(q_idx);
+      ed_model.a[i].leftCols(ndirs) =
+          crossm(model.a[i]) * S_i * q_dirs.row(q_idx);
     } else {
       model.v[i] = X_lam.apply(model.v[lambda]);
       
       auto v_curr = ed_model.v[i].leftCols(ndirs);
       auto v_lam  = ed_model.v[lambda].leftCols(ndirs);
       
-      v_curr = crossm(model.v[i]).col(s1_idx) * q_dirs.row(q_idx);
+      v_curr = crossm(model.v[i]) * S_i * q_dirs.row(q_idx);
       v_curr.block(0, 0, 3, ndirs) += X_lam.E * v_lam.block(0, 0, 3, ndirs);
       v_curr.block(3, 0, 3, ndirs) -= X_lam.E * (VectorCrossMatrix(X_lam.r) * v_lam.block(0, 0, 3, ndirs) - v_lam.block(3, 0, 3, ndirs));
-      v_curr.row(s1_idx) += qdot_dirs.row(q_idx);
+      v_curr += S_i * qdot_dirs.row(q_idx);
       
       model.v[i] += model.v_J[i];
 
@@ -506,7 +506,7 @@ RBDL_DLLAPI void NonlinearEffects (
       const Vector3d& vJ_head = model.v_J[i].head<3>();
       const Vector3d& vJ_tail = model.v_J[i].tail<3>();
 
-      c_curr = crossm(model.v[i]).col(s1_idx) * qdot_dirs.row(q_idx);
+      c_curr = crossm(model.v[i]) * S_i * qdot_dirs.row(q_idx);
       c_curr.block(0, 0, 3, ndirs) -= VectorCrossMatrix(vJ_head) * v_curr.block(0, 0, 3, ndirs);
       c_curr.block(3, 0, 3, ndirs) -= (VectorCrossMatrix(vJ_tail) * v_curr.block(0, 0, 3, ndirs) + VectorCrossMatrix(vJ_head) * v_curr.block(3, 0, 3, ndirs));
 
@@ -515,7 +515,7 @@ RBDL_DLLAPI void NonlinearEffects (
       auto a_curr = ed_model.a[i].leftCols(ndirs);
       auto a_lam  = ed_model.a[lambda].leftCols(ndirs);
       
-      a_curr = crossm(model.a[i]).col(s1_idx) * q_dirs.row(q_idx) + c_curr;
+      a_curr = crossm(model.a[i]) * S_i * q_dirs.row(q_idx) + c_curr;
       a_curr.block(0, 0, 3, ndirs) += X_lam.E * a_lam.block(0, 0, 3, ndirs);
       a_curr.block(3, 0, 3, ndirs) -= X_lam.E * (VectorCrossMatrix(X_lam.r) * a_lam.block(0, 0, 3, ndirs) - a_lam.block(3, 0, 3, ndirs));
       
@@ -544,7 +544,7 @@ RBDL_DLLAPI void NonlinearEffects (
   // Backward Pass
   for (unsigned int i = num_bodies - 1; i > 0; i--) {
     const unsigned int q_idx = model.mJoints[i].q_index;
-    const unsigned int s1_idx = ed_model.bodyidx2s1idx[i];
+    const SpatialVector& S_i = model.S[i];
     const unsigned int lambda = model.lambda[i];
 
     if (model.mJoints[i].mDoFCount != 1 || model.mJoints[i].mJointType == JointTypeCustom) {
@@ -553,14 +553,15 @@ RBDL_DLLAPI void NonlinearEffects (
     }
 
     // tau removed.
-    ed_tau.row(q_idx).leftCols(ndirs) = ed_model.f[i].row(s1_idx).leftCols(ndirs);
+    ed_tau.row(q_idx).leftCols(ndirs) =
+        S_i.transpose() * ed_model.f[i].leftCols(ndirs);
 
     if (lambda != 0) {
       model.f[lambda] += model.X_lambda[i].applyTranspose(model.f[i]);
       
       // OPTIMIZATION: Vectorized cross product and applyTranspose instead of 6x6 MatrixTranspose
       // Equivalent to: X^T * (ed_f + (S x* f) * q_dir)
-      SpatialVector f_cross_S = crossf(model.S[i], model.f[i]);
+      SpatialVector f_cross_S = crossf(S_i, model.f[i]);
 
       for (unsigned idir = 0; idir < ndirs; idir++) {
           SpatialVector ed_f_i_combined = ed_model.f[i].col(idir) 

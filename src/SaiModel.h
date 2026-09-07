@@ -291,7 +291,7 @@ public:
 	 */
 	void updateModel(
 		bool regularize_inertia = false,
-		double max_condition_number = 50.0);
+		double max_condition_number = 10000.0);
 
 	/**
 	 * @brief update the kinematics and the inverse of the mass matrix
@@ -304,7 +304,7 @@ public:
 	void updateModel(
 		const Eigen::MatrixXd& M,
 		bool regularize_inertia = false,
-		double max_condition_number = 50.0);
+		double max_condition_number = 10000.0);
 
 	/**
 	 * @brief      returns the number of degrees of freedom of the robot
@@ -1273,14 +1273,14 @@ private:
 	 */
 	void updateDynamics(
 		bool regularize_inertia = false,
-		double max_condition_number = 50.0);
+		double max_condition_number = 100.0);
 
 	/**
 	 * @brief      update the inverse inertia matrix.
 	 */
 	void updateInverseInertia(
 		bool regularize_inertia = false,
-		double max_condition_number = 50.0);
+		double max_condition_number = 100.0);
 
 	/**
 	 * @brief Compute the inverse kinematics from the constraint set as defined

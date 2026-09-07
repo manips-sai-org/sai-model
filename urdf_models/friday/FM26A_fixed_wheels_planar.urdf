@@ -1,0 +1,3973 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="FM26A_fixed_wheels_planar">
+  <mujoco>
+    <compiler strippath="false" meshdir="." balanceinertia="true" boundmass="1e-9" boundinertia="1e-9" discardvisual="false" fusestatic="true" />
+  </mujoco>
+  <link name="ground">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.1" />
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" />
+    </inertial>
+  </link>
+  <link name="virtual_x_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.1" />
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" />
+    </inertial>
+  </link>
+  <joint name="virtual_x" type="prismatic">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+    <parent link="ground" />
+    <child link="virtual_x_link" />
+    <axis xyz="1.0 0.0 0.0" />
+    <limit effort="1000000.0" velocity="100.0" lower="-1000.0" upper="1000.0" />
+  </joint>
+  <link name="virtual_y_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.1" />
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" />
+    </inertial>
+  </link>
+  <joint name="virtual_y" type="prismatic">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+    <parent link="virtual_x_link" />
+    <child link="virtual_y_link" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="1000000.0" velocity="100.0" lower="-1000.0" upper="1000.0" />
+  </joint>
+  <link name="virtual_yaw_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.1" />
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" />
+    </inertial>
+  </link>
+  <joint name="virtual_yaw" type="revolute">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+    <parent link="virtual_y_link" />
+    <child link="virtual_yaw_link" />
+    <axis xyz="0.0 0.0 1.0" />
+    <limit effort="1000000.0" velocity="100.0" lower="-1000.0" upper="1000.0" />
+  </joint>
+  <joint name="virtual_yaw_to_base_footprint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+    <parent link="virtual_yaw_link" />
+    <child link="base_footprint" />
+  </joint>
+  <material name="friday_body_material">
+    <color rgba="0.792157 0.819608 0.933333 1.0" />
+  </material>
+  <material name="friday_hand_link_material">
+    <color rgba="0.301961 0.301961 0.301961 1.0" />
+  </material>
+  <material name="friday_hand_shell_material">
+    <color rgba="0.647059 0.647059 0.647059 1.0" />
+  </material>
+  <material name="magnet_material">
+    <color rgba="1.0 0.0 0.0 1.0" />
+  </material>
+  <material name="polyurethane_green">
+    <color rgba="0.0 1.0 0.0 1.0" />
+  </material>
+  <material name="sensor_material">
+    <color rgba="1.0 0.0 0.0 1.0" />
+  </material>
+  <material name="tactile_material">
+    <color rgba="0.917647 0.917647 0.917647 1.0" />
+  </material>
+  <link name="base_footprint">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.1" />
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" />
+    </inertial>
+  </link>
+  <link name="base_link">
+    <inertial>
+      <origin xyz="-0.00907054663 0.00020508694 0.049357185" rpy="0.0 0.0 0.0" />
+      <mass value="50.80817668892" />
+      <inertia ixx="0.959913452" ixy="0.00317242304" ixz="0.0592827073" iyy="1.51776039" iyz="0.00105088654" izz="2.13609887" />
+    </inertial>
+    <visual name="base_link_visual_0">
+      <origin xyz="0.0 0.0 -0.07" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/base.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+    <collision name="base_link_collision_0">
+      <origin xyz="-0.025 0.0 0.13" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <box size="0.6 0.5 0.05" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="base_footprint" type="fixed">
+    <origin xyz="0.0 0.0 0.07" rpy="0.0 0.0 0.0" />
+    <parent link="base_footprint" />
+    <child link="base_link" />
+  </joint>
+  <link name="right_wheel_carrier">
+    <inertial>
+      <origin xyz="0.0262916946 -0.0251235631 1.23019759e-13" rpy="0.0 0.0 0.0" />
+      <mass value="0.481384721" />
+      <inertia ixx="0.000611222475" ixy="-5.88661185e-05" ixz="2.88226404e-16" iyy="0.000423414158" iyz="6.59896711e-16" izz="0.000558179667" />
+    </inertial>
+    <visual name="right_wheel_carrier_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="-4.89658886014675e-12 0.0 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/right_wheel_carrier.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+  </link>
+  <joint name="right_wheel_suspension" type="fixed">
+    <origin xyz="0.0 -0.152 -0.0025" rpy="4.89658886014675e-12 0.0 0.0" />
+    <parent link="base_link" />
+    <child link="right_wheel_carrier" />
+  </joint>
+  <link name="right_wheel">
+    <inertial>
+      <origin xyz="7.67559969e-17 -0.044 4.31053445e-13" rpy="0.0 0.0 0.0" />
+      <mass value="1.15876442" />
+      <inertia ixx="0.00188066944" ixy="-5.54542081e-20" ixz="5.43263491e-31" iyy="0.00258496837" iyz="-6.89976473e-15" izz="0.00188066944" />
+    </inertial>
+    <visual name="right_wheel_visual_0">
+      <origin xyz="0.0 0.044 0.0" rpy="-1.57079632679979 0.0 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/right_wheel.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+    <collision name="right_wheel_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="-1.57079632679979 0.0 0.0" />
+      <geometry>
+        <cylinder radius="0.0699685" length="0.088" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_wheel_joint" type="fixed">
+    <origin xyz="0.0 -0.1102 0.0" rpy="4.89658886014675e-12 0.0 0.0" />
+    <parent link="right_wheel_carrier" />
+    <child link="right_wheel" />
+  </joint>
+  <link name="left_wheel_carrier">
+    <inertial>
+      <origin xyz="0.0262916946 0.0251235631 1.23033637e-13" rpy="0.0 0.0 0.0" />
+      <mass value="0.481384721" />
+      <inertia ixx="0.000611222475" ixy="5.88661185e-05" ixz="2.88251456e-16" iyy="0.000423414158" iyz="-6.59903418e-16" izz="0.000558179667" />
+    </inertial>
+    <visual name="left_wheel_carrier_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="4.89658886014675e-12 0.0 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/left_wheel_carrier.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+  </link>
+  <joint name="left_wheel_suspension" type="fixed">
+    <origin xyz="0.0 0.152 -0.0025" rpy="-4.89658886014675e-12 0.0 0.0" />
+    <parent link="base_link" />
+    <child link="left_wheel_carrier" />
+  </joint>
+  <link name="left_wheel">
+    <inertial>
+      <origin xyz="8.03022344e-17 0.044 4.3077395e-13" rpy="0.0 0.0 0.0" />
+      <mass value="1.15876442" />
+      <inertia ixx="0.00188066944" ixy="-2.48864914e-20" ixz="-2.43623497e-31" iyy="0.00258496837" iyz="6.89494964e-15" izz="0.00188066944" />
+    </inertial>
+    <visual name="left_wheel_visual_0">
+      <origin xyz="0.0 -0.044 0.0" rpy="-1.57079632679979 0.0 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/left_wheel.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+    <collision name="left_wheel_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="-1.57079632679979 0.0 0.0" />
+      <geometry>
+        <cylinder radius="0.0699685" length="0.088" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_wheel_joint" type="fixed">
+    <origin xyz="0.0 0.1102 0.0" rpy="-4.89658886014675e-12 0.0 0.0" />
+    <parent link="left_wheel_carrier" />
+    <child link="left_wheel" />
+  </joint>
+  <link name="waist_1">
+    <inertial>
+      <origin xyz="5.21029786e-18 -2.52396826e-13 0.0515428082" rpy="0.0 0.0 0.0" />
+      <mass value="3.41394914" />
+      <inertia ixx="0.0331351425" ixy="-2.33697661e-18" ixz="-1.15286115e-18" iyy="0.0235079249" iyz="8.06828111e-15" izz="0.0218600918" />
+    </inertial>
+    <visual name="waist_1_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="4.89658886014675e-12 0.0 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/waist_1.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+    <collision name="waist_1_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="4.89658886014675e-12 0.0 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_waist_1.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="waist_1" type="revolute">
+    <origin xyz="0.0 0.0 0.14" rpy="-4.89658886014675e-12 0.0 0.0" />
+    <parent link="base_link" />
+    <child link="waist_1" />
+    <axis xyz="0.0 0.0 1.0" />
+    <limit effort="10.0" velocity="1.57079633" lower="-5.4978" upper="5.4978" />
+  </joint>
+  <link name="waist_2">
+    <inertial>
+      <origin xyz="-0.00786718612 -5.85073475e-13 0.167531324" rpy="0.0 0.0 0.0" />
+      <mass value="7.53298958" />
+      <inertia ixx="0.158475191" ixy="-5.90248242e-15" ixz="0.00168941487" iyy="0.15553938" iyz="4.69682812e-13" izz="0.0210544427" />
+    </inertial>
+    <visual name="waist_2_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="-1.5707963267948966 -1.5707926536057681 -1.511245704886202e-11" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/waist_2.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+    <collision name="waist_2_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="-1.5707963267948966 -1.5707926536057681 -1.511245704886202e-11" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_waist_2.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="waist_2" type="revolute">
+    <origin xyz="0.0 0.0 0.14" rpy="1.4896589687550503e-11 0.0 1.10196153105e-05" />
+    <parent link="waist_1" />
+    <child link="waist_2" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="1.57079633" lower="-1.5708" upper="0.174533" />
+  </joint>
+  <link name="waist_3">
+    <inertial>
+      <origin xyz="-0.0201153198 1.25716516e-07 0.177274658" rpy="0.0 0.0 0.0" />
+      <mass value="5.55808645" />
+      <inertia ixx="0.0949979305" ixy="4.58064854e-08" ixz="-0.00216697356" iyy="0.0746143795" iyz="-1.33823907e-07" izz="0.0369379309" />
+    </inertial>
+    <visual name="waist_3_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.5707963267948966 1.5707926536057681 -3.1415926535746808" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/waist_3.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+    <collision name="waist_3_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.5707963267948966 1.5707926536057681 -3.1415926535746808" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_waist_3.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="waist_3" type="revolute">
+    <origin xyz="1.28562178628889e-06 0.0 0.349999999998" rpy="0.0 0.0 0.0" />
+    <parent link="waist_2" />
+    <child link="waist_3" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="1.57079633" lower="-0.174533" upper="2.618" />
+  </joint>
+  <link name="waist_4">
+    <inertial>
+      <origin xyz="1.00122489e-07 -9.52205582e-14 0.0272575274" rpy="0.0 0.0 0.0" />
+      <mass value="3.12931768" />
+      <inertia ixx="0.0134146411" ixy="-2.10189265e-19" ixz="-1.11935071e-08" iyy="0.0130192839" iyz="9.26221706e-15" izz="0.0103673005" />
+    </inertial>
+    <visual name="waist_4_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.5707963267899998 -3.67320511013396e-06 -3.14159265358959" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/waist_4.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+    <collision name="waist_4_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.5707963267899998 -3.67320511013396e-06 -3.14159265358959" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_waist_4.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="waist_4" type="revolute">
+    <origin xyz="1.28562178742889e-06 0.0 0.349999999998" rpy="0.0 0.0 0.0" />
+    <parent link="waist_3" />
+    <child link="waist_4" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="1.57079633" lower="-1.8326" upper="1.0472" />
+  </joint>
+  <link name="waist_5">
+    <inertial>
+      <origin xyz="-0.0120824752 -8.87634999e-08 0.138996175" rpy="0.0 0.0 0.0" />
+      <mass value="15.2973045" />
+      <inertia ixx="0.213607007" ixy="4.07710288e-07" ixz="-0.000192785055" iyy="0.158109114" iyz="-1.41617916e-09" izz="0.137899324" />
+    </inertial>
+    <visual name="waist_5_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="-4.689765752772261e-12 0.0 1.5708036732097903" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/waist_5.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+    <collision name="waist_5_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="-4.689765752772261e-12 0.0 1.5708036732097903" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_waist_5.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="waist_5_collision_1_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.01" />
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" />
+    </inertial>
+    <collision name="waist_5_collision_1">
+      <origin xyz="0.0 0.0 0.0" rpy="-4.689765752772261e-12 0.0 1.5708036732097903" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_waist_5_left.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="waist_5_collision_1_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+    <parent link="waist_5" />
+    <child link="waist_5_collision_1_link" />
+  </joint>
+  <link name="waist_5_collision_2_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.01" />
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" />
+    </inertial>
+    <collision name="waist_5_collision_2">
+      <origin xyz="0.0 0.0 0.0" rpy="-4.689765752772261e-12 0.0 1.5708036732097903" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_waist_5_right.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="waist_5_collision_2_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+    <parent link="waist_5" />
+    <child link="waist_5_collision_2_link" />
+  </joint>
+  <joint name="waist_5" type="revolute">
+    <origin xyz="4.66497049022853e-07 0.0 0.126999999999" rpy="-1.4896589688145103e-11 0.0 -1.10196153105e-05" />
+    <parent link="waist_4" />
+    <child link="waist_5" />
+    <axis xyz="0.0 0.0 1.0" />
+    <limit effort="10.0" velocity="1.57079633" lower="-5.4978" upper="5.4978" />
+  </joint>
+  <link name="right_arm_1">
+    <inertial>
+      <origin xyz="1.75910709e-08 -0.0495645414 1.18110751e-08" rpy="0.0 0.0 0.0" />
+      <mass value="0.589982705" />
+      <inertia ixx="0.000732967148" ixy="-4.40392861e-10" ixz="6.6533242e-10" iyy="0.000569751463" iyz="-3.8921914e-10" izz="0.00075617386" />
+    </inertial>
+    <visual name="right_arm_1_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.57079632679979 0.0 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/right_arm_1.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+    <collision name="right_arm_1_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.57079632679979 0.0 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_right_arm_1.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_arm_1" type="revolute">
+    <origin xyz="1.2023667534291e-06 -0.163667249651 0.244688600437" rpy="-0.174532925195806 1.0587911840678754e-22 7.34641020355339e-06" />
+    <parent link="waist_5" />
+    <child link="right_arm_1" />
+    <axis xyz="-0.0 1.0 -0.0" />
+    <limit effort="10.0" velocity="3.14159265" lower="-2.1817" upper="0.7854" />
+  </joint>
+  <link name="right_arm_2">
+    <inertial>
+      <origin xyz="-3.64043056e-09 -0.00912432503 -0.0884367713" rpy="0.0 0.0 0.0" />
+      <mass value="0.825116825" />
+      <inertia ixx="0.00192070908" ixy="-4.86940903e-09" ixz="-1.29364244e-09" iyy="0.0022945932" iyz="-6.89393875e-05" izz="0.00119871281" />
+    </inertial>
+    <visual name="right_arm_2_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="-1.5707963267897898 -4.915789997284037e-12 1.57079632679469" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/right_arm_2.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+    <collision name="right_arm_2_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="-1.5707963267897898 -4.915789997284037e-12 1.57079632679469" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_right_arm_2.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_arm_2" type="revolute">
+    <origin xyz="0.0 -0.0649999999999999 0.0" rpy="0.174532925200703 -5.048709793414476e-29 -3.801897164912129e-12" />
+    <parent link="right_arm_1" />
+    <child link="right_arm_2" />
+    <axis xyz="1.0 -0.0 -0.0" />
+    <limit effort="10.0" velocity="3.14159265" lower="-3.3161" upper="0.2967" />
+  </joint>
+  <link name="right_arm_3">
+    <inertial>
+      <origin xyz="0.00127996245 5.94934837e-10 -0.0683334448" rpy="0.0 0.0 0.0" />
+      <mass value="0.836764547" />
+      <inertia ixx="0.00250150061" ixy="-1.62942212e-09" ixz="0.000105969358" iyy="0.00211468509" iyz="2.32321106e-10" izz="0.00123286035" />
+    </inertial>
+    <visual name="right_arm_3_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="3.1415926535851 -4.0389678347315804e-28 1.5708036732113602" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/right_arm_3.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+    <collision name="right_arm_3_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="3.1415926535851 -4.0389678347315804e-28 1.5708036732113602" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_right_arm_3.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_arm_3" type="revolute">
+    <origin xyz="0.0 -0.0100000000000317 -0.155000000000004" rpy="-4.45613302476705e-12 -4.896746437033651e-12 -7.34640646060241e-06" />
+    <parent link="right_arm_2" />
+    <child link="right_arm_3" />
+    <axis xyz="-0.0 -0.0 1.0" />
+    <limit effort="10.0" velocity="3.14159265" lower="-1.5708" upper="1.5708" />
+  </joint>
+  <link name="right_arm_4">
+    <inertial>
+      <origin xyz="-0.0083060547 -8.93683405e-09 -0.0367004747" rpy="0.0 0.0 0.0" />
+      <mass value="0.860649367" />
+      <inertia ixx="0.00183943891" ixy="-1.65102516e-10" ixz="-0.000184857732" iyy="0.00184629648" iyz="-1.91151003e-10" izz="0.000867553842" />
+    </inertial>
+    <visual name="right_arm_4_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.57079632679979 -5.563637020899301e-12 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/right_arm_4.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+    <collision name="right_arm_4_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.57079632679979 -5.563637020899301e-12 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_right_arm_4.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_arm_4" type="revolute">
+    <origin xyz="0.0134999999996 9.91765141122869e-08 -0.163" rpy="4.896647150347661e-12 5.563637021134761e-12 7.34640843940577e-06" />
+    <parent link="right_arm_3" />
+    <child link="right_arm_4" />
+    <axis xyz="-0.0 1.0 -0.0" />
+    <limit effort="10.0" velocity="3.14159265" lower="-2.2689" upper="-0.0" />
+  </joint>
+  <link name="right_arm_5">
+    <inertial>
+      <origin xyz="7.29469e-05 -0.000300832 -0.0390986" rpy="0.0 0.0 0.0" />
+      <mass value="0.195155" />
+      <inertia ixx="0.000299126" ixy="-1.08531e-05" ixz="-2.24336e-06" iyy="0.000293745" iyz="3.21417e-06" izz="0.000107749" />
+    </inertial>
+    <visual name="right_arm_5_visual_0">
+      <origin xyz="0.0 0.0 -0.0685" rpy="-3.14159265358611 0.0 -1.5707916339684402" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/right_wrist_base_lowpoly.stl" />
+      </geometry>
+      <material name="friday_hand_shell_material" />
+    </visual>
+    <collision name="right_arm_5_collision_0">
+      <origin xyz="0.0 0.0 -0.0685" rpy="-3.14159265358611 0.0 -1.5707916339684402" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_right_wrist_base.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_arm_5" type="revolute">
+    <origin xyz="-0.0134999999993918 0.0 -0.110500000000001" rpy="-4.896606277597691e-12 -5.5638590660305e-12 -7.34640843940577e-06" />
+    <parent link="right_arm_4" />
+    <child link="right_arm_5" />
+    <axis xyz="-0.0 -0.0 1.0" />
+    <limit effort="10.0" velocity="3.14159265" lower="-1.5708" upper="1.5708" />
+  </joint>
+  <link name="right_arm_6">
+    <inertial>
+      <origin xyz="-0.000227227 -0.000127412000064335 -0.0144595999999995" rpy="0.0 0.0 0.0" />
+      <mass value="0.118788" />
+      <inertia ixx="9.11567000000001e-05" ixy="1.17771000000025e-05" ixz="5.65098999948091e-07" iyy="0.000114219999999995" iyz="-6.04892000170612e-07" izz="7.58761000000051e-05" />
+    </inertial>
+    <visual name="right_arm_6_visual_0">
+      <origin xyz="0.0 -3.13896291624288e-13 -0.074" rpy="3.14158898038044 -4.896765253567889e-12 -3.67320489653173e-06" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/right_wrist_pitch_lowpoly.stl" />
+      </geometry>
+      <material name="friday_hand_shell_material" />
+    </visual>
+    <collision name="right_arm_6_collision_0">
+      <origin xyz="0.0 -3.13896291624288e-13 -0.074" rpy="3.14158898038044 -4.896765253567889e-12 -3.67320489653173e-06" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_right_wrist_pitch.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_arm_6" type="revolute">
+    <origin xyz="0.0 0.0 -0.1195" rpy="4.456168999665622e-12 3.673209539583201e-06 7.34640646049319e-06" />
+    <parent link="right_arm_5" />
+    <child link="right_arm_6" />
+    <axis xyz="1.0 -0.0 -0.0" />
+    <limit effort="10.0" velocity="3.14159265" lower="-0.6981" upper="0.6981" />
+  </joint>
+  <link name="right_arm_7">
+    <inertial>
+      <origin xyz="0.00248205211197 0.00603202999998 -0.0484290091173" rpy="0.0 0.0 0.0" />
+      <mass value="0.140721" />
+      <inertia ixx="0.000183871153" ixy="-2.35175613e-06" ixz="2.08542922e-05" iyy="0.000212242" iyz="2.82772086e-05" izz="7.28443468e-05" />
+    </inertial>
+    <visual name="right_arm_7_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="-1.5707963258881392 1.5707926536057681 -3.1415926526981486" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/right_wrist_roll_lowpoly.stl" />
+      </geometry>
+      <material name="friday_hand_shell_material" />
+    </visual>
+    <visual name="right_arm_7_visual_1">
+      <origin xyz="0.0181995452611 0.00419999999988 -0.123800066851" rpy="-3.14158898042 -3.67320510009e-06 1.57079632677" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/right_wrist_tactile.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="right_arm_7_visual_2">
+      <origin xyz="-0.0179940503226 0.0182300000001 -0.040924433905" rpy="-1.5707963258881392 1.5707926536057681 -3.1415926526981486" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_arm_7_visual_3">
+      <origin xyz="-0.0051915586144 0.01823 -0.0431818809308" rpy="-1.5707963258881392 1.5707926536057681 -3.1415926526981486" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_arm_7_visual_4">
+      <origin xyz="-0.020598804583 0.0182300000001 -0.0556965243374" rpy="-1.5707963258881392 1.5707926536057681 -3.1415926526981486" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_arm_7_visual_5">
+      <origin xyz="-0.00779625287484 0.01823 -0.0579539713634" rpy="-1.5707963258881392 1.5707926536057681 -3.1415926526981486" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_arm_7_visual_6">
+      <origin xyz="-0.0232035588438 0.0182300000001 -0.0704687147698" rpy="-1.5707963258881392 1.5707926536057681 -3.1415926526981486" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_arm_7_visual_7">
+      <origin xyz="-0.0104010671357 0.0182300000001 -0.0727261617956" rpy="-1.5707963258881392 1.5707926536057681 -3.1415926526981486" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_arm_7_visual_8">
+      <origin xyz="0.00240144457244 0.01823 -0.0749836088214" rpy="-1.5707963258881392 1.5707926536057681 -3.1415926526981486" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_arm_7_visual_9">
+      <origin xyz="0.0152040162809 0.0182299999999 -0.0772409558475" rpy="-1.5707963258881392 1.5707926536057681 -3.1415926526981486" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_arm_7_visual_10">
+      <origin xyz="0.028006507989 0.0182299999998 -0.0794984028732" rpy="-1.5707963258881392 1.5707926536057681 -3.1415926526981486" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_arm_7_visual_11">
+      <origin xyz="0.0408088996971 0.0182299999997 -0.0817558498987" rpy="-1.5707963258881392 1.5707926536057681 -3.1415926526981486" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_arm_7_visual_12">
+      <origin xyz="-0.0258082131042 0.0182300000002 -0.0852408052026" rpy="-1.5707963258881392 1.5707926536057681 -3.1415926526981486" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_arm_7_visual_13">
+      <origin xyz="-0.0130057213962 0.0182300000001 -0.0874982522284" rpy="-1.5707963258881392 1.5707926536057681 -3.1415926526981486" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_arm_7_visual_14">
+      <origin xyz="-0.000203254688018 0.01823 -0.089755699254" rpy="-1.5707963258881392 1.5707926536057681 -3.1415926526981486" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_arm_7_visual_15">
+      <origin xyz="0.0125992620204 0.0182299999999 -0.0920130462799" rpy="-1.5707963258881392 1.5707926536057681 -3.1415926526981486" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_arm_7_visual_16">
+      <origin xyz="0.0254017537282 0.0182299999998 -0.0942705933056" rpy="-1.5707963258881392 1.5707926536057681 -3.1415926526981486" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_arm_7_visual_17">
+      <origin xyz="0.0382042454366 0.0182299999998 -0.0965279403314" rpy="-1.5707963258881392 1.5707926536057681 -3.1415926526981486" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_arm_7_visual_18">
+      <origin xyz="-0.0284129673647 0.0182300000002 -0.100012895635" rpy="-1.5707963258881392 1.5707926536057681 -3.1415926526981486" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_arm_7_visual_19">
+      <origin xyz="-0.0156104756551 0.0182300000001 -0.102269942661" rpy="-1.5707963258881392 1.5707926536057681 -3.1415926526981486" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_arm_7_visual_20">
+      <origin xyz="-0.0028079539492 0.01823 -0.104527989687" rpy="-1.5707963258881392 1.5707926536057681 -3.1415926526981486" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_arm_7_visual_21">
+      <origin xyz="0.00999454776037 0.0182299999999 -0.106785036712" rpy="-1.5707963258881392 1.5707926536057681 -3.1415926526981486" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_arm_7_visual_22">
+      <origin xyz="0.0227969994663 0.0182299999999 -0.109043083738" rpy="-1.5707963258881392 1.5707926536057681 -3.1415926526981486" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_arm_7_visual_23">
+      <origin xyz="0.0355995911758 0.0182299999998 -0.111300130764" rpy="-1.5707963258881392 1.5707926536057681 -3.1415926526981486" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="right_arm_7_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="-1.5707963258881392 1.5707926536057681 -3.1415926526981486" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_right_wrist_roll.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_arm_7" type="revolute">
+    <origin xyz="0.0 -2.12219131157e-13 -0.05" rpy="-3.6732128433499995e-06 -3.6731589367900005e-06 3.67321510456e-06" />
+    <parent link="right_arm_6" />
+    <child link="right_arm_7" />
+    <axis xyz="-0.0 1.0 -0.0" />
+    <limit effort="10.0" velocity="3.14159265" lower="-0.6981" upper="0.6981" />
+  </joint>
+  <link name="right_hand_1_1">
+    <inertial>
+      <origin xyz="0.000130292331805 5.71099308158e-10 0.000104305585528" rpy="0.0 0.0 0.0" />
+      <mass value="0.00574066" />
+      <inertia ixx="2.27878e-07" ixy="-2.25759855e-13" ixz="7.77172278e-11" iyy="3.50936e-07" iyz="-6.74088211e-13" izz="1.38986e-07" />
+    </inertial>
+    <visual name="right_hand_1_1_visual_0">
+      <origin xyz="-0.00949974816969 -0.0412947414598 0.0553232615824" rpy="0.523599472501 3.18109009068e-06 1.8366013730400002e-06" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_1_1.stl" />
+      </geometry>
+      <material name="friday_hand_shell_material" />
+    </visual>
+  </link>
+  <joint name="right_hand_1_1" type="revolute">
+    <origin xyz="0.0263006970891 0.0136999999998 -0.0552413966073" rpy="2.61799685426 -7.049361094857431e-13 1.5707963267900003" />
+    <parent link="right_arm_7" />
+    <child link="right_hand_1_1" />
+    <axis xyz="3e-06 3e-06 1.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="-1.5708" upper="-0.0" />
+  </joint>
+  <link name="right_hand_1_2">
+    <inertial>
+      <origin xyz="0.00436714117953 0.0160210407545 0.0180164825175" rpy="0.0 0.0 0.0" />
+      <mass value="0.0263023" />
+      <inertia ixx="6.60972402e-06" ixy="-4.46293811e-07" ixz="-1.79977032e-06" iyy="7.40614772e-06" iyz="-6.2713581e-07" izz="3.03683826e-06" />
+    </inertial>
+    <visual name="right_hand_1_2_visual_0">
+      <origin xyz="-0.00950014079565 -0.0528117400145 0.0444615744337" rpy="0.753414365426 3.96227155863e-06 -8.8739493514e-06" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/right_hand_1_2.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="right_hand_1_2_visual_1">
+      <origin xyz="-0.00950014079565 -0.0528117400145 0.0444615744337" rpy="0.753414365426 3.96227155863e-06 -8.8739493514e-06" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_thumb_mcp.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="right_hand_1_2_visual_2">
+      <origin xyz="0.00768296958386 0.0120761692312 0.0209924786135" rpy="1.57079953672 -0.2298180386489999 1.57079029826" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_1_2_visual_3">
+      <origin xyz="0.0127219500057 0.0167384763476 0.0196243741613" rpy="1.57079953672 -0.2298180386489999 1.57079029826" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_1_2_visual_4">
+      <origin xyz="0.00964800220602 0.0120761625972 0.0282303732172" rpy="1.57079953672 -0.2298180386489999 1.57079029826" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_1_2_visual_5">
+      <origin xyz="0.0146869726286 0.0167385443044 0.0268623889158" rpy="1.57079953672 -0.2298180386489999 1.57079029826" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_1_2_visual_6">
+      <origin xyz="0.011613074829 0.0120762305538 0.0354683879717" rpy="1.57079953672 -0.2298180386489999 1.57079029826" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_1_2_visual_7">
+      <origin xyz="0.0167239955427 0.0168051172358 0.0340808389975" rpy="1.57079953672 -0.2298180386489999 1.57079029826" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="right_hand_1_2_collision_0">
+      <origin xyz="-0.00950014079565 -0.0528117400145 0.0444615744337" rpy="0.753414365426 3.96227155863e-06 -8.8739493514e-06" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_right_hand_1_2.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_hand_1_2" type="revolute">
+    <origin xyz="0.0 0.0 0.0" rpy="-0.22982121974499997 -2.3286911232700006e-06 1.1379874227599999e-05" />
+    <parent link="right_hand_1_1" />
+    <child link="right_hand_1_2" />
+    <axis xyz="1.0 -5e-06 -3e-06" />
+    <limit effort="10.0" velocity="6.28318531" lower="-0.8028" upper="0.0" />
+  </joint>
+  <link name="right_hand_1_3">
+    <inertial>
+      <origin xyz="-0.00355424999997 -0.000788994000059 0.01748" rpy="0.0 0.0 0.0" />
+      <mass value="0.0176727" />
+      <inertia ixx="3.12381e-06" ixy="-6.5986e-08" ixz="-7.2979e-08" iyy="2.84328e-06" iyz="1.2669e-08" izz="8.69495e-07" />
+    </inertial>
+    <visual name="right_hand_1_3_visual_0">
+      <origin xyz="0.0347597000003 -0.0636743999998 -0.00940297000014" rpy="0.7534218147869999 -0.2650966498619999 0.8418893810410001" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/right_hand_1_3.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="right_hand_1_3_visual_1">
+      <origin xyz="0.0347597000003 -0.0636743999998 -0.00940297000014" rpy="0.7534218147869999 -0.2650966498619999 0.8418893810410001" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_thumb_pip.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="right_hand_1_3_visual_2">
+      <origin xyz="0.00149999000001 -0.00349999000002 0.0125" rpy="-1.5707963268 1.4255263636199975e-13 4.540368081510001e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_1_3_visual_3">
+      <origin xyz="0.00149995999996 0.00350000999998 0.0125" rpy="-1.5707963268 1.4255263636199975e-13 4.540368081510001e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_1_3_visual_4">
+      <origin xyz="0.00149998999998 -0.00349999000004 0.0199999999999" rpy="-1.5707963268 1.4255263636199975e-13 4.540368081510001e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_1_3_visual_5">
+      <origin xyz="0.00149995999995 0.00350000999996 0.02" rpy="-1.5707963268 1.4255263636199975e-13 4.540368081510001e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_1_3_visual_6">
+      <origin xyz="0.00149999000002 -0.00349999000006 0.0275" rpy="-1.5707963268 1.4255263636199975e-13 4.540368081510001e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_1_3_visual_7">
+      <origin xyz="0.00149995999996 0.00350000999994 0.0275" rpy="-1.5707963268 1.4255263636199975e-13 4.540368081510001e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="right_hand_1_3_collision_0">
+      <origin xyz="0.0347597000003 -0.0636743999998 -0.00940297000014" rpy="0.7534218147869999 -0.2650966498619999 0.8418893810410001" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_right_hand_1_3.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_hand_1_3" type="revolute">
+    <origin xyz="0.0164565296399 0.0155261529422 0.047157812569" rpy="-0.199803969065 0.17540723361599994 -0.859521264933" />
+    <parent link="right_hand_1_2" />
+    <child link="right_hand_1_3" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="right_hand_1_4">
+    <inertial>
+      <origin xyz="-0.0036273282135 -0.000934590000051 0.0138114004692" rpy="0.0 0.0 0.0" />
+      <mass value="0.0140376" />
+      <inertia ixx="1.62630999e-06" ixy="-4.13040039e-08" ixz="-4.39701399e-08" iyy="1.47074e-06" iyz="-3.00659947e-08" izz="5.44493011e-07" />
+    </inertial>
+    <visual name="right_hand_1_4_visual_0">
+      <origin xyz="0.0347596936101 -0.0636743999997 -0.0494030044963" rpy="0.7534219147570002 -0.26509656371 0.8418893548480001" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/right_hand_1_4.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="right_hand_1_4_visual_1">
+      <origin xyz="0.0347596936101 -0.0636743999997 -0.0494030044963" rpy="0.7534219147570002 -0.26509656371 0.8418893548480001" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_thumb_dip.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="right_hand_1_4_visual_2">
+      <origin xyz="0.00149999146166 -0.00349999000002 0.011299999806" rpy="-1.5707963268000003 1.2934814264100003e-07 4.540368081507078e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_1_4_visual_3">
+      <origin xyz="0.00149997146163 0.00350000999998 0.011299999806" rpy="-1.5707963268000003 1.2934814264100003e-07 4.540368081507078e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_1_4_visual_4">
+      <origin xyz="0.00149999223772 -0.00349999000004 0.017299999806" rpy="-1.5707963268000003 1.2934814264100003e-07 4.540368081507078e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_1_4_visual_5">
+      <origin xyz="0.0014999722377 0.00350000999996 0.017299999806" rpy="-1.5707963268000003 1.2934814264100003e-07 4.540368081507078e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_1_4_visual_6">
+      <origin xyz="0.00149999301383 -0.00349999000005 0.023299999806" rpy="-1.5707963268000003 1.2934814264100003e-07 4.540368081507078e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_1_4_visual_7">
+      <origin xyz="0.00149997301375 0.00350000999995 0.023299999806" rpy="-1.5707963268000003 1.2934814264100003e-07 4.540368081507078e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="right_hand_1_4_collision_0">
+      <origin xyz="0.0347596936101 -0.0636743999997 -0.0494030044963" rpy="0.7534219147570002 -0.26509656371 0.8418893548480001" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_right_hand_1_4.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_hand_1_4" type="revolute">
+    <origin xyz="2.14486858011e-18 -2.06613597976e-18 0.04" rpy="2.20969579322e-17 -1.04360964315e-14 -2.6978234121e-18" />
+    <parent link="right_hand_1_3" />
+    <child link="right_hand_1_4" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="-0.0" upper="1.5708" />
+  </joint>
+  <link name="right_hand_2_1">
+    <inertial>
+      <origin xyz="-0.00566497 0.000734251444088 -0.00400346805831" rpy="0.0 0.0 0.0" />
+      <mass value="0.00738742" />
+      <inertia ixx="6.32072e-07" ixy="1.94472785e-08" ixz="-4.80488313e-08" iyy="6.11881555e-07" iyz="-3.41952955e-08" izz="3.32255445e-07" />
+    </inertial>
+    <visual name="right_hand_2_1_visual_0">
+      <origin xyz="-0.0055 0.00033148269882 0.00949421503972" rpy="-0.034896326786600006 -1.2816933847600003e-07 -3.6709651979500003e-06" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_2_1.stl" />
+      </geometry>
+      <material name="friday_hand_shell_material" />
+    </visual>
+  </link>
+  <joint name="right_hand_2_1" type="revolute">
+    <origin xyz="0.0391995893392 0.00969999999975 -0.111800143988" rpy="3.14159265355 -7.052136652420028e-13 1.57079632679" />
+    <parent link="right_arm_7" />
+    <child link="right_hand_2_1" />
+    <axis xyz="1.0 -6.55452029142e-12 4.98636620086e-13" />
+    <limit effort="10.0" velocity="6.28318531" lower="-0.2618" upper="0.2618" />
+  </joint>
+  <link name="right_hand_2_2">
+    <inertial>
+      <origin xyz="-0.00331828128816322 -0.000178959000021358 0.0187418873784991" rpy="0.0 0.0 0.0" />
+      <mass value="0.0153719" />
+      <inertia ixx="2.74279096092e-06" ixy="-2.06798518808e-08" ixz="-1.26311185142e-07" iyy="2.65598e-06" iyz="-3.89410786599e-08" izz="6.88238039075e-07" />
+    </inertial>
+    <visual name="right_hand_2_2_visual_0">
+      <origin xyz="-0.00549999999995997 0.0 -2.09202416676551e-08" rpy="3.6731979416338e-06 -3.8036785049004706e-06 6.445338750194731e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_2_2.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="right_hand_2_2_visual_1">
+      <origin xyz="-0.00549999999995997 0.0 -2.09202416676551e-08" rpy="3.6731979416338e-06 -3.8036785049004706e-06 6.445338750194731e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_mcp.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="right_hand_2_2_visual_2">
+      <origin xyz="0.00149994055216632 -0.00299998999999029 0.0130000057054002" rpy="-1.5707963268020702 -3.8036785049004706e-06 6.445338749889727e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_2_2_visual_3">
+      <origin xyz="0.00149992055212762 0.00300001000000971 0.0130000057053002" rpy="-1.5707963268020702 -3.8036785049004706e-06 6.445338749889727e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_2_2_visual_4">
+      <origin xyz="0.0014999063190442 -0.00299998999999027 0.0220000057053002" rpy="-1.5707963268020702 -3.8036785049004706e-06 6.445338749889727e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_2_2_visual_5">
+      <origin xyz="0.00149988631900553 0.00300001000000974 0.0220000057052002" rpy="-1.5707963268020702 -3.8036785049004706e-06 6.445338749889727e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_2_2_visual_6">
+      <origin xyz="0.00149987208592211 -0.00299998999999025 0.0310000057053002" rpy="-1.5707963268020702 -3.8036785049004706e-06 6.445338749889727e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_2_2_visual_7">
+      <origin xyz="0.0014998520858834 0.00300001000000975 0.0310000057052003" rpy="-1.5707963268020702 -3.8036785049004706e-06 6.445338749889727e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="right_hand_2_2_collision_0">
+      <origin xyz="-0.00549999999995997 0.0 -2.09202416676551e-08" rpy="3.6731979416338e-06 -3.8036785049004706e-06 6.445338750194731e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_hand_2_2.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_hand_2_2" type="revolute">
+    <origin xyz="-2.56148747357e-15 0.000331482698819 0.00949421503972" rpy="-0.0348999999967 3.6731946084799993e-06 -3.8036916575699996e-06" />
+    <parent link="right_hand_2_1" />
+    <child link="right_hand_2_2" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="right_hand_2_3">
+    <inertial>
+      <origin xyz="-0.00304223538663203 -0.000113559000019625 0.0119322884283995" rpy="0.0 0.0 0.0" />
+      <mass value="0.00960055" />
+      <inertia ixx="1.08863058161e-06" ixy="-1.6444003252e-08" ixz="-7.64523840929e-08" iyy="9.9172e-07" iyz="8.5493745228e-10" izz="4.00899418389e-07" />
+    </inertial>
+    <visual name="right_hand_2_3_visual_0">
+      <origin xyz="-0.00549983263802964 0.0 -0.0440000209199011" rpy="3.6731979416338e-06 -3.8036785049004706e-06 6.445338750194731e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_2_3.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="right_hand_2_3_visual_1">
+      <origin xyz="-0.00549983263802964 0.0 -0.0440000209199011" rpy="3.6731979416338e-06 -3.8036785049004706e-06 6.445338750194731e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_pip.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="right_hand_2_3_visual_2">
+      <origin xyz="0.00149994435584657 -0.00299998999999034 0.0120000057054004" rpy="-1.5707963268020702 -3.8036785049004706e-06 6.445338749889727e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_2_3_visual_3">
+      <origin xyz="0.00149992435580786 0.00300001000000967 0.0120000057053005" rpy="-1.5707963268020702 -3.8036785049004706e-06 6.445338749889727e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_2_3_visual_4">
+      <origin xyz="0.00149992153376515 -0.00299998999999032 0.0180000057053004" rpy="-1.5707963268020702 -3.8036785049004706e-06 6.445338749889727e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_2_3_visual_5">
+      <origin xyz="0.00149990153372645 0.00300001000000968 0.0180000057053005" rpy="-1.5707963268020702 -3.8036785049004706e-06 6.445338749889727e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="right_hand_2_3_collision_0">
+      <origin xyz="-0.00549983263802964 0.0 -0.0440000209199011" rpy="3.6731979416338e-06 -3.8036785049004706e-06 6.445338750194731e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_hand_2_3.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_hand_2_3" type="revolute">
+    <origin xyz="-1.67361932368326e-07 0.0 0.0439999999996999" rpy="0.0 0.0 0.0" />
+    <parent link="right_hand_2_2" />
+    <child link="right_hand_2_3" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="right_hand_2_4">
+    <inertial>
+      <origin xyz="-0.00153401670525386 5.96675999901499e-05 0.0149079941651998" rpy="0.0 0.0 0.0" />
+      <mass value="0.00848267" />
+      <inertia ixx="9.93317933904e-07" ixy="3.79302686536e-09" ixz="8.68976059281e-09" iyy="9.05573e-07" iyz="-7.06298557259e-09" izz="2.67549066096e-07" />
+    </inertial>
+    <visual name="right_hand_2_4_visual_0">
+      <origin xyz="-0.0054997185276226 0.0 -0.0740000209197011" rpy="3.6731979416338e-06 -3.8036785049004706e-06 6.445338750194731e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_2_4.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="right_hand_2_4_visual_1">
+      <origin xyz="-0.0054997185276226 0.0 -0.0740000209197011" rpy="3.6731979416338e-06 -3.8036785049004706e-06 6.445338750194731e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_dip.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="right_hand_2_4_visual_2">
+      <origin xyz="0.00149994796933678 -0.0029999899999903 0.0110500057054004" rpy="-1.5707963268020702 -3.8036785049004706e-06 6.445338749889727e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_2_4_visual_3">
+      <origin xyz="0.0014999279692981 0.00300001000000971 0.0110500057053005" rpy="-1.5707963268020702 -3.8036785049004706e-06 6.445338749889727e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_2_4_visual_4">
+      <origin xyz="0.00149992514725536 -0.00299998999999028 0.0170500057054004" rpy="-1.5707963268020702 -3.8036785049004706e-06 6.445338749889727e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_2_4_visual_5">
+      <origin xyz="0.00149990514721669 0.00300001000000972 0.0170500057053005" rpy="-1.5707963268020702 -3.8036785049004706e-06 6.445338749889727e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_2_4_visual_6">
+      <origin xyz="0.00149990232517396 -0.00299998999999027 0.0230500057053004" rpy="-1.5707963268020702 -3.8036785049004706e-06 6.445338749889727e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_2_4_visual_7">
+      <origin xyz="0.00149988232513528 0.00300001000000974 0.0230500057052005" rpy="-1.5707963268020702 -3.8036785049004706e-06 6.445338749889727e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="right_hand_2_4_collision_0">
+      <origin xyz="-0.0054997185276226 0.0 -0.0740000209197011" rpy="3.6731979416338e-06 -3.8036785049004706e-06 6.445338750194731e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_hand_2_4.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_hand_2_4" type="revolute">
+    <origin xyz="-1.14110408483414e-07 0.0 0.0299999999998002" rpy="0.0 0.0 0.0" />
+    <parent link="right_hand_2_3" />
+    <child link="right_hand_2_4" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="right_hand_3_1">
+    <inertial>
+      <origin xyz="-0.00566497 0.000873497000033 -0.00397540999999" rpy="0.0 0.0 0.0" />
+      <mass value="0.00738742" />
+      <inertia ixx="6.32072e-07" ixy="2.1112e-08" ixz="-4.7341e-08" iyy="6.13926e-07" iyz="-2.4361e-08" izz="3.30211e-07" />
+    </inertial>
+    <visual name="right_hand_3_1_visual_0">
+      <origin xyz="-0.0055 3.13128137187e-14 0.0095" rpy="3.67321313189e-06 -4.984901380570006e-13 -3.67320519805e-06" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_3_1.stl" />
+      </geometry>
+      <material name="friday_hand_shell_material" />
+    </visual>
+  </link>
+  <joint name="right_hand_3_1" type="revolute">
+    <origin xyz="0.0181995801564 0.00969999999988 -0.114300066851" rpy="3.14159265355 -7.052136652420028e-13 1.57079632679" />
+    <parent link="right_arm_7" />
+    <child link="right_hand_3_1" />
+    <axis xyz="1.0 -6.55452029142e-12 4.98636620086e-13" />
+    <limit effort="10.0" velocity="6.28318531" lower="-0.2618" upper="0.2618" />
+  </joint>
+  <link name="right_hand_3_2">
+    <inertial>
+      <origin xyz="-0.00331827884256903 -0.00017895900002137 0.0187418878115003" rpy="0.0 0.0 0.0" />
+      <mass value="0.0153719" />
+      <inertia ixx="2.74279092796e-06" ixy="-2.06798569621e-08" ixz="-1.26311453237e-07" iyy="2.65598e-06" iyz="-3.89410759613e-08" izz="6.8823807204e-07" />
+    </inertial>
+    <visual name="right_hand_3_2_visual_0">
+      <origin xyz="-0.00549999999996 0.0 -2.02025547559949e-08" rpy="3.6731970520802794e-06 -3.6731951099105297e-06 6.451523529144491e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_3_2.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="right_hand_3_2_visual_1">
+      <origin xyz="-0.00549999999996 0.0 -2.02025547559949e-08" rpy="3.6731970520802794e-06 -3.6731951099105297e-06 6.451523529144491e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_mcp.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="right_hand_3_2_visual_2">
+      <origin xyz="0.00149994224851924 -0.00299998999999028 0.0130000055097003" rpy="-1.5707963268029497 -3.6731951099105293e-06 6.451523529087041e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_3_2_visual_3">
+      <origin xyz="0.00149992224848051 0.00300001000000972 0.0130000055096004" rpy="-1.5707963268029497 -3.6731951099105293e-06 6.451523529087041e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_3_2_visual_4">
+      <origin xyz="0.00149990918978915 -0.00299998999999025 0.0220000055096003" rpy="-1.5707963268029497 -3.6731951099105293e-06 6.451523529087041e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_3_2_visual_5">
+      <origin xyz="0.00149988918975042 0.00300001000000975 0.0220000055095004" rpy="-1.5707963268029497 -3.6731951099105293e-06 6.451523529087041e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_3_2_visual_6">
+      <origin xyz="0.00149987613105906 -0.00299998999999022 0.0310000055095003" rpy="-1.5707963268029497 -3.6731951099105293e-06 6.451523529087041e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_3_2_visual_7">
+      <origin xyz="0.00149985613102033 0.00300001000000978 0.0310000055095004" rpy="-1.5707963268029497 -3.6731951099105293e-06 6.451523529087041e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="right_hand_3_2_collision_0">
+      <origin xyz="-0.00549999999996 0.0 -2.02025547559949e-08" rpy="3.6731970520802794e-06 -3.6731951099105297e-06 6.451523529144491e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_hand_3_2.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_hand_3_2" type="revolute">
+    <origin xyz="-4.73706852739e-15 -4.73704788416e-15 0.0095" rpy="8.024619376e-12 3.67319460848e-06 -3.67321165787e-06" />
+    <parent link="right_hand_3_1" />
+    <child link="right_hand_3_2" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="right_hand_3_3">
+    <inertial>
+      <origin xyz="-0.00304223382959937 -0.00011355900001962 0.0119322888254003" rpy="0.0 0.0 0.0" />
+      <mass value="0.00960055" />
+      <inertia ixx="1.08863056166e-06" ixy="-1.64440031405e-08" ixz="-7.64524738338e-08" iyy="9.9172e-07" iyz="8.54939598028e-10" izz="4.00899438342e-07" />
+    </inertial>
+    <visual name="right_hand_3_3_visual_0">
+      <origin xyz="-0.00549983837951957 0.0 -0.0440000202022997" rpy="3.6731970520802794e-06 -3.6731951099105297e-06 6.451523529144491e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_3_3.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="right_hand_3_3_visual_1">
+      <origin xyz="-0.00549983837951957 0.0 -0.0440000202022997" rpy="3.6731970520802794e-06 -3.6731951099105297e-06 6.451523529144491e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_pip.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="right_hand_3_3_visual_2">
+      <origin xyz="0.00149994592170926 -0.00299998999999031 0.0120000055097003" rpy="-1.5707963268029497 -3.6731951099105293e-06 6.451523529087041e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_3_3_visual_3">
+      <origin xyz="0.00149992592167055 0.0030000100000097 0.0120000055096004" rpy="-1.5707963268029497 -3.6731951099105293e-06 6.451523529087041e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_3_3_visual_4">
+      <origin xyz="0.0014999238825592 -0.00299998999999029 0.0180000055096003" rpy="-1.5707963268029497 -3.6731951099105293e-06 6.451523529087041e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_3_3_visual_5">
+      <origin xyz="0.0014999038825205 0.00300001000000971 0.0180000055096004" rpy="-1.5707963268029497 -3.6731951099105293e-06 6.451523529087041e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="right_hand_3_3_collision_0">
+      <origin xyz="-0.00549983837951957 0.0 -0.0440000202022997" rpy="3.6731970520802794e-06 -3.6731951099105297e-06 6.451523529144491e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_hand_3_3.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_hand_3_3" type="revolute">
+    <origin xyz="-1.61620440697341e-07 0.0 0.0439999999997003" rpy="0.0 0.0 0.0" />
+    <parent link="right_hand_3_2" />
+    <child link="right_hand_3_3" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="right_hand_3_4">
+    <inertial>
+      <origin xyz="-0.00153401475993045 5.96675999901291e-05 0.0149079943654" rpy="0.0 0.0 0.0" />
+      <mass value="0.00848267" />
+      <inertia ixx="9.93317936172e-07" ixy="3.79302594373e-09" ixz="8.68966588852e-09" iyy="9.05573e-07" iyz="-7.06298606754e-09" izz="2.67549063828e-07" />
+    </inertial>
+    <visual name="right_hand_3_4_visual_0">
+      <origin xyz="-0.00549972818375922 0.0 -0.0740000202021" rpy="3.6731970520802794e-06 -3.6731951099105297e-06 6.451523529144491e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_3_4.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="right_hand_3_4_visual_1">
+      <origin xyz="-0.00549972818375922 0.0 -0.0740000202021" rpy="3.6731970520802794e-06 -3.6731951099105297e-06 6.451523529144491e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_dip.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="right_hand_3_4_visual_2">
+      <origin xyz="0.00149994941123936 -0.0029999899999903 0.0110500055097" rpy="-1.5707963268029497 -3.6731951099105293e-06 6.451523529087041e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_3_4_visual_3">
+      <origin xyz="0.00149992941120062 0.0030000100000097 0.0110500055096001" rpy="-1.5707963268029497 -3.6731951099105293e-06 6.451523529087041e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_3_4_visual_4">
+      <origin xyz="0.0014999273720893 -0.00299998999999028 0.0170500055096" rpy="-1.5707963268029497 -3.6731951099105293e-06 6.451523529087041e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_3_4_visual_5">
+      <origin xyz="0.00149990737205056 0.00300001000000972 0.0170500055096001" rpy="-1.5707963268029497 -3.6731951099105293e-06 6.451523529087041e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_3_4_visual_6">
+      <origin xyz="0.00149990533293925 -0.00299998999999026 0.0230500055096" rpy="-1.5707963268029497 -3.6731951099105293e-06 6.451523529087041e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_3_4_visual_7">
+      <origin xyz="0.00149988533290051 0.00300001000000974 0.0230500055095001" rpy="-1.5707963268029497 -3.6731951099105293e-06 6.451523529087041e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="right_hand_3_4_collision_0">
+      <origin xyz="-0.00549972818375922 0.0 -0.0740000202021" rpy="3.6731970520802794e-06 -3.6731951099105297e-06 6.451523529144491e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_hand_3_4.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_hand_3_4" type="revolute">
+    <origin xyz="-1.10195754965403e-07 0.0 0.0299999999998003" rpy="0.0 0.0 0.0" />
+    <parent link="right_hand_3_3" />
+    <child link="right_hand_3_4" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="right_hand_4_1">
+    <inertial>
+      <origin xyz="-0.00566497 0.00101171816094 -0.00394250022701" rpy="0.0 0.0 0.0" />
+      <mass value="0.00738742" />
+      <inertia ixx="6.32072e-07" ixy="2.27514753e-08" ixz="-4.65752853e-08" iyy="6.15279878e-07" iyz="-1.44052007e-08" izz="3.28857122e-07" />
+    </inertial>
+    <visual name="right_hand_4_1_visual_0">
+      <origin xyz="-0.0055 -0.000331577641106 0.00949421172441" rpy="0.0349136732129 1.28205041472e-07 -3.6709651980499998e-06" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_4_1.stl" />
+      </geometry>
+      <material name="friday_hand_shell_material" />
+    </visual>
+  </link>
+  <joint name="right_hand_4_1" type="revolute">
+    <origin xyz="-0.00280040515081 0.00970000000002 -0.110299989714" rpy="3.14159265355 -7.052136652420028e-13 1.57079632679" />
+    <parent link="right_arm_7" />
+    <child link="right_hand_4_1" />
+    <axis xyz="1.0 -6.55452029142e-12 4.98636620086e-13" />
+    <limit effort="10.0" velocity="6.28318531" lower="-0.2618" upper="0.2618" />
+  </joint>
+  <link name="right_hand_4_2">
+    <inertial>
+      <origin xyz="-0.0033182764803248 -0.000178959000021371 0.0187418882297005" rpy="0.0 0.0 0.0" />
+      <mass value="0.0153719" />
+      <inertia ixx="2.74279089612e-06" ixy="-2.06798618703e-08" ixz="-1.26311712195e-07" iyy="2.65598e-06" iyz="-3.89410733549e-08" izz="6.88238103881e-07" />
+    </inertial>
+    <visual name="right_hand_4_2_visual_0">
+      <origin xyz="-0.00549999999997 0.0 -1.95093291993945e-08" rpy="3.67318571462869e-06 -3.54714832486334e-06 6.451940933386102e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_4_2.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="right_hand_4_2_visual_1">
+      <origin xyz="-0.00549999999997 0.0 -1.95093291993945e-08" rpy="3.67318571462869e-06 -3.54714832486334e-06 6.451940933386102e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_mcp.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="right_hand_4_2_visual_2">
+      <origin xyz="0.00149994388705217 -0.00299998999999029 0.0130000053205996" rpy="-1.57079632680387 -3.54714832486334e-06 6.451940933579746e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_4_2_visual_3">
+      <origin xyz="0.00149992388701344 0.00300001000000971 0.0130000053204997" rpy="-1.57079632680387 -3.54714832486334e-06 6.451940933579746e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_4_2_visual_4">
+      <origin xyz="0.00149991196269411 -0.00299998999999026 0.0220000053204996" rpy="-1.57079632680387 -3.54714832486334e-06 6.451940933579746e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_4_2_visual_5">
+      <origin xyz="0.0014998919626554 0.00300001000000974 0.0220000053204997" rpy="-1.57079632680387 -3.54714832486334e-06 6.451940933579746e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_4_2_visual_6">
+      <origin xyz="0.00149988003833606 -0.00299998999999023 0.0310000053204996" rpy="-1.57079632680387 -3.54714832486334e-06 6.451940933579746e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_4_2_visual_7">
+      <origin xyz="0.00149986003829732 0.00300001000000977 0.0310000053203997" rpy="-1.57079632680387 -3.54714832486334e-06 6.451940933579746e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="right_hand_4_2_collision_0">
+      <origin xyz="-0.00549999999997 0.0 -1.95093291993945e-08" rpy="3.67318571462869e-06 -3.54714832486334e-06 6.451940933386102e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_hand_4_2.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_hand_4_2" type="revolute">
+    <origin xyz="-6.90750101405e-15 -0.000331577641107 0.00949421172441" rpy="0.0349100000067 3.67319460848e-06 -3.5471616576899992e-06" />
+    <parent link="right_hand_4_1" />
+    <child link="right_hand_4_2" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="right_hand_4_3">
+    <inertial>
+      <origin xyz="-0.00304223232564669 -0.0001135590000196 0.0119322892088007" rpy="0.0 0.0 0.0" />
+      <mass value="0.00960055" />
+      <inertia ixx="1.08863054239e-06" ixy="-1.64440030327e-08" ixz="-7.6452560516e-08" iyy="9.9172e-07" iyz="8.54941670644e-10" izz="4.00899457613e-07" />
+    </inertial>
+    <visual name="right_hand_4_3_visual_0">
+      <origin xyz="-0.0054998439253295 0.0 -0.0440000195089986" rpy="3.67318571462869e-06 -3.54714832486334e-06 6.451940933386102e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_4_3.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="right_hand_4_3_visual_1">
+      <origin xyz="-0.0054998439253295 0.0 -0.0440000195089986" rpy="3.67318571462869e-06 -3.54714832486334e-06 6.451940933386102e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_pip.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="right_hand_4_3_visual_2">
+      <origin xyz="0.00149994743420197 -0.00299998999999028 0.0120000053205998" rpy="-1.57079632680387 -3.54714832486334e-06 6.451940933579746e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_4_3_visual_3">
+      <origin xyz="0.00149992743416323 0.00300001000000972 0.0120000053204999" rpy="-1.57079632680387 -3.54714832486334e-06 6.451940933579746e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_4_3_visual_4">
+      <origin xyz="0.00149992615129326 -0.00299998999999026 0.0180000053205998" rpy="-1.57079632680387 -3.54714832486334e-06 6.451940933579746e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_4_3_visual_5">
+      <origin xyz="0.00149990615125452 0.00300001000000974 0.0180000053204999" rpy="-1.57079632680387 -3.54714832486334e-06 6.451940933579746e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="right_hand_4_3_collision_0">
+      <origin xyz="-0.0054998439253295 0.0 -0.0440000195089986" rpy="3.67318571462869e-06 -3.54714832486334e-06 6.451940933386102e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_hand_4_3.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_hand_4_3" type="revolute">
+    <origin xyz="-1.5607463277334e-07 0.0 0.0439999999996996" rpy="0.0 0.0 0.0" />
+    <parent link="right_hand_4_2" />
+    <child link="right_hand_4_3" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="right_hand_4_4">
+    <inertial>
+      <origin xyz="-0.0015340128809072 5.96675999901419e-05 0.0149079945587002" rpy="0.0 0.0 0.0" />
+      <mass value="0.00848267" />
+      <inertia ixx="9.93317938363e-07" ixy="3.79302505351e-09" ixz="8.68957441198e-09" iyy="9.05573e-07" iyz="-7.06298654562e-09" izz="2.67549061637e-07" />
+    </inertial>
+    <visual name="right_hand_4_4_visual_0">
+      <origin xyz="-0.00549973751080599 0.0 -0.0740000195087989" rpy="3.67318571462869e-06 -3.54714832486334e-06 6.451940933386102e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_4_4.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="right_hand_4_4_visual_1">
+      <origin xyz="-0.00549973751080599 0.0 -0.0740000195087989" rpy="3.67318571462869e-06 -3.54714832486334e-06 6.451940933386102e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_dip.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="right_hand_4_4_visual_2">
+      <origin xyz="0.00149995080399173 -0.00299998999999029 0.0110500053205996" rpy="-1.57079632680387 -3.54714832486334e-06 6.451940933579746e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_4_4_visual_3">
+      <origin xyz="0.00149993080395299 0.00300001000000972 0.0110500053204997" rpy="-1.57079632680387 -3.54714832486334e-06 6.451940933579746e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_4_4_visual_4">
+      <origin xyz="0.00149992952109302 -0.00299998999999027 0.0170500053205996" rpy="-1.57079632680387 -3.54714832486334e-06 6.451940933579746e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_4_4_visual_5">
+      <origin xyz="0.00149990952105429 0.00300001000000973 0.0170500053204997" rpy="-1.57079632680387 -3.54714832486334e-06 6.451940933579746e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_4_4_visual_6">
+      <origin xyz="0.00149990823818431 -0.00299998999999025 0.0230500053204996" rpy="-1.57079632680387 -3.54714832486334e-06 6.451940933579746e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_4_4_visual_7">
+      <origin xyz="0.00149988823814558 0.00300001000000975 0.0230500053204997" rpy="-1.57079632680387 -3.54714832486334e-06 6.451940933579746e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="right_hand_4_4_collision_0">
+      <origin xyz="-0.00549973751080599 0.0 -0.0740000195087989" rpy="3.67318571462869e-06 -3.54714832486334e-06 6.451940933386102e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_hand_4_4.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_hand_4_4" type="revolute">
+    <origin xyz="-1.06414522249576e-07 0.0 0.0299999999998002" rpy="0.0 0.0 0.0" />
+    <parent link="right_hand_4_3" />
+    <child link="right_hand_4_4" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="right_hand_5_1">
+    <inertial>
+      <origin xyz="-0.00566497 0.00114870645793 -0.00390478618501" rpy="0.0 0.0 0.0" />
+      <mass value="0.00738742" />
+      <inertia ixx="6.32072e-07" ixy="2.43632259e-08" ixz="-4.57528146e-08" iyy="6.15935908e-07" iyz="-4.37920704e-09" izz="3.28201092e-07" />
+    </inertial>
+    <visual name="right_hand_5_1_visual_0">
+      <origin xyz="-0.0055 -0.000662751226816 0.00947685395115" rpy="0.06982367321260001 2.56254361508e-07 -3.6642551978200005e-06" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_5_1.stl" />
+      </geometry>
+      <material name="friday_hand_shell_material" />
+    </visual>
+  </link>
+  <joint name="right_hand_5_1" type="revolute">
+    <origin xyz="-0.023800390458 0.00970000000015 -0.106299912578" rpy="3.14159265355 -7.052136652420028e-13 1.57079632679" />
+    <parent link="right_arm_7" />
+    <child link="right_hand_5_1" />
+    <axis xyz="1.0 -6.55452029142e-12 4.98636620086e-13" />
+    <limit effort="10.0" velocity="6.28318531" lower="-0.2618" upper="0.2618" />
+  </joint>
+  <link name="right_hand_5_2">
+    <inertial>
+      <origin xyz="-0.00331827419634056 -0.000178959000021301 0.0187418886341014" rpy="0.0 0.0 0.0" />
+      <mass value="0.0153719" />
+      <inertia ixx="2.74279086533e-06" ixy="-2.06798666159e-08" ixz="-1.26311962573e-07" iyy="2.65598e-06" iyz="-3.89410708347e-08" izz="6.88238134667e-07" />
+    </inertial>
+    <visual name="right_hand_5_2_visual_0">
+      <origin xyz="-0.00549999999996997 0.0 -1.88390691394503e-08" rpy="3.67318476182787e-06 -3.4252879697730395e-06 6.4410234141789794e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_5_2.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="right_hand_5_2_visual_1">
+      <origin xyz="-0.00549999999996997 0.0 -1.88390691394503e-08" rpy="3.67318476182787e-06 -3.4252879697730395e-06 6.4410234141789794e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_mcp.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="right_hand_5_2_visual_2">
+      <origin xyz="0.00149994547129509 -0.00299998999999027 0.0130000051377993" rpy="-1.57079632681482 -3.4252879697730395e-06 6.441023414111432e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_5_2_visual_3">
+      <origin xyz="0.00149992547125643 0.00300001000000973 0.0130000051376993" rpy="-1.57079632681482 -3.4252879697730395e-06 6.441023414111432e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_5_2_visual_4">
+      <origin xyz="0.00149991464372905 -0.00299998999999024 0.0220000051377993" rpy="-1.57079632681482 -3.4252879697730395e-06 6.441023414111432e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_5_2_visual_5">
+      <origin xyz="0.0014998946436904 0.00300001000000976 0.0220000051376993" rpy="-1.57079632681482 -3.4252879697730395e-06 6.441023414111432e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_5_2_visual_6">
+      <origin xyz="0.00149988381616301 -0.00299998999999021 0.0310000051376993" rpy="-1.57079632681482 -3.4252879697730395e-06 6.441023414111432e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_5_2_visual_7">
+      <origin xyz="0.00149986381612436 0.00300001000000979 0.0310000051375993" rpy="-1.57079632681482 -3.4252879697730395e-06 6.441023414111432e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="right_hand_5_2_collision_0">
+      <origin xyz="-0.00549999999996997 0.0 -1.88390691394503e-08" rpy="3.67318476182787e-06 -3.4252879697730395e-06 6.4410234141789794e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_hand_5_2.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_hand_5_2" type="revolute">
+    <origin xyz="-9.0695161277e-15 -0.000662751226817 0.00947685395115" rpy="0.0698200000034 3.6731946087e-06 -3.4253016576e-06" />
+    <parent link="right_hand_5_1" />
+    <child link="right_hand_5_2" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="right_hand_5_3">
+    <inertial>
+      <origin xyz="-0.00304223087151391 -0.000113559000019569 0.0119322895796013" rpy="0.0 0.0 0.0" />
+      <mass value="0.00960055" />
+      <inertia ixx="1.08863052375e-06" ixy="-1.64440029285e-08" ixz="-7.64526443265e-08" iyy="9.9172e-07" iyz="8.54943674597e-10" izz="4.00899476247e-07" />
+    </inertial>
+    <visual name="right_hand_5_3_visual_0">
+      <origin xyz="-0.00549984928741928 0.0 -0.0440000188387976" rpy="3.67318476182787e-06 -3.4252879697730395e-06 6.4410234141789794e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_5_3.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="right_hand_5_3_visual_1">
+      <origin xyz="-0.00549984928741928 0.0 -0.0440000188387976" rpy="3.67318476182787e-06 -3.4252879697730395e-06 6.4410234141789794e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_pip.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="right_hand_5_3_visual_2">
+      <origin xyz="0.00149994889658473 -0.0029999899999903 0.0120000051377994" rpy="-1.57079632681482 -3.4252879697730395e-06 6.441023414111432e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_5_3_visual_3">
+      <origin xyz="0.00149992889654608 0.0030000100000097 0.0120000051377994" rpy="-1.57079632681482 -3.4252879697730395e-06 6.441023414111432e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_5_3_visual_4">
+      <origin xyz="0.00149992834487737 -0.00299998999999028 0.0180000051377994" rpy="-1.57079632681482 -3.4252879697730395e-06 6.441023414111432e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_5_3_visual_5">
+      <origin xyz="0.00149990834483872 0.00300001000000972 0.0180000051376994" rpy="-1.57079632681482 -3.4252879697730395e-06 6.441023414111432e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="right_hand_5_3_collision_0">
+      <origin xyz="-0.00549984928741928 0.0 -0.0440000188387976" rpy="3.67318476182787e-06 -3.4252879697730395e-06 6.4410234141789794e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_hand_5_3.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_hand_5_3" type="revolute">
+    <origin xyz="-1.50712552160481e-07 0.0 0.0439999999996996" rpy="0.0 0.0 0.0" />
+    <parent link="right_hand_5_2" />
+    <child link="right_hand_5_3" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="right_hand_5_4">
+    <inertial>
+      <origin xyz="-0.00153401106414381 5.96675999901311e-05 0.0149079947457006" rpy="0.0 0.0 0.0" />
+      <mass value="0.00848267" />
+      <inertia ixx="9.93317940481e-07" ixy="3.79302419277e-09" ixz="8.68948596598e-09" iyy="9.05573e-07" iyz="-7.06298700785e-09" izz="2.67549059519e-07" />
+    </inertial>
+    <visual name="right_hand_5_4_visual_0">
+      <origin xyz="-0.00549974652885261 0.0 -0.0740000188385976" rpy="3.67318476182787e-06 -3.4252879697730395e-06 6.4410234141789794e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_5_4.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="right_hand_5_4_visual_1">
+      <origin xyz="-0.00549974652885261 0.0 -0.0740000188385976" rpy="3.67318476182787e-06 -3.4252879697730395e-06 6.4410234141789794e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_dip.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="right_hand_5_4_visual_2">
+      <origin xyz="0.00149995215060421 -0.00299998999999034 0.0110500051377994" rpy="-1.57079632681482 -3.4252879697730395e-06 6.441023414111432e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_5_4_visual_3">
+      <origin xyz="0.00149993215056554 0.00300001000000965 0.0110500051377994" rpy="-1.57079632681482 -3.4252879697730395e-06 6.441023414111432e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_5_4_visual_4">
+      <origin xyz="0.00149993159889686 -0.00299998999999032 0.0170500051377994" rpy="-1.57079632681482 -3.4252879697730395e-06 6.441023414111432e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_5_4_visual_5">
+      <origin xyz="0.00149991159885818 0.00300001000000967 0.0170500051376994" rpy="-1.57079632681482 -3.4252879697730395e-06 6.441023414111432e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_5_4_visual_6">
+      <origin xyz="0.0014999110471895 -0.00299998999999029 0.0230500051377994" rpy="-1.57079632681482 -3.4252879697730395e-06 6.441023414111432e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="right_hand_5_4_visual_7">
+      <origin xyz="0.00149989104715083 0.00300001000000969 0.0230500051376994" rpy="-1.57079632681482 -3.4252879697730395e-06 6.441023414111432e-12" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="right_hand_5_4_collision_0">
+      <origin xyz="-0.00549974652885261 0.0 -0.0740000188385976" rpy="3.67318476182787e-06 -3.4252879697730395e-06 6.4410234141789794e-12" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_hand_5_4.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_hand_5_4" type="revolute">
+    <origin xyz="-1.02758558329086e-07 0.0 0.0299999999998" rpy="0.0 0.0 0.0" />
+    <parent link="right_hand_5_3" />
+    <child link="right_hand_5_4" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="right_wrist_cam">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.01" />
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" />
+    </inertial>
+    <visual name="right_wrist_cam_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <sphere radius="0.01" />
+      </geometry>
+      <material name="polyurethane_green" />
+    </visual>
+  </link>
+  <joint name="right_wrist_cam" type="fixed">
+    <origin xyz="-0.00975011748267 0.019031 -0.0319839641864" rpy="2.35619449019 -3.6731722554699996e-06 3.1415926535895866" />
+    <parent link="right_arm_7" />
+    <child link="right_wrist_cam" />
+  </joint>
+  <link name="left_arm_1">
+    <inertial>
+      <origin xyz="-1.75910707e-08 0.0495645414 1.18115508e-08" rpy="0.0 0.0 0.0" />
+      <mass value="0.589982705" />
+      <inertia ixx="0.000732967148" ixy="-4.40392862e-10" ixz="-6.65332419e-10" iyy="0.000569751463" iyz="3.89217352e-10" izz="0.00075617386" />
+    </inertial>
+    <visual name="left_arm_1_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.57079632679979 0.0 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/left_arm_1.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+    <collision name="left_arm_1_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.57079632679979 0.0 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_left_arm_1.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_arm_1" type="revolute">
+    <origin xyz="-1.2023667534291e-06 0.163667249651 0.244688600437" rpy="0.17453292519601296 0.0 7.3464102038018195e-06" />
+    <parent link="waist_5" />
+    <child link="left_arm_1" />
+    <axis xyz="-0.0 1.0 -0.0" />
+    <limit effort="10.0" velocity="3.14159265" lower="-2.1817" upper="0.7854" />
+  </joint>
+  <link name="left_arm_2">
+    <inertial>
+      <origin xyz="3.64042865e-09 0.00912432503 -0.0884367713" rpy="0.0 0.0 0.0" />
+      <mass value="0.825116825" />
+      <inertia ixx="0.00192070908" ixy="-4.86940895e-09" ixz="1.29364243e-09" iyy="0.0022945932" iyz="6.89393875e-05" izz="0.00119871281" />
+    </inertial>
+    <visual name="left_arm_2_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.57079632679979 4.2956194157284244e-12 1.5707963267949" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/left_arm_2.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+    <collision name="left_arm_2_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.57079632679979 4.2956194157284244e-12 1.5707963267949" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_left_arm_2.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_arm_2" type="revolute">
+    <origin xyz="0.0 0.0649999999999999 0.0" rpy="-0.174532925191117 0.0 -3.59392390244872e-12" />
+    <parent link="left_arm_1" />
+    <child link="left_arm_2" />
+    <axis xyz="1.0 0.0 0.0" />
+    <limit effort="10.0" velocity="3.14159265" lower="-0.2967" upper="3.3161" />
+  </joint>
+  <link name="left_arm_3">
+    <inertial>
+      <origin xyz="0.00127996245 5.9498137e-10 -0.0683334448" rpy="0.0 0.0 0.0" />
+      <mass value="0.836764547" />
+      <inertia ixx="0.00250150061" ixy="-1.62942219e-09" ixz="0.000105969358" iyy="0.00211468509" iyz="2.32321709e-10" izz="0.00123286035" />
+    </inertial>
+    <visual name="left_arm_3_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="-4.68976575231962e-12 0.0 1.57080367321135" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/left_arm_3.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+    <collision name="left_arm_3_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="-4.68976575231962e-12 0.0 1.57080367321135" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_left_arm_3.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_arm_3" type="revolute">
+    <origin xyz="0.0 0.00999999999857595 -0.155" rpy="-5.130210532745981e-12 -4.896749869204071e-12 -7.34640666451662e-06" />
+    <parent link="left_arm_2" />
+    <child link="left_arm_3" />
+    <axis xyz="0.0 0.0 1.0" />
+    <limit effort="10.0" velocity="3.14159265" lower="-1.5708" upper="1.5708" />
+  </joint>
+  <link name="left_arm_4">
+    <inertial>
+      <origin xyz="-0.0083060547 -8.93644741e-09 -0.0367004747" rpy="0.0 0.0 0.0" />
+      <mass value="0.860649367" />
+      <inertia ixx="0.00183943891" ixy="-1.65100577e-10" ixz="-0.000184857732" iyy="0.00184629648" iyz="-1.91140699e-10" izz="0.000867553842" />
+    </inertial>
+    <visual name="left_arm_4_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.57079632679979 -4.2724131072083206e-12 -4.0389678347315804e-28" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/left_arm_4.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+    <collision name="left_arm_4_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.57079632679979 -4.2724131072083206e-12 -4.0389678347315804e-28" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_left_arm_4.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_arm_4" type="revolute">
+    <origin xyz="0.0134999999996 9.91765171654002e-08 -0.163" rpy="-4.8965674655779384e-12 4.27241310700382e-12 7.346408675638919e-06" />
+    <parent link="left_arm_3" />
+    <child link="left_arm_4" />
+    <axis xyz="-0.0 1.0 -0.0" />
+    <limit effort="10.0" velocity="3.14159265" lower="-2.2689" upper="-0.0" />
+  </joint>
+  <link name="left_arm_5">
+    <inertial>
+      <origin xyz="7.29527e-05 0.00030085 -0.0390987" rpy="0.0 0.0 0.0" />
+      <mass value="0.195155" />
+      <inertia ixx="0.000299126" ixy="1.0853e-05" ixz="-2.24329e-06" iyy="0.000293745" iyz="-3.21406e-06" izz="0.000107749" />
+    </inertial>
+    <visual name="left_arm_5_visual_0">
+      <origin xyz="0.0999999999939 1.10196137789138e-06 -0.0685" rpy="-3.1415899999951 0.0 1.57080734641135" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/left_wrist_base_lowpoly.stl" />
+      </geometry>
+      <material name="friday_hand_shell_material" />
+    </visual>
+    <collision name="left_arm_5_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="-4.689765751219811e-12 0.0 1.57080734641135" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_left_wrist_base.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_arm_5" type="revolute">
+    <origin xyz="-0.0134999999995088 0.0 -0.110499999999999" rpy="4.489660789821339e-11 -3.6732093724968098e-06 -7.346408675803829e-06" />
+    <parent link="left_arm_4" />
+    <child link="left_arm_5" />
+    <axis xyz="0.0 0.0 1.0" />
+    <limit effort="10.0" velocity="3.14159265" lower="-1.5708" upper="1.5708" />
+  </joint>
+  <link name="left_arm_6">
+    <inertial>
+      <origin xyz="-0.000227239 0.000127382999918337 -0.0144593999999995" rpy="0.0 0.0 0.0" />
+      <mass value="0.118788" />
+      <inertia ixx="9.11578000000001e-05" ixy="-1.17775000000025e-05" ixz="5.65127000065989e-07" iyy="0.000114220999999995" iyz="6.04963999784695e-07" izz="7.58769000000051e-05" />
+    </inertial>
+    <visual name="left_arm_6_visual_0">
+      <origin xyz="-0.1 3.13906918145969e-13 -0.074" rpy="-3.14158898037907 -4.8967340907665195e-12 -3.14158898038469" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/left_wrist_pitch_lowpoly.stl" />
+      </geometry>
+      <material name="friday_hand_shell_material" />
+    </visual>
+    <collision name="left_arm_6_collision_0">
+      <origin xyz="-0.1 3.13906918145969e-13 -0.074" rpy="-3.14158898037907 -4.8967340907665195e-12 -3.14158898038469" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_left_wrist_pitch.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_arm_6" type="revolute">
+    <origin xyz="0.0 0.0 -0.1195" rpy="5.607564531443509e-12 3.6732046898764006e-06 1.1019616458285901e-05" />
+    <parent link="left_arm_5" />
+    <child link="left_arm_6" />
+    <axis xyz="1.0 0.0 0.0" />
+    <limit effort="10.0" velocity="3.14159265" lower="-0.6981" upper="0.6981" />
+  </joint>
+  <link name="left_arm_7">
+    <inertial>
+      <origin xyz="0.00248254000227 -0.00603203 -0.0484289999999" rpy="0.0 0.0 0.0" />
+      <mass value="0.140721" />
+      <inertia ixx="0.000183871" ixy="2.35157e-06" ixz="2.08536e-05" iyy="0.000212242" iyz="-2.82771e-05" izz="7.28442e-05" />
+    </inertial>
+    <visual name="left_arm_7_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.5708026896865126 1.5707963267948966 3.181460990505331e-06" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/left_wrist_roll_lowpoly.stl" />
+      </geometry>
+      <material name="friday_hand_shell_material" />
+    </visual>
+    <visual name="left_arm_7_visual_1">
+      <origin xyz="0.258200000006 -0.00419999999999 -0.123799999988" rpy="3.14159000005 -3.6732050994199994e-06 -1.5707963267899998" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/left_wrist_tactile.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="left_arm_7_visual_2">
+      <origin xyz="-0.00519079999797 -0.0182298 -0.0431817000002" rpy="1.5708026896865126 1.5707963267948966 3.181460990505331e-06" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_arm_7_visual_3">
+      <origin xyz="-0.017993299998 -0.0182298 -0.0409242000008" rpy="1.5708026896865126 1.5707963267948966 3.181460990505331e-06" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_arm_7_visual_4">
+      <origin xyz="-0.00779555999728 -0.0182298 -0.0579538000004" rpy="1.5708026896865126 1.5707963267948966 3.181460990505331e-06" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_arm_7_visual_5">
+      <origin xyz="-0.0205979999973 -0.0182298 -0.0556963000009" rpy="1.5708026896865126 1.5707963267948966 3.181460990505331e-06" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_arm_7_visual_6">
+      <origin xyz="0.0408096000038 -0.0182299 -0.081755799998" rpy="1.5708026896865126 1.5707963267948966 3.181460990505331e-06" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_arm_7_visual_7">
+      <origin xyz="0.0280071000037 -0.0182299 -0.0794982999987" rpy="1.5708026896865126 1.5707963267948966 3.181460990505331e-06" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_arm_7_visual_8">
+      <origin xyz="0.0152046000036 -0.0182299 -0.0772408999993" rpy="1.5708026896865126 1.5707963267948966 3.181460990505331e-06" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_arm_7_visual_9">
+      <origin xyz="0.00240208000351 -0.0182299 -0.0749833999999" rpy="1.5708026896865126 1.5707963267948966 3.181460990505331e-06" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_arm_7_visual_10">
+      <origin xyz="-0.0104003999966 -0.0182299 -0.0727260000005" rpy="1.5708026896865126 1.5707963267948966 3.181460990505331e-06" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_arm_7_visual_11">
+      <origin xyz="-0.0232028999966 -0.0182299 -0.070468400001" rpy="1.5708026896865126 1.5707963267948966 3.181460990505331e-06" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_arm_7_visual_12">
+      <origin xyz="0.0382048000045 -0.0182299 -0.0965278999983" rpy="1.5708026896865126 1.5707963267948966 3.181460990505331e-06" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_arm_7_visual_13">
+      <origin xyz="0.0254023000044 -0.0182299 -0.0942704999988" rpy="1.5708026896865126 1.5707963267948966 3.181460990505331e-06" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_arm_7_visual_14">
+      <origin xyz="0.0125998000043 -0.0182299 -0.0920128999994" rpy="1.5708026896865126 1.5707963267948966 3.181460990505331e-06" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_arm_7_visual_15">
+      <origin xyz="-0.000202674995789 -0.0182299 -0.0897555" rpy="1.5708026896865126 1.5707963267948966 3.181460990505331e-06" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_arm_7_visual_16">
+      <origin xyz="-0.0130051999959 -0.0182299 -0.0874980000006" rpy="1.5708026896865126 1.5707963267948966 3.181460990505331e-06" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_arm_7_visual_17">
+      <origin xyz="-0.025807699996 -0.0182299 -0.0852405000012" rpy="1.5708026896865126 1.5707963267948966 3.181460990505331e-06" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_arm_7_visual_18">
+      <origin xyz="0.0356000000052 -0.01823 -0.111299999999" rpy="1.5708026896865126 1.5707963267948966 3.181460990505331e-06" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_arm_7_visual_19">
+      <origin xyz="0.0227976000051 -0.01823 -0.109042999999" rpy="1.5708026896865126 1.5707963267948966 3.181460990505331e-06" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_arm_7_visual_20">
+      <origin xyz="0.00999506000501 -0.01823 -0.106785" rpy="1.5708026896865126 1.5707963267948966 3.181460990505331e-06" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_arm_7_visual_21">
+      <origin xyz="-0.0028074299951 -0.0182299 -0.104528" rpy="1.5708026896865126 1.5707963267948966 3.181460990505331e-06" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_arm_7_visual_22">
+      <origin xyz="-0.0156098999952 -0.0182299 -0.102270000001" rpy="1.5708026896865126 1.5707963267948966 3.181460990505331e-06" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_arm_7_visual_23">
+      <origin xyz="-0.0284123999954 -0.0182299 -0.100013000001" rpy="1.5708026896865126 1.5707963267948966 3.181460990505331e-06" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="left_arm_7_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.5708026896865126 1.5707963267948966 3.181460990505331e-06" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_left_wrist_roll.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_arm_7" type="revolute">
+    <origin xyz="0.0 2.12219131157e-13 -0.05" rpy="-3.6732107232700005e-06 3.154076999580001e-11 -3.6732051033200004e-06" />
+    <parent link="left_arm_6" />
+    <child link="left_arm_7" />
+    <axis xyz="-0.0 1.0 -0.0" />
+    <limit effort="10.0" velocity="3.14159265" lower="-0.6981" upper="0.6981" />
+  </joint>
+  <link name="left_hand_1_1">
+    <inertial>
+      <origin xyz="0.000130292105914 -2.42429209895e-10 0.000104305867699" rpy="0.0 0.0 0.0" />
+      <mass value="0.00574066" />
+      <inertia ixx="2.27878e-07" ixy="1.28857892e-13" ixz="7.7909738e-11" iyy="3.50936e-07" iyz="2.16278427e-13" izz="1.38986e-07" />
+    </inertial>
+    <visual name="left_hand_1_1_visual_0">
+      <origin xyz="-0.00949998709178 -0.0412949462213 0.0553230677155" rpy="0.523600015404 1.01541824593e-06 -1.0477767695700003e-06" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_1_1.stl" />
+      </geometry>
+      <material name="friday_hand_shell_material" />
+    </visual>
+  </link>
+  <joint name="left_hand_1_1" type="revolute">
+    <origin xyz="0.0263009000026 -0.0137 -0.0552412999987" rpy="-2.61799101535 -2.269932658285074e-06 -1.57079672647" />
+    <parent link="left_arm_7" />
+    <child link="left_hand_1_1" />
+    <axis xyz="1e-06 -1e-06 1.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="left_hand_1_2">
+    <inertial>
+      <origin xyz="0.00430779526286 -0.0160882139221 0.0180326551544" rpy="0.0 0.0 0.0" />
+      <mass value="0.0263023" />
+      <inertia ixx="6.61226673e-06" ixy="4.62253015e-07" ixz="-1.7884244e-06" iyy="7.39023112e-06" iyz="6.43101453e-07" izz="3.00756215e-06" />
+    </inertial>
+    <visual name="left_hand_1_2_visual_0">
+      <origin xyz="-0.00950245574753 -0.122231848203 0.208654543563" rpy="-0.753428442798 -3.2445235702600003e-06 -9.547313923000002e-06" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/left_hand_1_2.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="left_hand_1_2_visual_1">
+      <origin xyz="0.0817817937564 -0.0324545514168 0.0196799084219" rpy="1.0281522913300003 -0.2852037488920001 1.6086813622700005" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_thumb_mcp.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="left_hand_1_2_visual_2">
+      <origin xyz="0.0127215002311 -0.0167385558257 0.0196246758812" rpy="1.5708005183199996 -0.22982476958000003 -1.5708104055899996" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_1_2_visual_3">
+      <origin xyz="0.00768260583787 -0.0120760720872 0.0209925924853" rpy="1.5708005183199996 -0.22982476958000003 -1.5708104055899996" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_1_2_visual_4">
+      <origin xyz="0.0146864706913 -0.0167385138907 0.0268626820167" rpy="1.5708005183199996 -0.22982476958000003 -1.5708104055899996" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_1_2_visual_5">
+      <origin xyz="0.00964759629671 -0.0120761275233 0.0282306214017" rpy="1.5708005183199996 -0.22982476958000003 -1.5708104055899996" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_1_2_visual_6">
+      <origin xyz="0.0166514411502 -0.0167385921071 0.0341006135625" rpy="1.5708005183199996 -0.22982476958000003 -1.5708104055899996" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_1_2_visual_7">
+      <origin xyz="0.0115405975513 -0.0120094817854 0.0354881684629" rpy="1.5708005183199996 -0.22982476958000003 -1.5708104055899996" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="left_hand_1_2_collision_0">
+      <origin xyz="-0.00950245574753 -0.122231848203 0.208654543563" rpy="-0.753428442798 -3.2445235702600003e-06 -9.547313923000002e-06" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_left_hand_1_2.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_hand_1_2" type="revolute">
+    <origin xyz="0.0 0.0 0.0" rpy="0.22982578498500006 -1.67351929314e-06 8.987626549040002e-06" />
+    <parent link="left_hand_1_1" />
+    <child link="left_hand_1_2" />
+    <axis xyz="1.0 -1.3e-05 4e-06" />
+    <limit effort="10.0" velocity="6.28318531" lower="-0.0" upper="0.8028" />
+  </joint>
+  <link name="left_hand_1_3">
+    <inertial>
+      <origin xyz="-0.00368816265001 0.000785116 0.0174800070545" rpy="0.0 0.0 0.0" />
+      <mass value="0.0176726" />
+      <inertia ixx="3.12388729e-06" ixy="6.44799033e-08" ixz="-6.7150483e-08" iyy="2.8199e-06" iyz="-1.22857079e-08" izz="8.46252707e-07" />
+    </inertial>
+    <visual name="left_hand_1_3_visual_0">
+      <origin xyz="-0.124459402792 -0.0208269 0.149054207433" rpy="-0.7534209650070002 -0.265096221873 -0.8418892509100001" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/left_hand_1_3.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="left_hand_1_3_visual_1">
+      <origin xyz="0.0341597045918 -0.063696 -0.00940299468779" rpy="0.7534223114169999 -0.2650962218729999 0.84188925091" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_thumb_pip.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="left_hand_1_3_visual_2">
+      <origin xyz="0.00149998962969 -0.00349998 0.0125000114178" rpy="-1.5707963268 -0.3870433574400001 -5.3950827549466655e-16" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_1_3_visual_3">
+      <origin xyz="0.00149997110916 0.00350002 0.0125000038689" rpy="-1.5707963268 -0.3870433574400001 -5.3950827549466655e-16" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_1_3_visual_4">
+      <origin xyz="0.00150000485369 -0.00349997 0.0199999979412" rpy="-1.5707963268 -0.3870433574400001 -5.3950827549466655e-16" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_1_3_visual_5">
+      <origin xyz="0.00149997707283 0.00350003 0.0199999866175" rpy="-1.5707963268 -0.3870433574400001 -5.3950827549466655e-16" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_1_3_visual_6">
+      <origin xyz="0.00150002933798 -0.00349996 0.027499988239" rpy="-1.5707963268 -0.3870433574400001 -5.3950827549466655e-16" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_1_3_visual_7">
+      <origin xyz="0.00150002933798 0.00350004 0.027499988239" rpy="-1.5707963268 -0.3870433574400001 -5.3950827549466655e-16" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="left_hand_1_3_collision_0">
+      <origin xyz="-0.124459402792 -0.0208269 0.149054207433" rpy="-0.7534209650070002 -0.265096221873 -0.8418892509100001" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_left_hand_1_3.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_hand_1_3" type="revolute">
+    <origin xyz="0.016455903771 -0.0155261386685 0.0471580356714" rpy="0.19979471447799996 0.175405766667 0.8595018312519999" />
+    <parent link="left_hand_1_2" />
+    <child link="left_hand_1_3" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="left_hand_1_4">
+    <inertial>
+      <origin xyz="-0.00362731940021 0.00093461 0.0138114024747" rpy="0.0 0.0 0.0" />
+      <mass value="0.0140376" />
+      <inertia ixx="1.62631452e-06" ixy="4.13013562e-08" ixz="-4.39697502e-08" iyy="1.47075e-06" iyz="3.00587584e-08" izz="5.44495482e-07" />
+    </inertial>
+    <visual name="left_hand_1_4_visual_0">
+      <origin xyz="-0.124459478283 -0.0208269 0.109054353625" rpy="-0.7534209650070002 -0.265096221873 -0.8418892509100001" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/left_hand_1_4.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="left_hand_1_4_visual_1">
+      <origin xyz="0.0347596615207 -0.0636744 -0.0494029742839" rpy="0.7534223114169999 -0.2650962218729999 0.84188925091" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_thumb_dip.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="left_hand_1_4_visual_2">
+      <origin xyz="0.00149999769212 -0.00349998 0.0112999984154" rpy="-1.5707963268 -0.3870433574400001 -5.3950827549466655e-16" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_1_4_visual_3">
+      <origin xyz="0.00149997917158 0.00350002 0.0112999908664" rpy="-1.5707963268 -0.3870433574400001 -5.3950827549466655e-16" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_1_4_visual_4">
+      <origin xyz="0.00150001364587 -0.00349998 0.0172999783737" rpy="-1.5707963268 -0.3870433574400001 -5.3950827549466655e-16" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_1_4_visual_5">
+      <origin xyz="0.00149998586492 0.00350002 0.0172999670501" rpy="-1.5707963268 -0.3870433574400001 -5.3950827549466655e-16" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_1_4_visual_6">
+      <origin xyz="0.00150001998723 -0.00349997 0.023300008408" rpy="-1.5707963268 -0.3870433574400001 -5.3950827549466655e-16" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_1_4_visual_7">
+      <origin xyz="0.00150001998723 0.00350003 0.023300008408" rpy="-1.5707963268 -0.3870433574400001 -5.3950827549466655e-16" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="left_hand_1_4_collision_0">
+      <origin xyz="-0.124459478283 -0.0208269 0.109054353625" rpy="-0.7534209650070002 -0.265096221873 -0.8418892509100001" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_left_hand_1_4.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_hand_1_4" type="revolute">
+    <origin xyz="-1.5156133027e-17 -1.06099687661e-18 0.0400000390131" rpy="3.21369269725e-17 -3.43725048424e-13 1.09028150701e-17" />
+    <parent link="left_hand_1_3" />
+    <child link="left_hand_1_4" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="left_hand_2_1">
+    <inertial>
+      <origin xyz="-0.00566496064641 0.00101168653248 -0.00394252178341" rpy="0.0 0.0 0.0" />
+      <mass value="0.00738742" />
+      <inertia ixx="6.3207223e-07" ixy="2.27511009e-08" ixz="-4.65747983e-08" iyy="6.15279612e-07" iyz="-1.44075928e-08" izz="3.28857158e-07" />
+    </inertial>
+    <visual name="left_hand_2_1_visual_0">
+      <origin xyz="-0.00550002168371 -0.000331493823839 0.00949420208988" rpy="0.03490507648869999 -2.3981077603699994e-06 3.2712916033599996e-06" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_2_1.stl" />
+      </geometry>
+      <material name="friday_hand_shell_material" />
+    </visual>
+  </link>
+  <joint name="left_hand_2_1" type="revolute">
+    <origin xyz="0.0392000000052 -0.0097 -0.111799999998" rpy="-3.14159038363 -2.2699326585099995e-06 -1.57079672647" />
+    <parent link="left_arm_7" />
+    <child link="left_hand_2_1" />
+    <axis xyz="0.999999999997 -3.9967377097e-07 2.2699337726e-06" />
+    <limit effort="10.0" velocity="6.28318531" lower="-0.2618" upper="0.2618" />
+  </joint>
+  <link name="left_hand_2_2">
+    <inertial>
+      <origin xyz="-0.00331814351885011 -0.000178958999999997 0.0187419117702003" rpy="0.0 0.0 0.0" />
+      <mass value="0.0153719" />
+      <inertia ixx="2.74278910382e-06" ixy="-2.06801381311e-08" ixz="-1.26326287886e-07" iyy="2.65598e-06" iyz="-3.89409266438e-08" izz="6.88239896181e-07" />
+    </inertial>
+    <visual name="left_hand_2_2_visual_0">
+      <origin xyz="-0.00549999999996988 0.0 1.95095623304721e-08" rpy="3.673205039698479e-06 3.54719473244726e-06 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_2_2.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="left_hand_2_2_visual_1">
+      <origin xyz="-0.00549999999996988 0.0 1.95095623304721e-08" rpy="3.673205039698479e-06 3.54719473244726e-06 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_mcp.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="left_hand_2_2_visual_2">
+      <origin xyz="0.00150003611349994 -0.00299999000000002 0.0129999946792003" rpy="-1.5707963267900698 3.5471947324472593e-06 2.1175823681490734e-22" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_2_2_visual_3">
+      <origin xyz="0.00150001611349997 0.00300000999999998 0.0129999946792003" rpy="-1.5707963267900698 3.5471947324472593e-06 2.1175823681490734e-22" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_2_2_visual_4">
+      <origin xyz="0.00150006803823983 -0.00299999000000002 0.0219999946791003" rpy="-1.5707963267900698 3.5471947324472593e-06 2.1175823681490734e-22" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_2_2_visual_5">
+      <origin xyz="0.00150004803823986 0.00300000999999998 0.0219999946792003" rpy="-1.5707963267900698 3.5471947324472593e-06 2.1175823681490734e-22" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_2_2_visual_6">
+      <origin xyz="0.00150009996297972 -0.00299999000000002 0.0309999946791003" rpy="-1.5707963267900698 3.5471947324472593e-06 2.1175823681490734e-22" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_2_2_visual_7">
+      <origin xyz="0.00150007996297975 0.00300000999999998 0.0309999946791003" rpy="-1.5707963267900698 3.5471947324472593e-06 2.1175823681490734e-22" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="left_hand_2_2_collision_0">
+      <origin xyz="-0.00549999999996988 0.0 1.95095623304721e-08" rpy="3.673205039698479e-06 3.54719473244726e-06 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_hand_2_2.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_hand_2_2" type="revolute">
+    <origin xyz="-2.16837285723e-08 -0.000331496022045 0.00949421457451" rpy="0.0349014032802 -5.94314068336e-06 3.1475196703799997e-06" />
+    <parent link="left_hand_2_1" />
+    <child link="left_hand_2_2" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="left_hand_2_3">
+    <inertial>
+      <origin xyz="-0.00304214767381014 -0.000113558999999969 0.0119323107911002" rpy="0.0 0.0 0.0" />
+      <mass value="0.00960055" />
+      <inertia ixx="1.08862945759e-06" ixy="-1.64439969671e-08" ixz="-7.64574395092e-08" iyy="9.9172e-07" iyz="8.55058330038e-10" izz="4.0090054241e-07" />
+    </inertial>
+    <visual name="left_hand_2_3_visual_0">
+      <origin xyz="-0.00550015607645946 0.0 -0.0439999804900997" rpy="3.673205039698479e-06 3.54719473244726e-06 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_2_3.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="left_hand_2_3_visual_1">
+      <origin xyz="-0.00550015607645946 0.0 -0.0439999804900997" rpy="3.673205039698479e-06 3.54719473244726e-06 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_pip.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="left_hand_2_3_visual_2">
+      <origin xyz="0.00150003256630983 -0.00299999 0.0119999946792002" rpy="-1.5707963267900698 3.5471947324472593e-06 2.1175823681490734e-22" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_2_3_visual_3">
+      <origin xyz="0.00150001256630989 0.00300001 0.0119999946793002" rpy="-1.5707963267900698 3.5471947324472593e-06 2.1175823681490734e-22" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_2_3_visual_4">
+      <origin xyz="0.00150005384946977 -0.00299999 0.0179999946791002" rpy="-1.5707963267900698 3.5471947324472593e-06 2.1175823681490734e-22" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_2_3_visual_5">
+      <origin xyz="0.0015000338494698 0.00300001 0.0179999946792002" rpy="-1.5707963267900698 3.5471947324472593e-06 2.1175823681490734e-22" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="left_hand_2_3_collision_0">
+      <origin xyz="-0.00550015607645946 0.0 -0.0439999804900997" rpy="3.673205039698479e-06 3.54719473244726e-06 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_hand_2_3.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_hand_2_3" type="revolute">
+    <origin xyz="1.5607649594962e-07 0.0 0.0439999999997005" rpy="0.0 0.0 0.0" />
+    <parent link="left_hand_2_2" />
+    <child link="left_hand_2_3" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="left_hand_2_4">
+    <inertial>
+      <origin xyz="-0.00153390711843015 5.96676000000492e-05 0.0149080054411" rpy="0.0 0.0 0.0" />
+      <mass value="0.00848267" />
+      <inertia ixx="9.9331806162e-07" ixy="3.79297494615e-09" ixz="8.68442555699e-09" iyy="9.05573e-07" iyz="-7.06301345446e-09" izz="2.6754893838e-07" />
+    </inertial>
+    <visual name="left_hand_2_4_visual_0">
+      <origin xyz="-0.00550026249225908 0.0 -0.0739999804899" rpy="3.673205039698479e-06 3.54719473244726e-06 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_2_4.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="left_hand_2_4_visual_1">
+      <origin xyz="-0.00550026249225908 0.0 -0.0739999804899" rpy="3.673205039698479e-06 3.54719473244726e-06 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_dip.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="left_hand_2_4_visual_2">
+      <origin xyz="0.00150002919647989 -0.00299998999999998 0.0110499946792" rpy="-1.5707963267900698 3.5471947324472593e-06 2.1175823681490734e-22" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_2_4_visual_3">
+      <origin xyz="0.00150000919647992 0.00300001000000002 0.0110499946793" rpy="-1.5707963267900698 3.5471947324472593e-06 2.1175823681490734e-22" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_2_4_visual_4">
+      <origin xyz="0.00150005047963979 -0.00299998999999998 0.0170499946792" rpy="-1.5707963267900698 3.5471947324472593e-06 2.1175823681490734e-22" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_2_4_visual_5">
+      <origin xyz="0.00150003047963982 0.00300001000000002 0.0170499946792" rpy="-1.5707963267900698 3.5471947324472593e-06 2.1175823681490734e-22" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_2_4_visual_6">
+      <origin xyz="0.00150007176278973 -0.00299998999999998 0.0230499946791" rpy="-1.5707963267900698 3.5471947324472593e-06 2.1175823681490734e-22" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_2_4_visual_7">
+      <origin xyz="0.00150005176278977 0.00300001000000002 0.0230499946792" rpy="-1.5707963267900698 3.5471947324472593e-06 2.1175823681490734e-22" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="left_hand_2_4_collision_0">
+      <origin xyz="-0.00550026249225908 0.0 -0.0739999804899" rpy="3.673205039698479e-06 3.54719473244726e-06 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_hand_2_4.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_hand_2_4" type="revolute">
+    <origin xyz="1.06415792733294e-07 0.0 0.0299999999998003" rpy="0.0 0.0 0.0" />
+    <parent link="left_hand_2_3" />
+    <child link="left_hand_2_4" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="left_hand_3_1">
+    <inertial>
+      <origin xyz="-0.00566496062695 0.000873504842797 -0.00397542163332" rpy="0.0 0.0 0.0" />
+      <mass value="0.00738742" />
+      <inertia ixx="6.32072232e-07" ixy="2.11121145e-08" ixz="-4.73402949e-08" iyy="6.13926051e-07" iyz="-2.4360535e-08" izz="3.30210717e-07" />
+    </inertial>
+    <visual name="left_hand_3_1_visual_0">
+      <origin xyz="-0.00550002156436 -1.11330610945e-08 0.00949998751533" rpy="5.076488929940001e-06 -2.269938935260001e-06 3.2735313124400007e-06" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_3_1.stl" />
+      </geometry>
+      <material name="friday_hand_shell_material" />
+    </visual>
+  </link>
+  <joint name="left_hand_3_1" type="revolute">
+    <origin xyz="0.0182000000053 -0.0097 -0.114299999999" rpy="-3.14159038363 -2.2699326585099995e-06 -1.57079672647" />
+    <parent link="left_arm_7" />
+    <child link="left_hand_3_1" />
+    <axis xyz="0.999999999997 -3.9967377097e-07 2.2699337726e-06" />
+    <limit effort="10.0" velocity="6.28318531" lower="-0.2618" upper="0.2618" />
+  </joint>
+  <link name="left_hand_3_2">
+    <inertial>
+      <origin xyz="-0.00331814115720025 -0.000178958999999918 0.0187419121882998" rpy="0.0 0.0 0.0" />
+      <mass value="0.0153719" />
+      <inertia ixx="2.74278907198e-06" ixy="-2.0680143038e-08" ixz="-1.26326546777e-07" iyy="2.65598e-06" iyz="-3.89409240379e-08" izz="6.88239928019e-07" />
+    </inertial>
+    <visual name="left_hand_3_2_visual_0">
+      <origin xyz="-0.00549999999996003 0.0 2.02026085433297e-08" rpy="3.6732050996413e-06 3.67320490253016e-06 -8.077935669517658e-28" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_3_2.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="left_hand_3_2_visual_1">
+      <origin xyz="-0.00549999999996003 0.0 2.02026085433297e-08" rpy="3.6732050996413e-06 3.67320490253016e-06 -8.077935669517658e-28" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_mcp.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="left_hand_3_2_visual_2">
+      <origin xyz="0.00150003775160976 -0.00299999000000003 0.0129999944901998" rpy="-1.5707963268000098 3.67320489253815e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_3_2_visual_3">
+      <origin xyz="0.00150001775160988 0.00300000999999997 0.0129999944901998" rpy="-1.5707963268000098 3.67320489253815e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_3_2_visual_4">
+      <origin xyz="0.00150007081042966 -0.00299999000000003 0.0219999944900998" rpy="-1.5707963268000098 3.67320489253815e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_3_2_visual_5">
+      <origin xyz="0.00150005081042977 0.00300000999999997 0.0219999944901998" rpy="-1.5707963268000098 3.67320489253815e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_3_2_visual_6">
+      <origin xyz="0.00150010386923957 -0.00299999000000003 0.0309999944899998" rpy="-1.5707963268000098 3.67320489253815e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_3_2_visual_7">
+      <origin xyz="0.00150008386923969 0.00300000999999997 0.0309999944900998" rpy="-1.5707963268000098 3.67320489253815e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="left_hand_3_2_collision_0">
+      <origin xyz="-0.00549999999996003 0.0 2.02026085433297e-08" rpy="3.6732050996413e-06 3.67320490253016e-06 -8.077935669517658e-28" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_hand_3_2.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_hand_3_2" type="revolute">
+    <origin xyz="-2.15643761679e-08 -1.33312669599e-08 0.00949999999997" rpy="1.40328369206e-06 -5.94314039759e-06 3.2735296704600002e-06" />
+    <parent link="left_hand_3_1" />
+    <child link="left_hand_3_2" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="left_hand_3_3">
+    <inertial>
+      <origin xyz="-0.00304214617024008 -0.000113558999999943 0.0119323111744999" rpy="0.0 0.0 0.0" />
+      <mass value="0.00960055" />
+      <inertia ixx="1.08862943832e-06" ixy="-1.64439968593e-08" ixz="-7.64575261689e-08" iyy="9.9172e-07" iyz="8.55060402122e-10" izz="4.00900561679e-07" />
+    </inertial>
+    <visual name="left_hand_3_3_visual_0">
+      <origin xyz="-0.00550016162082945 0.0 -0.0439999797970001" rpy="3.6732050996413e-06 3.67320490253016e-06 -8.077935669517658e-28" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_3_3.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="left_hand_3_3_visual_1">
+      <origin xyz="-0.00550016162082945 0.0 -0.0439999797970001" rpy="3.6732050996413e-06 3.67320490253016e-06 -8.077935669517658e-28" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_pip.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="left_hand_3_3_visual_2">
+      <origin xyz="0.00150003407840986 -0.00299999000000003 0.0119999944901999" rpy="-1.5707963268000098 3.67320489253815e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_3_3_visual_3">
+      <origin xyz="0.00150001407840998 0.00300000999999997 0.0119999944901999" rpy="-1.5707963268000098 3.67320489253815e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_3_3_visual_4">
+      <origin xyz="0.0015000561176198 -0.00299999000000003 0.0179999944900999" rpy="-1.5707963268000098 3.67320489253815e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_3_3_visual_5">
+      <origin xyz="0.00150003611761992 0.00300000999999997 0.0179999944901999" rpy="-1.5707963268000098 3.67320489253815e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="left_hand_3_3_collision_0">
+      <origin xyz="-0.00550016162082945 0.0 -0.0439999797970001" rpy="3.6732050996413e-06 3.67320490253016e-06 -8.077935669517658e-28" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_hand_3_3.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_hand_3_3" type="revolute">
+    <origin xyz="1.61620870242629e-07 0.0 0.0439999999997002" rpy="0.0 0.0 0.0" />
+    <parent link="left_hand_3_2" />
+    <child link="left_hand_3_3" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="left_hand_3_4">
+    <inertial>
+      <origin xyz="-0.00153390523990017 5.96676000000371e-05 0.0149080056343999" rpy="0.0 0.0 0.0" />
+      <mass value="0.00848267" />
+      <inertia ixx="9.93318063808e-07" ixy="3.79297405615e-09" ixz="8.68433410391e-09" iyy="9.05573e-07" iyz="-7.06301393241e-09" izz="2.67548936192e-07" />
+    </inertial>
+    <visual name="left_hand_3_4_visual_0">
+      <origin xyz="-0.00550027181687917 0.0 -0.0739999797968001" rpy="3.6732050996413e-06 3.67320490253016e-06 -8.077935669517658e-28" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_3_4.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="left_hand_3_4_visual_1">
+      <origin xyz="-0.00550027181687917 0.0 -0.0739999797968001" rpy="3.6732050996413e-06 3.67320490253016e-06 -8.077935669517658e-28" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_dip.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="left_hand_3_4_visual_2">
+      <origin xyz="0.00150003058886983 -0.00299999000000003 0.0110499944901999" rpy="-1.5707963268000098 3.67320489253815e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_3_4_visual_3">
+      <origin xyz="0.00150001058886995 0.00300000999999997 0.0110499944901999" rpy="-1.5707963268000098 3.67320489253815e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_3_4_visual_4">
+      <origin xyz="0.00150005262807973 -0.00299999000000003 0.0170499944900999" rpy="-1.5707963268000098 3.67320489253815e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_3_4_visual_5">
+      <origin xyz="0.00150003262807985 0.00300000999999997 0.0170499944901999" rpy="-1.5707963268000098 3.67320489253815e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_3_4_visual_6">
+      <origin xyz="0.00150007466728968 -0.00299999000000003 0.0230499944900999" rpy="-1.5707963268000098 3.67320489253815e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_3_4_visual_7">
+      <origin xyz="0.0015000546672898 0.00300000999999997 0.0230499944901999" rpy="-1.5707963268000098 3.67320489253815e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="left_hand_3_4_collision_0">
+      <origin xyz="-0.00550027181687917 0.0 -0.0739999797968001" rpy="3.6732050996413e-06 3.67320490253016e-06 -8.077935669517658e-28" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_hand_3_4.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_hand_3_4" type="revolute">
+    <origin xyz="1.10196047786726e-07 0.0 0.0299999999997999" rpy="0.0 0.0 0.0" />
+    <parent link="left_hand_3_3" />
+    <child link="left_hand_3_4" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="left_hand_4_1">
+    <inertial>
+      <origin xyz="-0.00566496061892 0.000734219291519 -0.00400348722942" rpy="0.0 0.0 0.0" />
+      <mass value="0.00738742" />
+      <inertia ixx="6.32072234e-07" ixy="1.9446935e-08" ixz="-4.80483315e-08" iyy="6.11880952e-07" iyz="-3.4197636e-08" izz="3.32255815e-07" />
+    </inertial>
+    <visual name="left_hand_4_1_visual_0">
+      <origin xyz="-0.0055000214187 0.000331566516092 0.00949419970504" rpy="-0.03490492351079999 -2.141733380199999e-06 3.2712910215e-06" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_4_1.stl" />
+      </geometry>
+      <material name="friday_hand_shell_material" />
+    </visual>
+  </link>
+  <joint name="left_hand_4_1" type="revolute">
+    <origin xyz="-0.00279999999483 -0.0097 -0.1103" rpy="-3.14159038363 -2.2699326585099995e-06 -1.57079672647" />
+    <parent link="left_arm_7" />
+    <child link="left_hand_4_1" />
+    <axis xyz="0.999999999997 -3.9967377097e-07 2.2699337726e-06" />
+    <limit effort="10.0" velocity="6.28318531" lower="-0.2618" upper="0.2618" />
+  </joint>
+  <link name="left_hand_4_2">
+    <inertial>
+      <origin xyz="-0.00331813871095008 -0.000178958999999961 0.0187419126213997" rpy="0.0 0.0 0.0" />
+      <mass value="0.0153719" />
+      <inertia ixx="2.74278903901e-06" ixy="-2.06801481207e-08" ixz="-1.26326814941e-07" iyy="2.65598e-06" iyz="-3.89409213387e-08" izz="6.88239960995e-07" />
+    </inertial>
+    <visual name="left_hand_4_2_visual_0">
+      <origin xyz="-0.00549999999995988 0.0 2.09204823687539e-08" rpy="3.6732054802523e-06 3.8037247927708604e-06 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_4_2.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="left_hand_4_2_visual_1">
+      <origin xyz="-0.00549999999995988 0.0 2.09204823687539e-08" rpy="3.6732054802523e-06 3.8037247927708604e-06 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_mcp.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="left_hand_4_2_visual_2">
+      <origin xyz="0.00150003944839991 -0.00299999000000003 0.0129999942943997" rpy="-1.5707963267999598 3.8037247927708595e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_4_2_visual_3">
+      <origin xyz="0.0015000194484 0.00300000999999997 0.0129999942943997" rpy="-1.5707963267999598 3.8037247927708595e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_4_2_visual_4">
+      <origin xyz="0.00150007368191983 -0.00299999000000003 0.0219999942942997" rpy="-1.5707963267999598 3.8037247927708595e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_4_2_visual_5">
+      <origin xyz="0.00150005368191992 0.00300000999999997 0.0219999942943997" rpy="-1.5707963267999598 3.8037247927708595e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_4_2_visual_6">
+      <origin xyz="0.00150010791543975 -0.00299999000000003 0.0309999942941997" rpy="-1.5707963267999598 3.8037247927708595e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_4_2_visual_7">
+      <origin xyz="0.00150008791543984 0.00300000999999997 0.0309999942942997" rpy="-1.5707963267999598 3.8037247927708595e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="left_hand_4_2_collision_0">
+      <origin xyz="-0.00549999999995988 0.0 2.09204823687539e-08" rpy="3.6732054802523e-06 3.8037247927708604e-06 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_hand_4_2.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_hand_4_2" type="revolute">
+    <origin xyz="-2.14187153325e-08 0.000331564317886 0.00949421218967" rpy="-0.0349085967138 -5.94314010116e-06 3.40404967038e-06" />
+    <parent link="left_hand_4_1" />
+    <child link="left_hand_4_2" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="left_hand_4_3">
+    <inertial>
+      <origin xyz="-0.00304214461280018 -0.000113558999999955 0.0119323115714998" rpy="0.0 0.0 0.0" />
+      <mass value="0.00960055" />
+      <inertia ixx="1.08862941836e-06" ixy="-1.64439967477e-08" ixz="-7.6457615933e-08" iyy="9.9172e-07" iyz="8.55062548434e-10" izz="4.00900581638e-07" />
+    </inertial>
+    <visual name="left_hand_4_3_visual_0">
+      <origin xyz="-0.00550016736382958 0.0 -0.0439999790792002" rpy="3.6732054802523e-06 3.8037247927708604e-06 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_4_3.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="left_hand_4_3_visual_1">
+      <origin xyz="-0.00550016736382958 0.0 -0.0439999790792002" rpy="3.6732054802523e-06 3.8037247927708604e-06 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_pip.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="left_hand_4_3_visual_2">
+      <origin xyz="0.00150003564467977 -0.00299999000000003 0.0119999942943998" rpy="-1.5707963267999598 3.8037247927708595e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_4_3_visual_3">
+      <origin xyz="0.00150001564467986 0.00300000999999997 0.0119999942944998" rpy="-1.5707963267999598 3.8037247927708595e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_4_3_visual_4">
+      <origin xyz="0.0015000584670297 -0.00299999000000003 0.0179999942942998" rpy="-1.5707963267999598 3.8037247927708595e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_4_3_visual_5">
+      <origin xyz="0.0015000384670298 0.00300000999999997 0.0179999942943998" rpy="-1.5707963267999598 3.8037247927708595e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="left_hand_4_3_collision_0">
+      <origin xyz="-0.00550016736382958 0.0 -0.0439999790792002" rpy="3.6732054802523e-06 3.8037247927708604e-06 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_hand_4_3.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_hand_4_3" type="revolute">
+    <origin xyz="1.67363861630632e-07 0.0 0.0439999999996995" rpy="0.0 0.0 0.0" />
+    <parent link="left_hand_4_2" />
+    <child link="left_hand_4_3" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="left_hand_4_4">
+    <inertial>
+      <origin xyz="-0.00153390329407006 5.96676000000253e-05 0.0149080058345998" rpy="0.0 0.0 0.0" />
+      <mass value="0.00848267" />
+      <inertia ixx="9.93318066075e-07" ixy="3.79297313427e-09" ixz="8.68423937469e-09" iyy="9.05573e-07" iyz="-7.06301442748e-09" izz="2.67548933925e-07" />
+    </inertial>
+    <visual name="left_hand_4_4_visual_0">
+      <origin xyz="-0.00550028147553909 0.0 -0.0739999790789001" rpy="3.6732054802523e-06 3.8037247927708604e-06 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_4_4.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="left_hand_4_4_visual_1">
+      <origin xyz="-0.00550028147553909 0.0 -0.0739999790789001" rpy="3.6732054802523e-06 3.8037247927708604e-06 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_dip.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="left_hand_4_4_visual_2">
+      <origin xyz="0.00150003203113995 -0.00299999000000002 0.0110499942943998" rpy="-1.5707963267999598 3.8037247927708595e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_4_4_visual_3">
+      <origin xyz="0.00150001203114004 0.00300000999999997 0.0110499942944998" rpy="-1.5707963267999598 3.8037247927708595e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_4_4_visual_4">
+      <origin xyz="0.00150005485348989 -0.00299999000000002 0.0170499942942998" rpy="-1.5707963267999598 3.8037247927708595e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_4_4_visual_5">
+      <origin xyz="0.00150003485348998 0.00300000999999997 0.0170499942943998" rpy="-1.5707963267999598 3.8037247927708595e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_4_4_visual_6">
+      <origin xyz="0.00150007767582983 -0.00299999000000002 0.0230499942942998" rpy="-1.5707963267999598 3.8037247927708595e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_4_4_visual_7">
+      <origin xyz="0.00150005767582992 0.00300000999999997 0.0230499942943998" rpy="-1.5707963267999598 3.8037247927708595e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="left_hand_4_4_collision_0">
+      <origin xyz="-0.00550028147553909 0.0 -0.0739999790789001" rpy="3.6732054802523e-06 3.8037247927708604e-06 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_hand_4_4.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_hand_4_4" type="revolute">
+    <origin xyz="1.14111723875654e-07 0.0 0.0299999999998" rpy="0.0 0.0 0.0" />
+    <parent link="left_hand_4_3" />
+    <child link="left_hand_4_4" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="left_hand_5_1">
+    <inertial>
+      <origin xyz="-0.00566496062231 0.000594039034874 -0.00402667425436" rpy="0.0 0.0 0.0" />
+      <mass value="0.00738742" />
+      <inertia ixx="6.32072235e-07" ixy="1.77580572e-08" ixz="-4.86978179e-08" iyy="6.09154566e-07" iyz="-4.38680967e-08" izz="3.34982198e-07" />
+    </inertial>
+    <visual name="left_hand_5_1_visual_0">
+      <origin xyz="-0.00550002124694 0.00066274012616 0.00947684239652" rpy="-0.06981492351050002 -2.0136840552800005e-06 3.2645807308000004e-06" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_5_1.stl" />
+      </geometry>
+      <material name="friday_hand_shell_material" />
+    </visual>
+  </link>
+  <joint name="left_hand_5_1" type="revolute">
+    <origin xyz="-0.023799999995 -0.0097 -0.106300000001" rpy="-3.14159038363 -2.2699326585099995e-06 -1.57079672647" />
+    <parent link="left_arm_7" />
+    <child link="left_hand_5_1" />
+    <axis xyz="0.999999999997 -3.9967377097e-07 2.2699337726e-06" />
+    <limit effort="10.0" velocity="6.28318531" lower="-0.2618" upper="0.2618" />
+  </joint>
+  <link name="left_hand_5_2">
+    <inertial>
+      <origin xyz="-0.00331813617465008 -0.000178958999999939 0.0187419130704" rpy="0.0 0.0 0.0" />
+      <mass value="0.0153719" />
+      <inertia ixx="2.74278900482e-06" ixy="-2.06801533905e-08" ixz="-1.2632709298e-07" iyy="2.65598e-06" iyz="-3.89409185401e-08" izz="6.88239995186e-07" />
+    </inertial>
+    <visual name="left_hand_5_2_visual_0">
+      <origin xyz="-0.00549999999995988 0.0 2.16647888086385e-08" rpy="3.6732052000171694e-06 3.939054743144109e-06 8.077935669525831e-28" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_5_2.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="left_hand_5_2_visual_1">
+      <origin xyz="-0.00549999999995988 0.0 2.16647888086385e-08" rpy="3.6732052000171694e-06 3.939054743144109e-06 8.077935669525831e-28" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_mcp.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="left_hand_5_2_visual_2">
+      <origin xyz="0.00150004120766995 -0.00299999000000001 0.0129999940914" rpy="-1.57079632679991 3.939054743144109e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_5_2_visual_3">
+      <origin xyz="0.00150002120767003 0.00300000999999999 0.0129999940915" rpy="-1.57079632679991 3.939054743144109e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_5_2_visual_4">
+      <origin xyz="0.00150007665914983 -0.00299999000000001 0.0219999940913" rpy="-1.57079632679991 3.939054743144109e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_5_2_visual_5">
+      <origin xyz="0.00150005665914995 0.00300000999999999 0.0219999940914" rpy="-1.57079632679991 3.939054743144109e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_5_2_visual_6">
+      <origin xyz="0.00150011211061975 -0.00299999000000002 0.0309999940912" rpy="-1.57079632679991 3.939054743144109e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_5_2_visual_7">
+      <origin xyz="0.00150009211061984 0.00300000999999998 0.0309999940913" rpy="-1.57079632679991 3.939054743144109e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="left_hand_5_2_collision_0">
+      <origin xyz="-0.00549999999995988 0.0 2.16647888086385e-08" rpy="3.6732052000171694e-06 3.939054743144109e-06 8.077935669525831e-28" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_hand_5_2.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_hand_5_2" type="revolute">
+    <origin xyz="-2.12469539861e-08 0.000662737927955 0.00947685488116" rpy="-0.0698185967208 -5.94313979407e-06 3.5393796702999997e-06" />
+    <parent link="left_hand_5_1" />
+    <child link="left_hand_5_2" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="left_hand_5_3">
+    <inertial>
+      <origin xyz="-0.00304214299802011 -0.000113558999999914 0.0119323119831997" rpy="0.0 0.0 0.0" />
+      <mass value="0.00960055" />
+      <inertia ixx="1.08862939767e-06" ixy="-1.6443996632e-08" ixz="-7.64577090022e-08" iyy="9.9172e-07" iyz="8.55064773773e-10" izz="4.00900602332e-07" />
+    </inertial>
+    <visual name="left_hand_5_3_visual_0">
+      <origin xyz="-0.00550017331825957 0.0 -0.0439999783348003" rpy="3.6732052000171694e-06 3.939054743144109e-06 8.077935669525831e-28" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_5_3.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="left_hand_5_3_visual_1">
+      <origin xyz="-0.00550017331825957 0.0 -0.0439999783348003" rpy="3.6732052000171694e-06 3.939054743144109e-06 8.077935669525831e-28" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_pip.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="left_hand_5_3_visual_2">
+      <origin xyz="0.00150003726861982 -0.00299998999999998 0.0119999940913997" rpy="-1.57079632679991 3.939054743144109e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_5_3_visual_3">
+      <origin xyz="0.00150001726861991 0.00300001000000002 0.0119999940914997" rpy="-1.57079632679991 3.939054743144109e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_5_3_visual_4">
+      <origin xyz="0.00150006090293977 -0.00299998999999998 0.0179999940912997" rpy="-1.57079632679991 3.939054743144109e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_5_3_visual_5">
+      <origin xyz="0.00150004090293986 0.00300001000000002 0.0179999940913997" rpy="-1.57079632679991 3.939054743144109e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="left_hand_5_3_collision_0">
+      <origin xyz="-0.00550017331825957 0.0 -0.0439999783348003" rpy="3.6732052000171694e-06 3.939054743144109e-06 8.077935669525831e-28" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_hand_5_3.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_hand_5_3" type="revolute">
+    <origin xyz="1.73318310509041e-07 0.0 0.0439999999997002" rpy="0.0 0.0 0.0" />
+    <parent link="left_hand_5_2" />
+    <child link="left_hand_5_3" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="left_hand_5_4">
+    <inertial>
+      <origin xyz="-0.00153390127659002 5.96676000000492e-05 0.0149080060422" rpy="0.0 0.0 0.0" />
+      <mass value="0.00848267" />
+      <inertia ixx="9.93318068426e-07" ixy="3.79297217844e-09" ixz="8.68414115752e-09" iyy="9.05573e-07" iyz="-7.06301494077e-09" izz="2.67548931574e-07" />
+    </inertial>
+    <visual name="left_hand_5_4_visual_0">
+      <origin xyz="-0.00550029148984914 0.0 -0.0739999783346" rpy="3.6732052000171694e-06 3.939054743144109e-06 8.077935669525831e-28" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/hand_5_4.stl" />
+      </geometry>
+      <material name="friday_hand_link_material" />
+    </visual>
+    <visual name="left_hand_5_4_visual_1">
+      <origin xyz="-0.00550029148984914 0.0 -0.0739999783346" rpy="3.6732052000171694e-06 3.939054743144109e-06 8.077935669525831e-28" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/tactile_dip.stl" />
+      </geometry>
+      <material name="tactile_material" />
+    </visual>
+    <visual name="left_hand_5_4_visual_2">
+      <origin xyz="0.00150003352651994 -0.00299999 0.0110499940914" rpy="-1.57079632679991 3.939054743144109e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_5_4_visual_3">
+      <origin xyz="0.00150001352652003 0.00300001 0.0110499940915" rpy="-1.57079632679991 3.939054743144109e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_5_4_visual_4">
+      <origin xyz="0.00150005716083989 -0.00299999 0.0170499940913" rpy="-1.57079632679991 3.939054743144109e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_5_4_visual_5">
+      <origin xyz="0.00150003716083998 0.00300001 0.0170499940914" rpy="-1.57079632679991 3.939054743144109e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_5_4_visual_6">
+      <origin xyz="0.00150008079514983 -0.00299999 0.0230499940913" rpy="-1.57079632679991 3.939054743144109e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <visual name="left_hand_5_4_visual_7">
+      <origin xyz="0.00150006079514992 0.00300001 0.0230499940914" rpy="-1.57079632679991 3.939054743144109e-06 0.0" />
+      <geometry>
+        <sphere radius="0.0015" />
+      </geometry>
+      <material name="magnet_material" />
+    </visual>
+    <collision name="left_hand_5_4_collision_0">
+      <origin xyz="-0.00550029148984914 0.0 -0.0739999783346" rpy="3.6732052000171694e-06 3.939054743144109e-06 8.077935669525831e-28" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_hand_5_4.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_hand_5_4" type="revolute">
+    <origin xyz="1.18171575413939e-07 0.0 0.0299999999998002" rpy="0.0 0.0 0.0" />
+    <parent link="left_hand_5_3" />
+    <child link="left_hand_5_4" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="6.28318531" lower="0.0" upper="1.5708" />
+  </joint>
+  <link name="left_wrist_cam">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.01" />
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" />
+    </inertial>
+    <visual name="left_wrist_cam_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <sphere radius="0.01" />
+      </geometry>
+      <material name="polyurethane_green" />
+    </visual>
+  </link>
+  <joint name="left_wrist_cam" type="fixed">
+    <origin xyz="-0.0097499999985 -0.019031 -0.0319840000005" rpy="2.35619449019 -4.70148364684e-11 0.0" />
+    <parent link="left_arm_7" />
+    <child link="left_wrist_cam" />
+  </joint>
+  <link name="head_1">
+    <inertial>
+      <origin xyz="3.0561952e-16 1.20628421e-16 0.0420817082" rpy="0.0 0.0 0.0" />
+      <mass value="0.254023002" />
+      <inertia ixx="0.000449234116" ixy="-2.76142264e-20" ixz="-1.90662159e-18" iyy="0.000399773941" iyz="-8.20443792e-19" izz="0.000144027076" />
+    </inertial>
+    <visual name="head_1_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.57079632679 0.0 -3.14159265358959" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/head_1.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+    <collision name="head_1_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.57079632679 0.0 -3.14159265358959" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_head_1.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="head_1" type="revolute">
+    <origin xyz="0.0 0.0 0.33" rpy="4.896588860146749e-12 0.0 7.346410210909999e-06" />
+    <parent link="waist_5" />
+    <child link="head_1" />
+    <axis xyz="0.0 1.0 0.0" />
+    <limit effort="10.0" velocity="3.14159265" lower="-1.309" upper="0.5236" />
+  </joint>
+  <link name="head_2">
+    <inertial>
+      <origin xyz="-4.38511863e-13 9.70110908e-17 0.0448099286" rpy="0.0 0.0 0.0" />
+      <mass value="0.313075583" />
+      <inertia ixx="0.000421911152" ixy="5.48754421e-18" ixz="2.10046422e-15" iyy="0.00044840489" iyz="-7.83883201e-19" izz="0.000207299312" />
+    </inertial>
+    <visual name="head_2_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.57079632679979 -4.896472116655559e-12 1.5707963267949" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/head_2.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+    <collision name="head_2_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.57079632679979 -4.896472116655559e-12 1.5707963267949" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_head_2.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="head_2" type="revolute">
+    <origin xyz="0.0 0.0 0.0845" rpy="0.0 9.793377847331692e-12 -3.67320489653173e-06" />
+    <parent link="head_1" />
+    <child link="head_2" />
+    <axis xyz="1.0 0.0 0.0" />
+    <limit effort="10.0" velocity="3.14159265" lower="-0.9599" upper="0.9599" />
+  </joint>
+  <link name="head_3">
+    <inertial>
+      <origin xyz="0.0251739754 -7.07876019e-05 0.0217886504" rpy="0.0 0.0 0.0" />
+      <mass value="0.711275771" />
+      <inertia ixx="0.00285000982" ixy="-6.09174492e-07" ixz="0.000353770915" iyy="0.0030943448" iyz="3.63386291e-06" izz="0.00186665865" />
+    </inertial>
+    <visual name="head_3_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="-4.689765752902999e-12 0.0 1.5707999999999998" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/head_3.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+    <collision name="head_3_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="-4.689765752902999e-12 0.0 1.5707999999999998" />
+      <geometry>
+        <mesh filename="meshes/FM26A/collision/compact_head_3.stl" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="head_3" type="revolute">
+    <origin xyz="0.0 0.0 0.0945" rpy="4.89658885984629e-12 -4.89674967240897e-12 -3.67320531437827e-06" />
+    <parent link="head_2" />
+    <child link="head_3" />
+    <axis xyz="0.0 0.0 1.0" />
+    <limit effort="10.0" velocity="3.14159265" lower="-1.5708" upper="1.5708" />
+  </joint>
+  <link name="head_stereo">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.01" />
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" />
+    </inertial>
+    <visual name="head_stereo_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <sphere radius="0.01" />
+      </geometry>
+      <material name="sensor_material" />
+    </visual>
+  </link>
+  <joint name="head_stereo" type="fixed">
+    <origin xyz="0.0955433217 0.0296023122 -0.0175141477" rpy="-1.5707963299999999 -9.7034047463751e-12 -1.5707963499999997" />
+    <parent link="head_3" />
+    <child link="head_stereo" />
+  </joint>
+  <link name="body_stereo">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.01" />
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" />
+    </inertial>
+    <visual name="body_stereo_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <sphere radius="0.01" />
+      </geometry>
+      <material name="sensor_material" />
+    </visual>
+  </link>
+  <joint name="body_stereo" type="fixed">
+    <origin xyz="0.071109168 0.0296007425 0.0221473069" rpy="-2.0943951 7.022160630754115e-14 -1.5707963299999999" />
+    <parent link="waist_5" />
+    <child link="body_stereo" />
+  </joint>
+  <link name="front_left_shoulder_cam">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.01" />
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" />
+    </inertial>
+    <visual name="front_left_shoulder_cam_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <sphere radius="0.01" />
+      </geometry>
+      <material name="sensor_material" />
+    </visual>
+  </link>
+  <joint name="front_left_shoulder_cam" type="fixed">
+    <origin xyz="0.0711232522 0.11019075 0.313997304" rpy="-1.22173048 -9.86322135076989e-13 -1.22173048" />
+    <parent link="waist_5" />
+    <child link="front_left_shoulder_cam" />
+  </joint>
+  <link name="front_right_shoulder_cam">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.01" />
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" />
+    </inertial>
+    <visual name="front_right_shoulder_cam_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <sphere radius="0.01" />
+      </geometry>
+      <material name="sensor_material" />
+    </visual>
+  </link>
+  <joint name="front_right_shoulder_cam" type="fixed">
+    <origin xyz="0.071125456 -0.11018925 0.31399731" rpy="-1.2217304800000002 -1.6292522886374172e-12 -1.9198621799999998" />
+    <parent link="waist_5" />
+    <child link="front_right_shoulder_cam" />
+  </joint>
+  <link name="rear_right_shoulder_cam">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.01" />
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" />
+    </inertial>
+    <visual name="rear_right_shoulder_cam_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <sphere radius="0.01" />
+      </geometry>
+      <material name="sensor_material" />
+    </visual>
+  </link>
+  <joint name="rear_right_shoulder_cam" type="fixed">
+    <origin xyz="-0.116054544 -0.110191122 0.31400686" rpy="-1.22173048 -1.6122658763606523e-12 1.9198621799999998" />
+    <parent link="waist_5" />
+    <child link="rear_right_shoulder_cam" />
+  </joint>
+  <link name="rear_left_shoulder_cam">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.01" />
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" />
+    </inertial>
+    <visual name="rear_left_shoulder_cam_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <sphere radius="0.01" />
+      </geometry>
+      <material name="sensor_material" />
+    </visual>
+  </link>
+  <joint name="rear_left_shoulder_cam" type="fixed">
+    <origin xyz="-0.116056748 0.110188878 0.314006854" rpy="-1.2217304800000002 2.6937896357992486e-12 1.2217304800000002" />
+    <parent link="waist_5" />
+    <child link="rear_left_shoulder_cam" />
+  </joint>
+  <link name="body_lidar_3d">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.01" />
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" />
+    </inertial>
+    <visual name="body_lidar_3d_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <sphere radius="0.01" />
+      </geometry>
+      <material name="sensor_material" />
+    </visual>
+  </link>
+  <joint name="body_lidar_3d" type="fixed">
+    <origin xyz="-0.132594543 -1.286359e-06 0.335627701" rpy="0.6980806809999998 -2.60757876402451e-08 -1.5707863299999998" />
+    <parent link="waist_5" />
+    <child link="body_lidar_3d" />
+  </joint>
+  <link name="front_right_caster_yoke">
+    <inertial>
+      <origin xyz="-0.00755571588 0.00029896738 -0.0213093564" rpy="0.0 0.0 0.0" />
+      <mass value="0.05" />
+      <inertia ixx="1e-05" ixy="0.0" ixz="0.0" iyy="1e-05" iyz="0.0" izz="1e-05" />
+    </inertial>
+    <visual name="front_right_caster_yoke_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="4.89658886014675e-12 0.0 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/front_right_caster_yoke.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+  </link>
+  <joint name="front_right_caster_swivel" type="fixed">
+    <origin xyz="0.225 -0.2 0.00231" rpy="-4.89658886014675e-12 0.0 0.0" />
+    <parent link="base_link" />
+    <child link="front_right_caster_yoke" />
+  </joint>
+  <link name="front_right_caster_wheel_link">
+    <inertial>
+      <origin xyz="0.0 1.82797e-06 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.05" />
+      <inertia ixx="1e-05" ixy="0.0" ixz="0.0" iyy="1e-05" iyz="0.0" izz="1e-05" />
+    </inertial>
+    <visual name="front_right_caster_wheel_link_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.57079632679 0.0 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/front_right_caster_wheel_link.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+    <collision name="front_right_caster_wheel_link_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.57079632679 0.0 0.0" />
+      <geometry>
+        <cylinder radius="0.03" length="0.015" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="front_right_caster_wheel" type="fixed">
+    <origin xyz="-0.021 0.0 -0.04231" rpy="4.89658886014675e-12 0.0 0.0" />
+    <parent link="front_right_caster_yoke" />
+    <child link="front_right_caster_wheel_link" />
+  </joint>
+  <link name="front_left_caster_yoke">
+    <inertial>
+      <origin xyz="-0.00755571588 0.00029896738 -0.0213093564" rpy="0.0 0.0 0.0" />
+      <mass value="0.05" />
+      <inertia ixx="1e-05" ixy="0.0" ixz="0.0" iyy="1e-05" iyz="0.0" izz="1e-05" />
+    </inertial>
+    <visual name="front_left_caster_yoke_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="4.89658886014675e-12 0.0 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/front_left_caster_yoke.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+  </link>
+  <joint name="front_left_caster_swivel" type="fixed">
+    <origin xyz="0.225 0.2 0.00231" rpy="-4.89658886014675e-12 0.0 0.0" />
+    <parent link="base_link" />
+    <child link="front_left_caster_yoke" />
+  </joint>
+  <link name="front_left_caster_wheel_link">
+    <inertial>
+      <origin xyz="0.0 1.82797e-06 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.05" />
+      <inertia ixx="1e-05" ixy="0.0" ixz="0.0" iyy="1e-05" iyz="0.0" izz="1e-05" />
+    </inertial>
+    <visual name="front_left_caster_wheel_link_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.57079632679 0.0 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/front_left_caster_wheel_link.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+    <collision name="front_left_caster_wheel_link_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.57079632679 0.0 0.0" />
+      <geometry>
+        <cylinder radius="0.03" length="0.015" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="front_left_caster_wheel" type="fixed">
+    <origin xyz="-0.021 0.0 -0.04231" rpy="4.89658886014675e-12 0.0 0.0" />
+    <parent link="front_left_caster_yoke" />
+    <child link="front_left_caster_wheel_link" />
+  </joint>
+  <link name="rear_caster_pivot">
+    <inertial>
+      <origin xyz="0.00185188622 -9.35947001e-15 0.0775317644" rpy="0.0 0.0 0.0" />
+      <mass value="8.48109032" />
+      <inertia ixx="0.205074009" ixy="-8.80334965e-13" ixz="-0.00208734252" iyy="0.0324553626" iyz="1.06436583e-14" izz="0.198432244" />
+    </inertial>
+    <visual name="rear_caster_pivot_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.57079632679979 -4.896583138958022e-12 1.5707963267949003" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/rear_caster_pivot.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+  </link>
+  <joint name="rear_caster_pivot" type="fixed">
+    <origin xyz="-0.264 0.0 -0.013" rpy="0.0 9.79317772029349e-12 5.10341196725696e-12" />
+    <parent link="base_link" />
+    <child link="rear_caster_pivot" />
+  </joint>
+  <link name="rear_right_caster_yoke">
+    <inertial>
+      <origin xyz="-0.00755571478178006 0.000298995133654999 -0.0213093564" rpy="0.0 0.0 0.0" />
+      <mass value="0.05" />
+      <inertia ixx="1e-05" ixy="0.0" ixz="0.0" iyy="1e-05" iyz="0.0" izz="1e-05" />
+    </inertial>
+    <visual name="rear_right_caster_yoke_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="4.896588860192811e-12 0.0 -3.6732002027985496e-06" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/rear_right_caster_yoke.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+  </link>
+  <joint name="rear_right_caster_swivel" type="fixed">
+    <origin xyz="-0.011 -0.195 0.01531" rpy="-3.67320510335483e-06 1.5103251982064102e-11 -5.1035034169496006e-12" />
+    <parent link="rear_caster_pivot" />
+    <child link="rear_right_caster_yoke" />
+  </joint>
+  <link name="rear_right_caster_wheel_link">
+    <inertial>
+      <origin xyz="0.0 1.82797e-06 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.05" />
+      <inertia ixx="1e-05" ixy="0.0" ixz="0.0" iyy="1e-05" iyz="0.0" izz="1e-05" />
+    </inertial>
+    <visual name="rear_right_caster_wheel_link_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.57079632679 1.14042340156904e-11 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/rear_right_caster_wheel_link.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+    <collision name="rear_right_caster_wheel_link_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.57079632679 1.14042340156904e-11 0.0" />
+      <geometry>
+        <cylinder radius="0.03" length="0.015" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="rear_right_caster_wheel" type="fixed">
+    <origin xyz="-0.0209999999999 7.71372044017227e-08 -0.04231" rpy="4.896662325995131e-12 -1.14040119709555e-11 -3.6732002030185494e-06" />
+    <parent link="rear_right_caster_yoke" />
+    <child link="rear_right_caster_wheel_link" />
+  </joint>
+  <link name="rear_left_caster_yoke">
+    <inertial>
+      <origin xyz="-0.00755571478178 0.000298995133654972 -0.0213093564" rpy="0.0 0.0 0.0" />
+      <mass value="0.05" />
+      <inertia ixx="1e-05" ixy="0.0" ixz="0.0" iyy="1e-05" iyz="0.0" izz="1e-05" />
+    </inertial>
+    <visual name="rear_left_caster_yoke_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="4.896588860192811e-12 0.0 -3.6732002027985496e-06" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/rear_left_caster_yoke.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+  </link>
+  <joint name="rear_left_caster_swivel" type="fixed">
+    <origin xyz="-0.011 0.195 0.01531" rpy="-3.67320510335483e-06 1.5103251982064102e-11 -5.1035034169496006e-12" />
+    <parent link="rear_caster_pivot" />
+    <child link="rear_left_caster_yoke" />
+  </joint>
+  <link name="rear_left_caster_wheel_link">
+    <inertial>
+      <origin xyz="0.0 1.82797e-06 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.05" />
+      <inertia ixx="1e-05" ixy="0.0" ixz="0.0" iyy="1e-05" iyz="0.0" izz="1e-05" />
+    </inertial>
+    <visual name="rear_left_caster_wheel_link_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.57079632679 1.14042340156904e-11 0.0" />
+      <geometry>
+        <mesh filename="meshes/FM26A/visual/rear_left_caster_wheel_link.stl" />
+      </geometry>
+      <material name="friday_body_material" />
+    </visual>
+    <collision name="rear_left_caster_wheel_link_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="1.57079632679 1.14042340156904e-11 0.0" />
+      <geometry>
+        <cylinder radius="0.03" length="0.015" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="rear_left_caster_wheel" type="fixed">
+    <origin xyz="-0.0209999999999 7.71372043739671e-08 -0.04231" rpy="4.896662325995131e-12 -1.14040119709555e-11 -3.6732002030185494e-06" />
+    <parent link="rear_left_caster_yoke" />
+    <child link="rear_left_caster_wheel_link" />
+  </joint>
+  <link name="mobile_stereo">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.01" />
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" />
+    </inertial>
+    <visual name="mobile_stereo_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <sphere radius="0.01" />
+      </geometry>
+      <material name="sensor_material" />
+    </visual>
+  </link>
+  <joint name="mobile_stereo" type="fixed">
+    <origin xyz="0.301 0.0296 0.10476" rpy="-1.79768913 -4.896694161260484e-12 -1.5707963299999999" />
+    <parent link="base_link" />
+    <child link="mobile_stereo" />
+  </joint>
+  <link name="mobile_lidar_3d">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.01" />
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" />
+    </inertial>
+    <visual name="mobile_lidar_3d_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <sphere radius="0.01" />
+      </geometry>
+      <material name="sensor_material" />
+    </visual>
+  </link>
+  <joint name="mobile_lidar_3d" type="fixed">
+    <origin xyz="0.27437 7.96332246e-14 0.156263" rpy="-0.785398163 -4.896583138958022e-12 -1.57079633" />
+    <parent link="base_link" />
+    <child link="mobile_lidar_3d" />
+  </joint>
+  <link name="left_lidar_2d">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.01" />
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" />
+    </inertial>
+    <visual name="left_lidar_2d_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <sphere radius="0.01" />
+      </geometry>
+      <material name="sensor_material" />
+    </visual>
+  </link>
+  <joint name="left_lidar_2d" type="fixed">
+    <origin xyz="0.05 0.215 0.16266" rpy="-2.3976928654100554e-23 4.89658886e-12 1.5707963299999999" />
+    <parent link="base_link" />
+    <child link="left_lidar_2d" />
+  </joint>
+  <link name="right_lidar_2d">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <mass value="0.01" />
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" />
+    </inertial>
+    <visual name="right_lidar_2d_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <sphere radius="0.01" />
+      </geometry>
+      <material name="sensor_material" />
+    </visual>
+  </link>
+  <joint name="right_lidar_2d" type="fixed">
+    <origin xyz="0.05 -0.215 0.16266" rpy="-2.3976928654100554e-23 -4.89658886e-12 -1.5707963299999999" />
+    <parent link="base_link" />
+    <child link="right_lidar_2d" />
+  </joint>
+</robot>
